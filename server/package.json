@@ -1,0 +1,26 @@
+{
+  "name": "bartop-api",
+  "version": "0.0.1",
+  "description": "Server for running BarTop's API.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dpopp07/bartop.git"
+  },
+  "keywords": [
+    "bartop"
+  ],
+  "author": "Dustin Popp",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dpopp07/bartop/issues"
+  },
+  "homepage": "https://github.com/dpopp07/bartop#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "morgan": "^1.9.0"
+  }
+}
