@@ -9,5 +9,5 @@ Web framework for hobbyist and freelance bartenders.
 * `npm run client` - the client at http://localhost:3000
 
 `npm test` - concurrently runs:
-* `npm run test-server` - runs server tests
-* `npm run test-client` - runs client tests in non-interactive mode
+* `npm run test-server` - the server tests
+* `npm run test-client` - the client tests in non-interactive mode
