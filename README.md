@@ -1,4 +1,4 @@
-# BarTop
+# BarTop  [![Build Status](https://travis-ci.org/dpopp07/bartop.svg?branch=dev)](https://travis-ci.org/dpopp07/bartop)
 Web framework for hobbyist and freelance bartenders.
 
 ## Development
