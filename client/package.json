@@ -12,6 +12,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "lint": "node_modules/eslint/bin/eslint.js src",
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:3001",
@@ -27,5 +28,10 @@
   "bugs": {
     "url": "https://github.com/dpopp07/bartop/issues"
   },
-  "homepage": "https://github.com/dpopp07/bartop#readme"
+  "homepage": "https://github.com/dpopp07/bartop#readme",
+  "devDependencies": {
+    "eslint-config-prettier": "^2.6.0",
+    "eslint-plugin-prettier": "^2.3.1",
+    "prettier": "^1.7.4"
+  }
 }
