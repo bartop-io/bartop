@@ -12,7 +12,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "lint": "node_modules/eslint/bin/eslint.js src",
+    "lint": "eslint src",
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:3001",
