@@ -6,3 +6,5 @@ cache:
     - 'node_modules'
     - 'server/node_modules'
     - 'client/node_modules'
+
+after_success: cd server/ && npm run coverage

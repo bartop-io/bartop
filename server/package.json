@@ -4,7 +4,8 @@
   "description": "Server for running BarTop's API.",
   "main": "server.js",
   "scripts": {
-    "test": "mocha test/test.js"
+    "test": "nyc mocha test/test.js",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,9 @@
   },
   "devDependencies": {
     "chai": "^4.1.2",
+    "coveralls": "^3.0.0",
     "mocha": "^4.0.1",
+    "nyc": "^11.3.0",
     "supertest": "^3.0.0"
   }
 }
