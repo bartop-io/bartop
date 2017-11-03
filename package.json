@@ -9,7 +9,8 @@
     "client": "cd client && npm start",
     "test-server": "cd server && npm test",
     "test-client": "cd client && CI=true npm test",
-    "test": "concurrently 'npm run test-server' 'npm run test-client'"
+    "test": "concurrently 'npm run test-server' 'npm run test-client'",
+    "precommit": "npm test"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
   "author": "Dustin Popp",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^3.5.0"
+    "concurrently": "^3.5.0",
+    "husky": "^0.14.3"
   }
 }
