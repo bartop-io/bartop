@@ -1,5 +1,6 @@
 # BarTop
-[![Build Status](https://travis-ci.org/dpopp07/bartop.svg?branch=dev)](https://travis-ci.org/dpopp07/bartop)  
+[![Build Status](https://travis-ci.org/dpopp07/bartop.svg?branch=dev)](https://travis-ci.org/dpopp07/bartop) 
+[![Coverage Status](https://coveralls.io/repos/github/dpopp07/bartop/badge.svg?branch=dev)](https://coveralls.io/github/dpopp07/bartop?branch=dev)  
 Web framework for hobbyist and freelance bartenders.
 
 ## Development
