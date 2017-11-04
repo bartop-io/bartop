@@ -1,6 +1,6 @@
 module.exports = {
 
-  plugins: ["prettier"],
+  plugins: ['prettier'],
 
   env: {
     es6: true,
@@ -14,6 +14,9 @@ module.exports = {
   },
 
   rules: {
+
+    'prettier/prettier': ['error', {'singleQuote': true}],
+
     // http://eslint.org/docs/rules/
     'array-callback-return': 'warn',
     'default-case': ['warn', { commentPattern: '^no default$' }],
@@ -144,5 +147,7 @@ module.exports = {
           'Please use import() instead. More info: https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#code-splitting',
       },
     ]
-  }  
+  },
+
+  extends: 'prettier'  
 };
