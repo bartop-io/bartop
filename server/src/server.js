@@ -1,6 +1,6 @@
 const express = require('express');
-const morgan  = require('morgan');
-const api     = require('./api/api');
+const morgan = require('morgan');
+const api = require('./api/api');
 
 const app = express();
 // set up a logger
