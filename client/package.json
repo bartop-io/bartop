@@ -11,7 +11,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --env=jsdom --coverage",
+    "coverage": "codecov",
     "lint": "eslint src",
     "fix": "eslint --fix src",
     "eject": "react-scripts eject"
@@ -25,7 +26,7 @@
     "bartop"
   ],
   "author": "James Clements",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/dpopp07/bartop/issues"
   },
