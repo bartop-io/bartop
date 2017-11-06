@@ -6,6 +6,7 @@ cache:
   - node_modules
   - server/node_modules
   - client/node_modules
+after_success: concurrently 'cd server/ && npm run coverage' 'cd client/ && npm run coverage'
 notifications:
   email: false
   slack:
