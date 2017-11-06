@@ -32,6 +32,7 @@
   },
   "homepage": "https://github.com/dpopp07/bartop#readme",
   "devDependencies": {
+    "codecov": "^3.0.0",
     "eslint-config-prettier": "^2.6.0",
     "eslint-plugin-prettier": "^2.3.1",
     "prettier": "^1.7.4"
