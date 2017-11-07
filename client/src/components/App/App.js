@@ -7,12 +7,13 @@ import Landing from '../Landing/Landing';
 import './App.css';
 
 // if in development, enable redux dev tools
-const enhancers =
+const enhancer =
   process.env.NODE_ENV === 'development'
     ? window.__REDUX_DEVTOOLS_EXTENSION__ &&
       window.__REDUX_DEVTOOLS_EXTENSION__()
-    : [];
-const store = createStore(rootReducer, enhancers);
+    : undefined;
+// second argument is optional preloaded state so we pass undefined
+const store = createStore(rootReducer, undefined, enhancer);
 
 const App = () => (
   <Provider store={store}>
