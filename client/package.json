@@ -14,6 +14,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom --coverage",
+    "watch-test": "react-scripts test --env=jsdom",
     "coverage": "codecov",
     "lint": "eslint src",
     "fix": "eslint --fix src",
