@@ -4,12 +4,16 @@
   "description": "Web framework for hobbyist and freelance bartenders",
   "scripts": {
     "install": "concurrently 'cd client && npm install' 'cd server && npm install'",
-    "start": "concurrently 'npm run server' 'npm run client'",
-    "server": "cd server && npm start",
-    "client": "cd client && npm start",
+    "start-server": "cd server && npm start",
+    "start-client": "cd client && npm start",
+    "start": "concurrently 'npm run start-server' 'npm run start-client'",
     "test-server": "cd server && npm test",
     "test-client": "cd client && CI=true npm test",
-    "test": "concurrently 'npm run test-server' 'npm run test-client'"
+    "test": "concurrently 'npm run test-server' 'npm run test-client'",
+    "lint-server": "cd server && npm run lint",
+    "lint-client": "cd client && npm run lint",
+    "lint": "concurrently 'npm run lint-server' 'npm run lint-client'",
+    "precommit": "npm run lint && npm test"
   },
   "repository": {
     "type": "git",
@@ -19,8 +23,9 @@
     "bartop"
   ],
   "author": "Dustin Popp",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
-    "concurrently": "^3.5.0"
+    "concurrently": "^3.5.0",
+    "husky": "^0.14.3"
   }
 }

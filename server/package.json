@@ -4,7 +4,11 @@
   "description": "Server for running BarTop's API.",
   "main": "server.js",
   "scripts": {
-    "test": "mocha test/test.js"
+    "start": "node src/index.js",
+    "test": "nyc mocha src/test/test.js",
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "lint": "eslint src",
+    "fix": "eslint --fix src"
   },
   "repository": {
     "type": "git",
@@ -14,7 +18,7 @@
     "bartop"
   ],
   "author": "Dustin Popp",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/dpopp07/bartop/issues"
   },
@@ -26,7 +30,13 @@
   },
   "devDependencies": {
     "chai": "^4.1.2",
+    "codecov": "^3.0.0",
+    "eslint": "^4.10.0",
+    "eslint-config-prettier": "^2.7.0",
+    "eslint-plugin-prettier": "^2.3.1",
     "mocha": "^4.0.1",
+    "nyc": "^11.3.0",
+    "prettier": "^1.7.4",
     "supertest": "^3.0.0"
   }
 }

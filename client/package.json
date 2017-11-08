@@ -11,7 +11,10 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --env=jsdom --coverage",
+    "coverage": "codecov",
+    "lint": "eslint src",
+    "fix": "eslint --fix src",
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:3001",
@@ -23,9 +26,15 @@
     "bartop"
   ],
   "author": "James Clements",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/dpopp07/bartop/issues"
   },
-  "homepage": "https://github.com/dpopp07/bartop#readme"
+  "homepage": "https://github.com/dpopp07/bartop#readme",
+  "devDependencies": {
+    "codecov": "^3.0.0",
+    "eslint-config-prettier": "^2.6.0",
+    "eslint-plugin-prettier": "^2.3.1",
+    "prettier": "^1.7.4"
+  }
 }
