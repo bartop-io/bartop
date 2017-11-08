@@ -2,6 +2,6 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Landing from './Landing';
 
-it('renders without crashing', () => {
+it('shallow renders without crashing', () => {
   shallow(<Landing />);
 });
