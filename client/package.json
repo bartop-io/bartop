@@ -36,8 +36,11 @@
   "homepage": "https://github.com/dpopp07/bartop#readme",
   "devDependencies": {
     "codecov": "^3.0.0",
+    "enzyme": "^3.1.1",
+    "enzyme-adapter-react-16": "^1.0.4",
     "eslint-config-prettier": "^2.6.0",
     "eslint-plugin-prettier": "^2.3.1",
-    "prettier": "^1.7.4"
+    "prettier": "^1.7.4",
+    "react-test-renderer": "^16.0.0"
   }
 }
