@@ -1,0 +1,16 @@
+coverage:
+  status:
+    project:
+      default:
+        # this will change as tests are added
+        target: 50%
+        threshold: 5%
+  notify:
+    slack:
+      default:
+        url: "secret:hM7+uktUBfU5KiJh4dL7Pw9abGO6+7AAUTf8WMVwV4dkM7tSfNO5eNmrw1gd27IHr7SIVtf3ShJ9hsAJJ+1sdqlt5TUyRJ27um3X8ZRzP2yf5NAJoWeIG35/Y7+/jY+bPOqhNiFgVfZt/TIgSq0ioFCISHD6TRkIzlr/EjohC1o="
+        threshold: 5%
+        only_pulls: false
+        branches: null
+        flags: null
+        paths: null
