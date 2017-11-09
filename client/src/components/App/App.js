@@ -15,15 +15,12 @@ const enhancer =
 // second argument is optional preloaded state so we pass undefined
 const store = createStore(rootReducer, undefined, enhancer);
 
-const App = () => {
-  console.log('in app');
-  return (
-    <Provider store={store}>
-      <Router>
-        <Route path="/" exact component={Landing} />
-      </Router>
-    </Provider>
-  );
-};
+const App = () => (
+  <Provider store={store}>
+    <Router>
+      <Route path="/" exact component={Landing} />
+    </Router>
+  </Provider>
+);
 
 export default App;
