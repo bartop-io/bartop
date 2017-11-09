@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches the snapshot 1`] = `
+<div
+  className="Landing"
+>
+  <header
+    className="Landing-header"
+  >
+    <img
+      alt="logo"
+      className="Landing-logo"
+      src="logo.svg"
+    />
+    <h1
+      className="Landing-title"
+    >
+      Welcome to React
+    </h1>
+  </header>
+  <p
+    className="Landing-intro"
+  >
+    To get started, edit 
+    <code>
+      src/Landing.js
+    </code>
+     and save to reload.
+  </p>
+</div>
+`;
