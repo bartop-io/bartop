@@ -2,9 +2,9 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { injectGlobal } from 'styled-components';
 import rootReducer from '../../ducks';
 import Landing from '../Landing/Landing';
-import './App.css';
 
 // if in development, enable redux dev tools
 const enhancer =
@@ -22,5 +22,14 @@ const App = () => (
     </Router>
   </Provider>
 );
+
+// styled components helper for adding styles to global dom element like body
+injectGlobal`
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+  }
+`;
 
 export default App;
