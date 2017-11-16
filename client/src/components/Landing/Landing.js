@@ -1,9 +1,9 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
+import { animations } from '../styleUtils';
 import logo from '../../images/logo.svg';
 
-// TODO -> determine better way of styling root element in SC
-const Content = styled.div`
+const Wrapper = styled.div`
   text-align: center;
 `;
 
@@ -14,14 +14,8 @@ const Header = styled.header`
   color: white;
 `;
 
-// TODO -> store animations elsewhere? Or is that against SC paradigm?
-const logoSpin = keyframes`
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-`;
-
 const Logo = styled.img`
-  animation: ${logoSpin} infinite 20s linear;
+  animation: ${animations.spin} infinite 20s linear;
   height: 80px;
 `;
 
@@ -34,7 +28,7 @@ const Intro = styled.p`
 `;
 
 const Landing = () => (
-  <Content>
+  <Wrapper>
     <Header>
       <Logo src={logo} alt="logo" />
       <Title>Welcome to React</Title>
@@ -42,7 +36,7 @@ const Landing = () => (
     <Intro>
       To get started, edit <code>src/Landing.js</code> and save to reload.
     </Intro>
-  </Content>
+  </Wrapper>
 );
 
 export default Landing;
