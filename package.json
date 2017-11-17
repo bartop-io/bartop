@@ -11,7 +11,7 @@
     "test-client": "cd client && CI=true npm test",
     "test": "concurrently 'npm run test-server' 'npm run test-client'",
     "lint-server": "cd server && npm run lint",
-    "lint-client": "cd client && npm run lint",
+    "lint-client": "cd client && npm run lint && npm run lint:css",
     "lint": "concurrently 'npm run lint-server' 'npm run lint-client'",
     "precommit": "npm run lint && npm test"
   },

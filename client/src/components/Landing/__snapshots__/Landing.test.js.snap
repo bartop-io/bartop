@@ -1,31 +1,71 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`matches the snapshot 1`] = `
-<div
-  className="Landing"
->
-  <header
-    className="Landing-header"
-  >
-    <img
-      alt="logo"
-      className="Landing-logo"
-      src="logo.svg"
-    />
-    <h1
-      className="Landing-title"
+.c0 {
+  text-align: center;
+}
+
+.c1 {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.c2 {
+  -webkit-animation: iVXCSc infinite 20s linear;
+  animation: iVXCSc infinite 20s linear;
+  height: 80px;
+}
+
+.c3 {
+  font-size: 1.5em;
+}
+
+.c4 {
+  font-size: large;
+}
+
+<Landing>
+  <styled.div>
+    <div
+      className="c0"
     >
-      Welcome to React
-    </h1>
-  </header>
-  <p
-    className="Landing-intro"
-  >
-    To get started, edit 
-    <code>
-      src/Landing.js
-    </code>
-     and save to reload.
-  </p>
-</div>
+      <styled.header>
+        <header
+          className="c1"
+        >
+          <styled.img
+            alt="logo"
+            src="logo.svg"
+          >
+            <img
+              alt="logo"
+              className="c2"
+              src="logo.svg"
+            />
+          </styled.img>
+          <styled.h1>
+            <h1
+              className="c3"
+            >
+              Welcome to React
+            </h1>
+          </styled.h1>
+        </header>
+      </styled.header>
+      <styled.p>
+        <p
+          className="c4"
+        >
+          To get started, edit 
+          <code>
+            src/Landing.js
+          </code>
+           and save to reload.
+        </p>
+      </styled.p>
+    </div>
+  </styled.div>
+</Landing>
 `;
