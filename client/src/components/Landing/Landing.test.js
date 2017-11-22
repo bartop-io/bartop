@@ -1,8 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { mount } from 'enzyme';
+import 'jest-styled-components';
 import Landing from './Landing';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<Landing />, div);
+it('matches the snapshot', () => {
+  const wrapper = mount(<Landing />);
+  expect(wrapper).toMatchSnapshot();
 });

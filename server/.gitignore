@@ -1,4 +1,15 @@
+# environment variables
+.env
+
+# dependencies
 node_modules/
+
+# mac os
 .DS_Store
+
+# code coverage
 coverage/
 .nyc_output/
+
+# development database
+rethinkdb_data/

@@ -4,7 +4,8 @@
   "description": "Server for running BarTop's API.",
   "main": "server.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "nodemon src/index.js",
+    "database": "rethinkdb",
     "test": "nyc mocha src/test/test.js",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "lint": "eslint src",
@@ -24,19 +25,25 @@
   },
   "homepage": "https://github.com/dpopp07/bartop#readme",
   "dependencies": {
+    "dotenv": "^4.0.0",
     "express": "^4.16.2",
+    "js-data": "^3.0.1",
+    "js-data-rethinkdb": "^3.0.0",
     "morgan": "^1.9.0",
-    "rethinkdb": "^2.3.3"
+    "rethinkdbdash": "^2.3.31"
   },
   "devDependencies": {
+    "babel-eslint": "^8.0.2",
     "chai": "^4.1.2",
     "codecov": "^3.0.0",
     "eslint": "^4.10.0",
     "eslint-config-prettier": "^2.7.0",
     "eslint-plugin-prettier": "^2.3.1",
     "mocha": "^4.0.1",
+    "nodemon": "^1.12.1",
     "nyc": "^11.3.0",
     "prettier": "^1.7.4",
+    "sinon": "^4.1.2",
     "supertest": "^3.0.0"
   }
 }

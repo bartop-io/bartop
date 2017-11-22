@@ -1,7 +1,14 @@
+const config = require('../config');
 const app = require('./server');
+const seed = require('./utils/seed');
 
-const port = 3001;
+const port = config.api.port;
 
-app.listen(port, function() {
+// ##### for development only #####
+if (config.env === 'development') {
+  seed();
+}
+
+app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
