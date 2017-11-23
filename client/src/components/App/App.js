@@ -23,7 +23,7 @@ const App = () => (
   </Provider>
 );
 
-// styled components helper for adding styles to global dom element like body
+// styled components helper for adding styles to global dom elements like body
 injectGlobal`
   body {
     margin: 0;
