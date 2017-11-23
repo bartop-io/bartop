@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Web app for BarTop's UI.",
   "dependencies": {
+    "auth0-js": "^8.11.3",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
@@ -50,7 +51,7 @@
     "stylelint": "^8.2.0",
     "stylelint-config-standard": "^17.0.0",
     "stylelint-config-styled-components": "^0.1.1",
-    "stylelint-processor-styled-components": "^1.0.0"
+    "stylelint-processor-styled-components": "^1.1.0"
   },
   "jest": {
     "collectCoverageFrom": [
