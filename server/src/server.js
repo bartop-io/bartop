@@ -12,7 +12,7 @@ app.use(morgan('dev'));
 app.use('/api/v1', api);
 
 // global error handling middleware
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json('Something broke!');
 });

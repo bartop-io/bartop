@@ -18,7 +18,7 @@ const expectedTables = [
 ];
 
 // seed the database for development use
-async function seed() {
+const seed = async () => {
   try {
     const existingTables = await dbAdapter.r.tableList();
 
@@ -49,8 +49,8 @@ async function seed() {
       console.log(`    > default drink added to 'drinks' table.`);
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
-}
+};
 
 module.exports = seed;

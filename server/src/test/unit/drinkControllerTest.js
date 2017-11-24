@@ -1,9 +1,9 @@
 const expect = require('chai').expect;
-const controllerModule = require('../api/drink/drinkController');
+const controllerModule = require('../../api/drink/drinkController');
 const sinon = require('sinon');
 
-describe('drinks controller', function(done) {
-  it('GET /drinks', async function() {
+describe('drinks controller - unit test', function(done) {
+  it('.getAll - pass data from ORM to response', async function() {
     const mockDb = {};
     const dbResults = [
       {
@@ -12,14 +12,12 @@ describe('drinks controller', function(done) {
       }
     ];
 
-    mockDb.findAll = async function(tableName) {
+    mockDb.findAll = async tableName => {
       return Promise.resolve(dbResults);
     };
 
     const res = {
-      json: function(data) {
-        return data;
-      }
+      json: data => data
     };
 
     const spy = sinon.spy(res, 'json');

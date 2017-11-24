@@ -1,6 +1,6 @@
 # BarTop
 [![Build Status](https://travis-ci.org/dpopp07/bartop.svg?branch=dev)](https://travis-ci.org/dpopp07/bartop) 
-[![codecov](https://codecov.io/gh/dpopp07/bartop/branch/dev/graph/badge.svg)](https://codecov.io/gh/dpopp07/bartop)  
+[![Coverage](https://codecov.io/gh/dpopp07/bartop/branch/dev/graph/badge.svg)](https://codecov.io/gh/dpopp07/bartop)  
 Web framework for hobbyist and freelance bartenders.
 
 ## Development
@@ -15,6 +15,8 @@ BarTop uses RethinkDB for its persistence layer. Running this app locally requir
 
 Once installed, start a local instance of the database:
 * `npm run database`
+
+Look to the RethinkDB docs for instructions on creating a new database. The default database, 'test', is reserved for running the integration tests. Using this as your development DB will have pretty unfortunate consequences. Make sure to add your created DB name to your `.env` file.
 
 Make sure to start the database before starting the API server.
 

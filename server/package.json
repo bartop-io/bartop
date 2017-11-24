@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon src/index.js",
     "database": "rethinkdb",
-    "test": "nyc mocha src/test/test.js",
+    "test": "NODE_ENV=test nyc --all mocha src/test/unit/**/*.js",
+    "test-all": "NODE_ENV=test nyc --all mocha src/test/**/*.js",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "lint": "eslint src",
     "fix": "eslint --fix src"
@@ -45,5 +46,9 @@
     "prettier": "^1.7.4",
     "sinon": "^4.1.2",
     "supertest": "^3.0.0"
+  },
+  "nyc": {
+    "include": ["**/src/**/*.js"],
+    "exclude": ["**/src/utils/seed.js", "**/src/test/**"]
   }
 }
