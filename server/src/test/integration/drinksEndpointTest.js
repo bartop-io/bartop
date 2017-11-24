@@ -33,7 +33,6 @@ describe(`'drinks' route - api test`, function() {
     return Promise.resolve();
   });
 
-  // test a successful hit to get all drinks
   it(`GET - return array of drinks`, function(done) {
     request(app)
       .get('/api/v1/drinks')
@@ -46,7 +45,6 @@ describe(`'drinks' route - api test`, function() {
       });
   });
 
-  // test the get route for handling an error
   it('GET - handle error if db table is not available', async function() {
     try {
       await dbAdapter.r.tableDrop('drinks');
