@@ -31,7 +31,13 @@ BarTop runs on two servers - one serving the client and one serving our API.
 The app is configured using `.env` files in both the client/ and server/ directories. Use the `.env.example` files in each respective directory as templates to create local versions.
 
 ### Testing
-`npm test` - concurrently runs:
+#### Unit Tests
+`npm test` - concurrently runs the unit tests:
 * `npm run test-server` - the server tests
 * `npm run test-client` - the client tests in non-interactive mode
+
+#### Integration Tests
+`npm run test-all` - concurrently runs the unit and integration tests.
+To run the integration tests, you _must_ be running a local instance of RethinkDB. See [this section](#starting-the-database) for more information.
+Travis CI will automatically run all tests (using this command) when a branch is pushed.
 
