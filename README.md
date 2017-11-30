@@ -16,7 +16,9 @@ BarTop uses RethinkDB for its persistence layer. Running this app locally requir
 Once installed, start a local instance of the database:
 * `npm run database`
 
-Look to the RethinkDB docs for instructions on creating a new database. The default database, 'test', is reserved for running the integration tests. Using this as your development DB will have pretty unfortunate consequences. Make sure to add your created DB name to your `.env` file.
+The default database, 'test', is reserved for running the integration tests. Using this as your development DB will have pretty unfortunate consequences.
+
+To create a new database use the [RethinkDB dashboard](http://localhost:8080/#tables). Click on `+ Add Database` and enter your desired development database name. Make sure the name of this database matches the DB_NAME variable in your `.env` file. Note: The database must be running to use the browser-based dashboard.
 
 Make sure to start the database before starting the API server.
 
