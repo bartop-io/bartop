@@ -1,6 +1,9 @@
 language: node_js
 node_js:
 - '8'
+addons:
+  rethinkdb: '2.3.6'
+script: npm run test-all
 cache:
   directories:
   - node_modules
