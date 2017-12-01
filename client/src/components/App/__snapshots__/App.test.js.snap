@@ -34,11 +34,18 @@ exports[`matches the snapshot 1`] = `
       }
     }
   >
-    <Route
-      component={[Function]}
-      exact={true}
-      path="/"
-    />
+    <div>
+      <Route
+        component={[Function]}
+        exact={true}
+        path="/"
+      />
+      <Route
+        exact={true}
+        path="/callback"
+        render={[Function]}
+      />
+    </div>
   </Router>
 </Provider>
 `;

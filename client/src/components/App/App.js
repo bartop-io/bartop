@@ -9,6 +9,7 @@ import rootReducer from '../../ducks';
 import history from '../../history';
 import Auth from '../../authentication/authentication';
 import Landing from '../Landing/Landing';
+import Callback from '../Callback/Callback';
 
 // if in development, enable redux dev tools
 const enhancer =
@@ -38,7 +39,17 @@ export default class App extends React.Component {
     return (
       <Provider store={store}>
         <Router history={history}>
-          <Route path="/" exact component={Landing} />
+          <div>
+            <Route path="/" exact component={Landing} />
+            <Route
+              path="/callback"
+              exact
+              render={() => {
+                auth.handleAuthentication();
+                return <Callback />;
+              }}
+            />
+          </div>
         </Router>
       </Provider>
     );

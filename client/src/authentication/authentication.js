@@ -10,9 +10,10 @@ export default class Auth {
   });
 
   handleAuthentication = () => {
+    console.log('handling business');
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
-        this.setSession(authResult);
+        Auth.setSession(authResult);
         history.replace('/');
       } else if (err) {
         // TODO - go somewhere for unauthenticated jawns
