@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+
+import AuthButton from '../AuthButton/AuthButton';
 import { animations } from '../styleUtils';
 import logo from '../../images/logo.svg';
 
@@ -35,6 +37,8 @@ const Landing = () => (
     </Header>
     <Intro>
       To get started, edit <code>src/Landing.js</code> and save to reload.
+      <br />
+      Or, <AuthButton />
     </Intro>
   </Wrapper>
 );

@@ -1,6 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`matches the snapshot 1`] = `
+.c5 {
+  border: none;
+}
+
 .c0 {
   text-align: center;
 }
@@ -63,6 +67,17 @@ exports[`matches the snapshot 1`] = `
             src/Landing.js
           </code>
            and save to reload.
+          <br />
+          Or, 
+          <AuthButton>
+            <styled.button>
+              <button
+                className="c5"
+              >
+                Login
+              </button>
+            </styled.button>
+          </AuthButton>
         </p>
       </styled.p>
     </div>

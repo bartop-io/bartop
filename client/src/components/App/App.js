@@ -1,9 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Router, Route } from 'react-router-dom';
 import { injectGlobal } from 'styled-components';
+
 import rootReducer from '../../ducks';
+import history from '../../history';
+import Auth from '../../authentication/authentication';
 import Landing from '../Landing/Landing';
 
 // if in development, enable redux dev tools
@@ -15,21 +19,32 @@ const enhancer =
 // second argument is optional preloaded state so we pass undefined
 const store = createStore(rootReducer, undefined, enhancer);
 
-const App = () => (
-  <Provider store={store}>
-    <Router>
-      <Route path="/" exact component={Landing} />
-    </Router>
-  </Provider>
-);
+const auth = new Auth();
 
-// styled components helper for adding styles to global dom elements like body
-injectGlobal`
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
+export default class App extends React.Component {
+  // throw auth in context so any child components can use it if needed
+  getChildContext() {
+    return { auth };
   }
-`;
+  render() {
+    // styled components helper for adding styles to global dom elements like body
+    injectGlobal`
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+    `;
+    return (
+      <Provider store={store}>
+        <Router history={history}>
+          <Route path="/" exact component={Landing} />
+        </Router>
+      </Provider>
+    );
+  }
+}
 
-export default App;
+App.childContextTypes = {
+  auth: PropTypes.object
+};
