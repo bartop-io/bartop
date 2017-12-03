@@ -3,7 +3,7 @@ const controllerModule = require('../../api/drink/drinkController');
 const sinon = require('sinon');
 
 describe('drinks controller - unit test', function(done) {
-  it('.getAll - pass data from ORM to response', async function() {
+  it('.list - pass data from ORM to response', async function() {
     const mockDb = {};
     const dbResults = [
       {
@@ -22,7 +22,7 @@ describe('drinks controller - unit test', function(done) {
 
     const spy = sinon.spy(res, 'json');
 
-    const controller = controllerModule(mockDb).getAll;
+    const controller = controllerModule(mockDb).list;
     await controller(null, res, null);
 
     expect(spy.calledOnce).to.equal(true);

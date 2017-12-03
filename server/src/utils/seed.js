@@ -1,4 +1,5 @@
 const dbAdapter = require('../db/adapter');
+const logger = require('./logger');
 
 // put one drink into the database by default
 const drink = {
@@ -31,7 +32,7 @@ const seed = async () => {
     const promises = neededTables.map(table => {
       return dbAdapter.r
         .tableCreate(table)
-        .then(console.log(`  > '${table}' table created.`));
+        .then(logger.info(`  > '${table}' table created.`));
     });
 
     // create the tables
@@ -40,16 +41,16 @@ const seed = async () => {
     // add 'drinks' as separate table and use the name as the primary key
     if (!existingTables.includes('drinks')) {
       await dbAdapter.r.tableCreate('drinks', { primaryKey: 'name' });
-      console.log(`  > 'drinks' table created.`);
+      logger.info(`  > 'drinks' table created.`);
     }
 
     // add the default drink
     const res = await dbAdapter.r.table('drinks').insert(drink);
     if (res.inserted === 1) {
-      console.log(`    > default drink added to 'drinks' table.`);
+      logger.info(`    > default drink added to 'drinks' table.`);
     }
   } catch (err) {
-    console.error(err);
+    logger.error(err);
   }
 };
 

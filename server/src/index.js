@@ -1,6 +1,7 @@
 const config = require('../config');
 const app = require('./server');
 const seed = require('./utils/seed');
+const logger = require('./utils/logger');
 
 const port = config.api.port;
 
@@ -10,5 +11,5 @@ if (config.env === 'development') {
 }
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  logger.info(`Server is running on port ${port}`);
 });
