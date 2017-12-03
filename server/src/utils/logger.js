@@ -1,11 +1,7 @@
 const winston = require('winston');
 
-let trueIfTest = false;
-
 // silence the logger on tests
-if (process.env.NODE_ENV === 'test') {
-  trueIfTest = true;
-}
+const trueIfTest = process.env.NODE_ENV === 'test';
 
 const logger = new winston.Logger({
   level: 'info',
