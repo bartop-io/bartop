@@ -1,6 +1,7 @@
 const expect = require('chai').expect;
 const controllerModule = require('../../api/user/userController');
 const sinon = require('sinon');
+const res = require('../../utils/mockObjects').res;
 
 describe('users controller - unit test', function(done) {
   it('.create - set correct status code and user object', async function() {
@@ -15,19 +16,6 @@ describe('users controller - unit test', function(done) {
         id: 1234567
       }
     };
-
-    // use standard functions to access 'this' for implementing chained
-    // methods to simulate express, i.e. res.status(201).json(user)
-    const res = function() {
-      this.statusCode = 200;
-    };
-
-    res.status = function(code) {
-      this.statusCode = code;
-      return this;
-    };
-
-    res.json = data => data;
 
     const jsonSpy = sinon.spy(res, 'json');
     const statusSpy = sinon.spy(res, 'status');
