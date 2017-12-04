@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { Router, Route } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 import { injectGlobal } from 'styled-components';
 
 import rootReducer from '../../ducks';
@@ -10,6 +10,7 @@ import history from '../../history';
 import Auth from '../../authentication/authentication';
 import Landing from '../Landing/Landing';
 import Callback from '../Callback/Callback';
+import NotFound from '../NotFound/NotFound';
 
 // if in development, enable redux dev tools
 const enhancer =
@@ -39,7 +40,7 @@ export default class App extends React.Component {
     return (
       <Provider store={store}>
         <Router history={history}>
-          <div>
+          <Switch>
             <Route path="/" exact component={Landing} />
             <Route
               path="/callback"
@@ -49,7 +50,8 @@ export default class App extends React.Component {
                 return <Callback />;
               }}
             />
-          </div>
+            <Route component={NotFound} />
+          </Switch>
         </Router>
       </Provider>
     );

@@ -10,7 +10,6 @@ export default class Auth {
   });
 
   handleAuthentication = () => {
-    console.log('handling business');
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         Auth.setSession(authResult);
