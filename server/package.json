@@ -55,6 +55,7 @@
     ],
     "exclude": [
       "**/src/utils/seed.js",
+      "**/src/utils/mockObjects.js",
       "**/src/test/**"
     ]
   }
