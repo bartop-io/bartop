@@ -27,12 +27,6 @@ describe(`'drinks' route - api test`, function() {
     return Promise.resolve();
   });
 
-  // after the tests, drain the connection pool so the process exits properly
-  after(async function() {
-    await dbAdapter.r.getPoolMaster().drain();
-    return Promise.resolve();
-  });
-
   it(`GET - return array of drinks`, function(done) {
     request(app)
       .get('/api/v1/drinks')

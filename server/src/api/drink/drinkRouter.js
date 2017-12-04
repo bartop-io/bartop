@@ -3,6 +3,6 @@ const db = require('../../db/store');
 const controller = require('./drinkController')(db);
 
 // get /drinks
-router.route('/').get(controller.getAll);
+router.route('/').get(controller.list);
 
 module.exports = router;
