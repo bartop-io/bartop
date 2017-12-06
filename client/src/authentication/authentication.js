@@ -1,12 +1,14 @@
 import auth0 from 'auth0-js';
 import history from '../history';
+import jwt_decode from 'jwt-decode';
 
 export default class Auth {
   auth0 = new auth0.WebAuth({
     domain: process.env.REACT_APP_AUTH0_DOMAIN,
     clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
     redirectUri: `${process.env.REACT_APP_URL}/callback`,
-    responseType: 'token id_token'
+    responseType: 'token id_token',
+    scope: 'openid profile'
   });
 
   handleAuthentication = () => {
@@ -30,6 +32,8 @@ export default class Auth {
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
+    const decoded = jwt_decode(authResult.idToken);
+    localStorage.setItem('name', decoded.name);
     history.replace('/');
   }
 

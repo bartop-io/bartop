@@ -34,7 +34,7 @@ exports[`matches the snapshot 1`] = `
       }
     }
   >
-    <div>
+    <Switch>
       <Route
         component={[Function]}
         exact={true}
@@ -45,7 +45,10 @@ exports[`matches the snapshot 1`] = `
         path="/callback"
         render={[Function]}
       />
-    </div>
+      <Route
+        component={[Function]}
+      />
+    </Switch>
   </Router>
 </Provider>
 `;
