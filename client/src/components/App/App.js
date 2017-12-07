@@ -2,6 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
+import persistState from 'redux-localstorage';
 import { Router, Route, Switch } from 'react-router-dom';
 import { injectGlobal } from 'styled-components';
 
@@ -13,11 +14,20 @@ import Callback from '../Callback/Callback';
 import NotFound from '../NotFound/NotFound';
 
 // if in development, enable redux dev tools
-const enhancer =
+const devToolsEnhancer =
   process.env.NODE_ENV === 'development'
     ? window.__REDUX_DEVTOOLS_EXTENSION__ &&
       window.__REDUX_DEVTOOLS_EXTENSION__()
     : () => {};
+
+// persist all of our authentication state to local storage
+const localStorageEnhancer = persistState('authentication', { key: 'bartop' });
+
+const enhancer = compose(
+  applyMiddleware(thunk),
+  localStorageEnhancer,
+  devToolsEnhancer
+);
 
 const store = createStore(
   rootReducer,
