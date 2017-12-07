@@ -1,13 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
 import { Router, Route, Switch } from 'react-router-dom';
 import { injectGlobal } from 'styled-components';
 
 import rootReducer from '../../ducks';
-import history from '../../history';
-import Auth from '../../authentication/authentication';
+import history from '../../singletons/history';
+import { actions as authActions } from '../../ducks/authentication/authentication';
 import Landing from '../Landing/Landing';
 import Callback from '../Callback/Callback';
 import NotFound from '../NotFound/NotFound';
@@ -17,17 +17,15 @@ const enhancer =
   process.env.NODE_ENV === 'development'
     ? window.__REDUX_DEVTOOLS_EXTENSION__ &&
       window.__REDUX_DEVTOOLS_EXTENSION__()
-    : undefined;
-// second argument is optional preloaded state so we pass undefined
-const store = createStore(rootReducer, undefined, enhancer);
+    : () => {};
 
-const auth = new Auth();
+const store = createStore(
+  rootReducer,
+  undefined, // optional preloaded state
+  compose(applyMiddleware(thunk), enhancer) // compose to combine enhancers for middlewares like thunk and other enhancers like dev tools
+);
 
 export default class App extends React.Component {
-  // throw auth in context so any child components can use it if needed
-  getChildContext() {
-    return { auth };
-  }
   render() {
     // styled components helper for adding styles to global dom elements like body
     injectGlobal`
@@ -46,7 +44,7 @@ export default class App extends React.Component {
               path="/callback"
               exact
               render={() => {
-                auth.handleAuthentication();
+                store.dispatch(authActions.handleAuthentication());
                 return <Callback />;
               }}
             />
@@ -57,7 +55,3 @@ export default class App extends React.Component {
     );
   }
 }
-
-App.childContextTypes = {
-  auth: PropTypes.object
-};
