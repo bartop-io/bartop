@@ -10,11 +10,13 @@ import { willExpireAt, isExpired } from './utils';
 describe('willExpireAt', () => {
   it('calculates expiration time given a duration', () => {
     const expiresIn = 1000;
-    // divide to form a floating point number so we can use
-    //toBeCloseTo() since it may be off by a few milliseconds
-    expect(willExpireAt(expiresIn) / 1000).toBeCloseTo(
-      (expiresIn * 1000 + new Date().getTime()) / 1000
-    );
+    // there can be a slight difference in new Date().getTime()
+    // so use math to give some leeway
+    expect(
+      Math.abs(
+        willExpireAt(expiresIn) - (expiresIn * 1000 + new Date().getTime())
+      )
+    ).toBeLessThan(1000);
   });
 });
 
