@@ -32,7 +32,7 @@ const enhancer = compose(
 const store = createStore(
   rootReducer,
   undefined, // optional preloaded state
-  compose(applyMiddleware(thunk), enhancer) // compose to combine enhancers for middlewares like thunk and other enhancers like dev tools
+  enhancer // compose to combine enhancers for middlewares like thunk and other enhancers like dev tools
 );
 
 export default class App extends React.Component {

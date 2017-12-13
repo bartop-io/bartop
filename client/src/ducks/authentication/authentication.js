@@ -1,6 +1,7 @@
 import auth from '../../singletons/authentication';
 import history from '../../singletons/history';
-import jwt_decode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
+import { willExpireAt } from '../../utils/utils';
 
 export const types = {
   LOGIN_REQUEST: 'AUTHENTICATION/LOGIN_REQUEST',
@@ -28,7 +29,10 @@ export const actions = {
   handleAuthentication: () => {
     // redux-thunk knows to handle action functions instead of normal action objects
     // this allows us to dispatch actions within actions, as well as access state
-    return (dispatch, getState) => {
+    return dispatch => {
+      dispatch({
+        type: types.HANDLE_AUTHENTICATION
+      });
       auth.parseHash((err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
           dispatch(actions.loginSuccess(authResult));
@@ -53,7 +57,7 @@ export const initialState = {
   status: {
     loggingIn: false,
     loggedIn: false,
-    error: null
+    error: undefined
   }
 };
 
@@ -69,16 +73,14 @@ export default (state = initialState, action) => {
       };
     case types.LOGIN_SUCCESS:
       const { authResult } = action;
-      // determine when the token will expire
-      const expiresAt = JSON.stringify(
-        authResult.expiresIn * 1000 + new Date().getTime()
-      );
+      const expiresAt = JSON.stringify(willExpireAt(authResult.expiresIn));
+
       return {
         ...state,
         accessToken: authResult.accessToken,
         idToken: authResult.idToken,
         expiresAt,
-        profile: jwt_decode(authResult.idToken),
+        profile: jwtDecode(authResult.idToken),
         status: {
           loggingIn: false,
           loggedIn: true,

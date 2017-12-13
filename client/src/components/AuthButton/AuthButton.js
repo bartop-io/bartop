@@ -4,21 +4,20 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import { actions } from '../../ducks/authentication/authentication';
-import { isExpired } from '../../utils';
 
 const Button = styled.button`
   border: none;
 `;
 
-export const AuthButton = ({ expiresAt, login, logout }) =>
-  !expiresAt || isExpired(JSON.parse(expiresAt)) ? (
+export const AuthButton = ({ loggedIn, login, logout }) =>
+  !loggedIn ? (
     <Button onClick={login}>Login</Button>
   ) : (
     <Button onClick={logout}>Logout</Button>
   );
 
 AuthButton.propTypes = {
-  expiresAt: PropTypes.string,
+  loggedIn: PropTypes.bool.isRequired,
   login: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired
 };
@@ -28,7 +27,7 @@ AuthButton.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-  expiresAt: state.authentication.expiresAt
+  loggedIn: state.authentication.status.loggedIn
 });
 
 const mapDispatchToProps = {
