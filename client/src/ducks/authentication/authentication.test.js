@@ -3,11 +3,16 @@ import thunk from 'redux-thunk';
 
 import reducer, { types, actions, initialState } from './authentication';
 
-// authentication dependencies
-// import entire objects instead of defaults so we can use jest.spyOn
-import * as jwtDecodeModule from 'jwt-decode';
+// import & mock authentication's dependencies so we can spy on functions
+import jwtDecode from 'jwt-decode';
 import auth from '../../singletons/authentication';
-import * as utilsModule from '../../utils/utils';
+import { willExpireAt } from '../../utils/utils';
+
+jest.mock('jwt-decode', () => jest.fn(x => x));
+
+jest.mock('../../utils/utils', () => ({
+  willExpireAt: jest.fn(x => x)
+}));
 
 describe('authentication actions', () => {
   it('should call auth authorize when requesting login', () => {
@@ -123,12 +128,7 @@ describe('authentication reducer', () => {
     );
   });
 
-  xit('should update state on login success', () => {
-    const jwtDecode = jest.spyOn(jwtDecodeModule, 'default');
-    jwtDecode.mockImplementation(s => s);
-    const willExpireAt = jest.spyOn(utilsModule, 'willExpireAt');
-    willExpireAt.mockImplementation(s => s);
-
+  it('should update state on login success', () => {
     const authResult = {
       accessToken: '',
       idToken: '',
@@ -138,7 +138,7 @@ describe('authentication reducer', () => {
       ...initialState,
       accessToken: authResult.accessToken,
       idToken: authResult.idToken,
-      expiresAt: authResult.expiresAt,
+      expiresAt: JSON.stringify(authResult.expiresIn),
       profile: authResult.idToken,
       status: {
         loggingIn: false,
@@ -153,10 +153,9 @@ describe('authentication reducer', () => {
       reducer(undefined, { type: types.LOGIN_SUCCESS, authResult })
     ).toEqual(expectedState);
     expect(jwtDecode).toBeCalledWith(authResult.idToken);
-    expect(willExpireAt).toBeCalledWith(authResult.expiresAt);
+    expect(willExpireAt).toBeCalledWith(authResult.expiresIn);
 
-    jwtDecode.mockRestore();
-    willExpireAt.mockRestore();
+    jest.resetModules();
   });
 
   it('should adjust status on failed login', () => {

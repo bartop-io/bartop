@@ -1,17 +1,9 @@
-// // determine when the token will expire
-// export const willExpireAt = expiresIn =>
-//   expiresIn * 1000 + new Date().getTime();
-
-// // check whether the current time is past the access token's expiry time
-// export const isExpired = expiresAt => expiresAt <= new Date().getTime();
-
 import { willExpireAt, isExpired } from './utils';
 
 describe('willExpireAt', () => {
   it('calculates expiration time given a duration', () => {
     const expiresIn = 1000;
-    // there can be a slight difference in new Date().getTime()
-    // so use math to give some leeway
+    // there can be a slight difference in new Date().getTime(), use math for leeway
     expect(
       Math.abs(
         willExpireAt(expiresIn) - (expiresIn * 1000 + new Date().getTime())

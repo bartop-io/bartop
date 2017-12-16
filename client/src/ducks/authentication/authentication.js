@@ -84,7 +84,7 @@ export default (state = initialState, action) => {
         status: {
           loggingIn: false,
           loggedIn: true,
-          error: null
+          error: undefined
         }
       };
     case types.LOGIN_FAILURE:
