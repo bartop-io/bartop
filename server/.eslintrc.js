@@ -15,6 +15,7 @@ module.exports = {
     'prettier/prettier': ['error', {'singleQuote': true}],
     'no-var': 'error',
     'prefer-const': 'error', 
+    'camelcase': 'warn',
     'array-callback-return': 'warn',
     'default-case': ['error', { commentPattern: '^no default$' }],
     'eqeqeq': ['error', 'smart'],
