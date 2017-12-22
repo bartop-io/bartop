@@ -2,6 +2,7 @@ const app = require('../../server');
 const request = require('supertest');
 const expect = require('chai').expect;
 const dbAdapter = require('../../db/adapter');
+const token = require('../../../config').auth.test;
 
 describe(`'users' route - api test`, function() {
   // before the tests, prime the database with test tables/data
@@ -26,10 +27,21 @@ describe(`'users' route - api test`, function() {
   it(`POST - create a new user`, function(done) {
     request(app)
       .post('/api/v1/users/12345')
+      .set('Authorization', 'Bearer ' + token)
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body).to.be.an('object');
         expect(res.body).to.deep.equal({ id: '12345' });
+        done();
+      });
+  });
+
+  it('POST - return a 401 if a user is unauthorized', function(done) {
+    request(app)
+      .post('/api/v1/users/12345')
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(401);
+        expect(res.body).to.equal('Access... DENIED.');
         done();
       });
   });

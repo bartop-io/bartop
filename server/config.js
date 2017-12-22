@@ -22,7 +22,11 @@ module.exports = {
   api: {
     port: process.env.API_PORT
   },
-  env: environment
+  env: environment,
+  auth: {
+    audience: process.env.AUTH0_AUDIENCE,
+    test: process.env.TEST_TOKEN
+  }
 };
 
 function envFileIsValid() {
@@ -30,6 +34,8 @@ function envFileIsValid() {
     process.env.API_PORT &&
     process.env.DB_HOST &&
     process.env.DB_PORT &&
-    process.env.DB_NAME
+    process.env.DB_NAME &&
+    process.env.AUTH0_AUDIENCE &&
+    process.env.TEST_TOKEN
   );
 }

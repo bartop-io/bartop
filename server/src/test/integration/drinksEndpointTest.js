@@ -2,6 +2,7 @@ const app = require('../../server');
 const request = require('supertest');
 const expect = require('chai').expect;
 const dbAdapter = require('../../db/adapter');
+const token = require('../../../config').auth.test;
 
 describe(`'drinks' route - api test`, function() {
   // before the tests, prime the database with test tables/data
@@ -30,11 +31,22 @@ describe(`'drinks' route - api test`, function() {
   it(`GET - return array of drinks`, function(done) {
     request(app)
       .get('/api/v1/drinks')
+      .set('Authorization', 'Bearer ' + token)
       .end((err, res) => {
         expect(res.statusCode).to.equal(200);
         expect(res.body).to.be.an('array');
         expect(res.body[0].name).to.equal('Tom Collins');
         expect(res.body[1].name).to.equal('Old Fashioned');
+        done();
+      });
+  });
+
+  it('GET - return a 401 if a user is unauthorized', function(done) {
+    request(app)
+      .get('/api/v1/drinks')
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(401);
+        expect(res.body).to.equal('Access... DENIED.');
         done();
       });
   });

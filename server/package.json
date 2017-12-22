@@ -28,9 +28,11 @@
   "dependencies": {
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
+    "express-jwt": "^5.3.0",
     "helmet": "^3.9.0",
     "js-data": "^3.0.1",
     "js-data-rethinkdb": "^3.0.0",
+    "jwks-rsa": "^1.2.1",
     "morgan": "^1.9.0",
     "rethinkdbdash": "^2.3.31",
     "winston": "^2.4.0"
