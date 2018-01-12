@@ -14,8 +14,7 @@ export const actions = {
       type: types.SET_NAME,
       name
     });
-    // post name to Auth0 user metadata
-    console.log('gonna post name to Auth0 as well');
+    // TODO - post name to Auth0 user metadata
   }
 };
 

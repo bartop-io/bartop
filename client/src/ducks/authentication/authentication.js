@@ -51,7 +51,6 @@ export const actions = {
         if (authResult && authResult.accessToken && authResult.idToken) {
           try {
             const decodedIdToken = jwtDecode(authResult.idToken);
-            console.log(decodedIdToken);
             const { email, phoneNumber } = decodedIdToken;
             const id = decodedIdToken.sub;
             let name = decodedIdToken[`${config.auth0.claimNamespace}/name`];
@@ -64,7 +63,6 @@ export const actions = {
               email,
               phoneNumber
             };
-            console.log(userInfo);
             dispatch(
               actions.loginSuccess(
                 authResult.accessToken,
