@@ -2,90 +2,124 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import reducer, { types, actions, initialState } from './authentication';
+import { types as userTypes } from '../user/user';
+import {
+  mockAuthResult,
+  mockUserInfo,
+  mockError,
+  mockDecodedIdTokenWithName,
+  mockDecodedIdTokenWithoutName,
+  mockAuthStatuses
+} from '../state-mocks';
 
 // import & mock authentication's dependencies so we can spy on functions
 import jwtDecode from 'jwt-decode';
 import auth from '../../singletons/authentication';
-import { willExpireAt } from '../../utils/utils';
+import * as utils from '../../utils/utils';
 
-jest.mock('jwt-decode', () => jest.fn(x => x));
-
-jest.mock('../../utils/utils', () => ({
-  willExpireAt: jest.fn(x => x)
-}));
+jest.mock('jwt-decode');
+jest.mock('../../singletons/authentication');
+jest.mock('../../utils/utils');
 
 describe('authentication actions', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   it('should call auth authorize when requesting login', () => {
-    const authorize = jest.spyOn(auth, 'authorize').mockImplementation(x => x);
     const expectedAction = {
       type: types.LOGIN_REQUEST
     };
-    expect(authorize).not.toBeCalled();
+    expect(auth.authorize).not.toBeCalled();
     const action = actions.loginRequest();
     expect(action).toEqual(expectedAction);
-    expect(authorize).toBeCalled();
+    expect(auth.authorize).toBeCalled();
   });
 
   it('should call login success with result of authentication', () => {
-    const authResult = {
-      token: 'token',
-      profile: 'profile'
-    };
     const expectedAction = {
       type: types.LOGIN_SUCCESS,
-      authResult
+      accessToken: mockAuthResult.accessToken,
+      expiresIn: mockAuthResult.expiresIn,
+      userInfo: mockUserInfo
     };
-    const action = actions.loginSuccess(authResult);
+    const action = actions.loginSuccess(
+      mockAuthResult.accessToken,
+      mockAuthResult.expiresIn,
+      mockUserInfo
+    );
     expect(action).toEqual(expectedAction);
   });
 
   it('should fail login with an error', () => {
-    const error = 'the login failed';
     const expectedAction = {
       type: types.LOGIN_FAILURE,
-      error
+      error: mockError
     };
-    const action = actions.loginFailure(error);
+    const action = actions.loginFailure(mockError);
     expect(action).toEqual(expectedAction);
   });
 
-  describe('handle authentication action', () => {
-    let store, parseHash;
+  describe('can handle authentication', () => {
+    let store;
 
     beforeAll(() => {
       store = configureMockStore([thunk])();
-      parseHash = jest.spyOn(auth, 'parseHash');
     });
 
     afterEach(() => {
       store.clearActions();
-      parseHash.mockReset();
+      auth.parseHash.mockReset();
     });
 
-    it('should call login success after successfully handling authentication', () => {
-      const mockAuthResult = {
-        accessToken: 'accessToken',
-        idToken: 'idToken'
-      };
-      parseHash.mockImplementation(f => f(null, mockAuthResult)); // mock successful parseHash call
+    it('should dispatch login success after successfully handling authentication', () => {
+      auth.parseHash.mockImplementation(f => f(null, mockAuthResult)); // mock successful parseHash call
+      jwtDecode.mockImplementation(idToken => mockDecodedIdTokenWithName);
       const expectedActions = [
         {
           type: types.HANDLE_AUTHENTICATION
         },
         {
           type: types.LOGIN_SUCCESS,
-          authResult: mockAuthResult
+          accessToken: mockAuthResult.accessToken,
+          expiresIn: mockAuthResult.expiresIn,
+          userInfo: mockUserInfo
         }
       ];
-      expect(parseHash).not.toBeCalled();
+      expect(auth.parseHash).not.toBeCalled();
+      expect(jwtDecode).not.toBeCalled();
       store.dispatch(actions.handleAuthentication());
-      expect(parseHash).toBeCalled();
+      expect(auth.parseHash).toBeCalled();
+      expect(jwtDecode).toBeCalledWith(mockAuthResult.idToken);
       expect(store.getActions()).toEqual(expectedActions);
     });
 
-    it('should call login failure if handling authentication errors', () => {
-      const mockError = {};
-      parseHash.mockImplementation(f => f(mockError, null)); // mock unsuccessful parseHash call
+    it(`should request user's name if blank after successfully handling authentication`, () => {
+      auth.parseHash.mockImplementation(f => f(null, mockAuthResult)); // mock successful parseHash call
+      jwtDecode.mockImplementation(idToken => mockDecodedIdTokenWithoutName);
+      const expectedActions = [
+        {
+          type: types.HANDLE_AUTHENTICATION
+        },
+        {
+          type: userTypes.REQUEST_NAME
+        },
+        {
+          type: types.LOGIN_SUCCESS,
+          accessToken: mockAuthResult.accessToken,
+          expiresIn: mockAuthResult.expiresIn,
+          userInfo: {
+            ...mockUserInfo,
+            name: undefined // we requested the name, but don't necessarily have it yet
+          }
+        }
+      ];
+      store.dispatch(actions.handleAuthentication());
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+
+    it('should call login failure if parsing the hash errors', () => {
+      auth.parseHash.mockImplementation(f => f(mockError, null)); // mock unsuccessful parseHash call
       const expectedActions = [
         {
           type: types.HANDLE_AUTHENTICATION
@@ -95,14 +129,30 @@ describe('authentication actions', () => {
           error: mockError
         }
       ];
-      expect(parseHash).not.toBeCalled();
       store.dispatch(actions.handleAuthentication());
-      expect(parseHash).toBeCalled();
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+
+    it('should call login failure if decoding the idToken errors', () => {
+      auth.parseHash.mockImplementation(f => f(null, mockAuthResult));
+      jwtDecode.mockImplementation(idToken => {
+        throw mockError;
+      });
+      const expectedActions = [
+        {
+          type: types.HANDLE_AUTHENTICATION
+        },
+        {
+          type: types.LOGIN_FAILURE,
+          error: mockError
+        }
+      ];
+      store.dispatch(actions.handleAuthentication());
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
 
-  it('should logout', () => {
+  it('can logout', () => {
     const expectedAction = {
       type: types.LOGOUT
     };
@@ -111,6 +161,10 @@ describe('authentication actions', () => {
 });
 
 describe('authentication reducer', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toEqual(initialState);
   });
@@ -118,10 +172,7 @@ describe('authentication reducer', () => {
   it('should adjust status on login request', () => {
     const expectedState = {
       ...initialState,
-      status: {
-        ...initialState.status,
-        loggingIn: true
-      }
+      status: mockAuthStatuses.requesting
     };
     expect(reducer(undefined, { type: types.LOGIN_REQUEST })).toEqual(
       expectedState
@@ -129,46 +180,34 @@ describe('authentication reducer', () => {
   });
 
   it('should update state on login success', () => {
-    const authResult = {
-      accessToken: '',
-      idToken: '',
-      expiresIn: 100
-    };
+    utils.willExpireAt.mockImplementation(x => x);
     const expectedState = {
       ...initialState,
-      accessToken: authResult.accessToken,
-      idToken: authResult.idToken,
-      expiresAt: JSON.stringify(authResult.expiresIn),
-      profile: authResult.idToken,
-      status: {
-        loggingIn: false,
-        loggedIn: true,
-        error: undefined
-      }
+      accessToken: mockAuthResult.accessToken,
+      expiresAt: utils.willExpireAt(mockAuthResult.expiresIn),
+      status: mockAuthStatuses.success
     };
 
-    expect(jwtDecode).not.toBeCalled();
-    expect(willExpireAt).not.toBeCalled();
+    utils.willExpireAt.mockClear();
+    expect(utils.willExpireAt).not.toBeCalled();
     expect(
-      reducer(undefined, { type: types.LOGIN_SUCCESS, authResult })
+      reducer(undefined, {
+        type: types.LOGIN_SUCCESS,
+        accessToken: mockAuthResult.accessToken,
+        expiresIn: mockAuthResult.expiresIn
+      })
     ).toEqual(expectedState);
-    expect(jwtDecode).toBeCalledWith(authResult.idToken);
-    expect(willExpireAt).toBeCalledWith(authResult.expiresIn);
-
-    jest.resetModules();
+    expect(utils.willExpireAt).toBeCalledWith(mockAuthResult.expiresIn);
   });
 
   it('should adjust status on failed login', () => {
-    const action = { type: types.LOGIN_FAILURE, error: {} };
     const expectedState = {
       ...initialState,
-      status: {
-        loggingIn: false,
-        loggedIn: false,
-        error: action.error
-      }
+      status: mockAuthStatuses.failure
     };
-    expect(reducer(undefined, action)).toEqual(expectedState);
+    expect(
+      reducer(undefined, { type: types.LOGIN_FAILURE, error: mockError })
+    ).toEqual(expectedState);
   });
 
   it('should reset to initial state on logout', () => {

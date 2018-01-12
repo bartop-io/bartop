@@ -1,7 +1,10 @@
+import jwtDecode from 'jwt-decode';
+
 import auth from '../../singletons/authentication';
 import history from '../../singletons/history';
-import jwtDecode from 'jwt-decode';
+import config from '../../config';
 import { willExpireAt } from '../../utils/utils';
+import { actions as userActions } from '../user/user';
 
 export const types = {
   LOGIN_REQUEST: 'AUTHENTICATION/LOGIN_REQUEST',
@@ -18,46 +21,80 @@ export const actions = {
       type: types.LOGIN_REQUEST
     };
   },
-  loginSuccess: authResult => ({
+  loginSuccess: (accessToken, expiresIn, userInfo) => ({
     type: types.LOGIN_SUCCESS,
-    authResult
+    accessToken,
+    expiresIn,
+    userInfo
   }),
   loginFailure: error => ({
     type: types.LOGIN_FAILURE,
     error
   }),
-  handleAuthentication: () => {
+  handleAuthentication: () =>
     // redux-thunk knows to handle action functions instead of normal action objects
     // this allows us to dispatch actions within actions, as well as access state
-    return dispatch => {
+    (dispatch, getState) => {
       dispatch({
         type: types.HANDLE_AUTHENTICATION
       });
+
+      // shorthand for when we encounter an error during this authentication process
+      const errorOut = err => {
+        console.error(err);
+        dispatch(actions.loginFailure(err));
+        // TODO - go somewhere for failure or unauthenticated jawns
+        history.replace('/');
+      };
+
       auth.parseHash((err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
-          dispatch(actions.loginSuccess(authResult));
-          history.replace('/');
+          try {
+            const decodedIdToken = jwtDecode(authResult.idToken);
+            console.log(decodedIdToken);
+            const { email, phoneNumber } = decodedIdToken;
+            const id = decodedIdToken.sub;
+            let name = decodedIdToken[`${config.auth0.claimNamespace}/name`];
+            if (!name) {
+              dispatch(userActions.requestName());
+            }
+            const userInfo = {
+              id,
+              name,
+              email,
+              phoneNumber
+            };
+            console.log(userInfo);
+            dispatch(
+              actions.loginSuccess(
+                authResult.accessToken,
+                authResult.expiresIn,
+                userInfo
+              )
+            );
+            history.replace('/');
+          } catch (err) {
+            errorOut(err);
+          }
         } else if (err) {
-          console.error(err);
-          dispatch(actions.loginFailure(err));
-          // TODO - go somewhere for unauthenticated jawns
-          history.replace('/');
+          errorOut(err);
+        } else {
+          errorOut({
+            message: 'An unknown error occurred while authenticating'
+          });
         }
       });
-    };
-  },
+    },
   logout: () => ({ type: types.LOGOUT })
 };
 
 export const initialState = {
   accessToken: null,
-  idToken: null,
   expiresAt: null,
-  profile: null,
   status: {
     loggingIn: false,
     loggedIn: false,
-    error: undefined
+    error: null
   }
 };
 
@@ -72,19 +109,17 @@ export default (state = initialState, action) => {
         }
       };
     case types.LOGIN_SUCCESS:
-      const { authResult } = action;
-      const expiresAt = JSON.stringify(willExpireAt(authResult.expiresIn));
+      const { accessToken, expiresIn } = action;
+      const expiresAt = willExpireAt(expiresIn);
 
       return {
         ...state,
-        accessToken: authResult.accessToken,
-        idToken: authResult.idToken,
+        accessToken,
         expiresAt,
-        profile: jwtDecode(authResult.idToken),
         status: {
           loggingIn: false,
           loggedIn: true,
-          error: undefined
+          error: null
         }
       };
     case types.LOGIN_FAILURE:
