@@ -15,31 +15,31 @@ environment === 'test' ? (dbName = 'test') : (dbName = process.env.DB_NAME);
 
 module.exports = {
   database: {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
+    host: process.env.BARTOP_DB_HOST,
+    port: process.env.BARTOP_DB_PORT,
     db: dbName
   },
   api: {
-    port: process.env.API_PORT
+    port: process.env.BARTOP_API_PORT
   },
   env: environment,
   auth: {
-    audience: process.env.AUDIENCE,
-    id: process.env.CLIENT_ID,
-    secret: process.env.CLIENT_SECRET,
-    grant: process.env.GRANT_TYPE
+    audience: process.env.BARTOP_API_AUDIENCE,
+    id: process.env.BARTOP_API_CLIENT_ID,
+    secret: process.env.BARTOP_API_CLIENT_SECRET,
+    grant: process.env.BARTOP_API_GRANT_TYPE
   }
 };
 
 function envFileIsValid() {
   return (
-    process.env.API_PORT &&
-    process.env.DB_HOST &&
-    process.env.DB_PORT &&
-    process.env.DB_NAME &&
-    process.env.AUDIENCE &&
-    process.env.CLIENT_ID &&
-    process.env.CLIENT_SECRET &&
-    process.env.GRANT_TYPE
+    process.env.BARTOP_API_PORT &&
+    process.env.BARTOP_DB_HOST &&
+    process.env.BARTOP_DB_PORT &&
+    process.env.BARTOP_DB_NAME &&
+    process.env.BARTOP_API_AUDIENCE &&
+    process.env.BARTOP_API_CLIENT_ID &&
+    process.env.BARTOP_API_CLIENT_SECRET &&
+    process.env.BARTOP_API_GRANT_TYPE
   );
 }
