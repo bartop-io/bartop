@@ -14,8 +14,10 @@ import Landing from '../Landing/Landing';
 import Callback from '../Callback/Callback';
 import NotFound from '../NotFound/NotFound';
 
-// persist all of our authentication state to local storage
-const localStorageEnhancer = persistState('authentication', { key: 'bartop' });
+// persist all of our auth & user state to local storage
+const localStorageEnhancer = persistState(['authentication', 'user'], {
+  key: 'bartop'
+});
 
 const enhancer = composeWithDevTools(
   applyMiddleware(thunk),
