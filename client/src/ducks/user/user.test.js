@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 
 import reducer, { types, actions, initialState } from './user';
 import { types as authTypes } from '../authentication/authentication';
-import { mockName, mockUserInfo } from '../state-mocks';
+import { mockName, mockUserInfo } from '../../test-helpers/state-mocks';
 
 describe('user actions', () => {
   it(`can request the user's name`, () => {

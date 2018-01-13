@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import 'jest-styled-components';
 
 import { AuthButton } from './AuthButton';
-import { noop } from '../../testUtils';
+import { noop } from '../../test-helpers/utils';
 
 const requiredProps = {
   loggedIn: false,

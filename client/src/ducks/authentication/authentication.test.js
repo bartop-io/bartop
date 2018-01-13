@@ -10,7 +10,7 @@ import {
   mockDecodedIdTokenWithName,
   mockDecodedIdTokenWithoutName,
   mockAuthStatuses
-} from '../state-mocks';
+} from '../../test-helpers/state-mocks';
 
 // import & mock authentication's dependencies so we can spy on functions
 import jwtDecode from 'jwt-decode';
