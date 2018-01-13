@@ -2,11 +2,14 @@ const app = require('../../server');
 const request = require('supertest');
 const expect = require('chai').expect;
 const dbAdapter = require('../../db/adapter');
-const token = require('../../../config').auth.test;
+const auth = require('../../../config').auth;
+const axios = require('axios');
 
 describe(`'drinks' route - api test`, function() {
-  // before the tests, prime the database with test tables/data
+  let token;
+
   before(async function() {
+    // prime the database with test tables/data
     const tables = await dbAdapter.r.tableList();
     const drinkTestObjects = [
       {
@@ -18,14 +21,24 @@ describe(`'drinks' route - api test`, function() {
         name: 'Tom Collins'
       }
     ];
-
     if (tables.includes('drinks')) {
       await dbAdapter.r.tableDrop('drinks');
     }
-
     await dbAdapter.r.tableCreate('drinks', { primaryKey: 'name' });
     await dbAdapter.r.table('drinks').insert(drinkTestObjects);
-    return Promise.resolve();
+
+    // get a temporary bearer token for testing
+    const options = {
+      method: 'POST',
+      url: 'https://bartop.auth0.com/oauth/token',
+      headers: { 'content-type': 'application/json' },
+      data: `{"client_id":"${auth.id}","client_secret":"${auth.secret}","audience":"${auth.audience}","grant_type":"${auth.grant}"}`
+    };
+
+    const response = await axios(options);
+    token = response.data.access_token;
+
+    return;
   });
 
   it(`GET - return array of drinks`, function(done) {
@@ -52,15 +65,12 @@ describe(`'drinks' route - api test`, function() {
   });
 
   it('GET - handle error if db table is not available', async function() {
-    try {
-      await dbAdapter.r.tableDrop('drinks');
-    } finally {
-      request(app)
-        .get('/api/v1/drinks')
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(500);
-          expect(res.body).to.equal('Something broke!');
-        });
-    }
+    await dbAdapter.r.tableDrop('drinks');
+    const res = await request(app)
+      .get('/api/v1/drinks')
+      .set('Authorization', 'Bearer ' + token);
+
+    expect(res.statusCode).to.equal(500);
+    expect(res.body).to.equal('Something broke!');
   });
 });

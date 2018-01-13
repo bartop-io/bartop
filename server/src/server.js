@@ -22,12 +22,15 @@ app.use('/api/v1', api);
 
 // global error handling middleware
 app.use((err, req, res, next) => {
-  if (err.name === 'UnauthorizedError') {
-    logger.error('Request is not authorized.');
-    res.status(401).json('Access... DENIED.');
-  } else {
-    logger.error(err.stack);
-    res.status(500).json('Something broke!');
+  switch (err.name) {
+    case 'UnauthorizedError':
+      logger.error('Request is not authorized.');
+      res.status(401).json('Access... DENIED.');
+      break;
+
+    default:
+      logger.error(`${err.name}: ${err.message}`);
+      res.status(500).json('Something broke!');
   }
 });
 

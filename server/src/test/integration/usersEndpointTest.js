@@ -2,26 +2,39 @@ const app = require('../../server');
 const request = require('supertest');
 const expect = require('chai').expect;
 const dbAdapter = require('../../db/adapter');
-const token = require('../../../config').auth.test;
+const auth = require('../../../config').auth;
+const axios = require('axios');
 
 describe(`'users' route - api test`, function() {
-  // before the tests, prime the database with test tables/data
-  before(async function() {
-    const tables = await dbAdapter.r.tableList();
+  let token;
 
+  before(async function() {
+    // prime the database with test tables/data
+    const tables = await dbAdapter.r.tableList();
     if (tables.includes('users')) {
       await dbAdapter.r.tableDrop('users');
     }
-
     await dbAdapter.r.tableCreate('users');
-    return Promise.resolve();
+
+    // get a temporary bearer token for testing
+    const options = {
+      method: 'POST',
+      url: 'https://bartop.auth0.com/oauth/token',
+      headers: { 'content-type': 'application/json' },
+      data: `{"client_id":"${auth.id}","client_secret":"${auth.secret}","audience":"${auth.audience}","grant_type":"${auth.grant}"}`
+    };
+
+    const response = await axios(options);
+    token = response.data.access_token;
+
+    return;
   });
 
   // after the tests, drain the connection pool so the process exits properly
   // this has to happen after the last tests are run
   after(async function() {
     await dbAdapter.r.getPoolMaster().drain();
-    return Promise.resolve();
+    return;
   });
 
   it(`POST - create a new user`, function(done) {
@@ -47,15 +60,12 @@ describe(`'users' route - api test`, function() {
   });
 
   it('POST - handle error if db table is not available', async function() {
-    try {
-      await dbAdapter.r.tableDrop('users');
-    } finally {
-      request(app)
-        .post('/api/v1/users/0987')
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(500);
-          expect(res.body).to.equal('Something broke!');
-        });
-    }
+    await dbAdapter.r.tableDrop('users');
+    const res = await request(app)
+      .post('/api/v1/users/0987')
+      .set('Authorization', 'Bearer ' + token);
+
+    expect(res.statusCode).to.equal(500);
+    expect(res.body).to.equal('Something broke!');
   });
 });

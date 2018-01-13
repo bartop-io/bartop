@@ -24,8 +24,10 @@ module.exports = {
   },
   env: environment,
   auth: {
-    audience: process.env.AUTH0_AUDIENCE,
-    test: process.env.TEST_TOKEN
+    audience: process.env.AUDIENCE,
+    id: process.env.CLIENT_ID,
+    secret: process.env.CLIENT_SECRET,
+    grant: process.env.GRANT_TYPE
   }
 };
 
@@ -35,7 +37,9 @@ function envFileIsValid() {
     process.env.DB_HOST &&
     process.env.DB_PORT &&
     process.env.DB_NAME &&
-    process.env.AUTH0_AUDIENCE &&
-    process.env.TEST_TOKEN
+    process.env.AUDIENCE &&
+    process.env.CLIENT_ID &&
+    process.env.CLIENT_SECRET &&
+    process.env.GRANT_TYPE
   );
 }
