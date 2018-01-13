@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import persistState from 'redux-localstorage';
 import { Router, Route, Switch } from 'react-router-dom';
@@ -13,20 +14,12 @@ import Landing from '../Landing/Landing';
 import Callback from '../Callback/Callback';
 import NotFound from '../NotFound/NotFound';
 
-// if in development, enable redux dev tools
-const devToolsEnhancer =
-  process.env.NODE_ENV === 'development'
-    ? window.__REDUX_DEVTOOLS_EXTENSION__ &&
-      window.__REDUX_DEVTOOLS_EXTENSION__()
-    : () => {};
-
 // persist all of our authentication state to local storage
 const localStorageEnhancer = persistState('authentication', { key: 'bartop' });
 
-const enhancer = compose(
+const enhancer = composeWithDevTools(
   applyMiddleware(thunk),
-  localStorageEnhancer,
-  devToolsEnhancer
+  localStorageEnhancer
 );
 
 const store = createStore(
