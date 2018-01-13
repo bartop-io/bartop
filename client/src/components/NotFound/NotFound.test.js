@@ -1,9 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import 'jest-styled-components';
-import Landing from './Landing';
+
+import NotFound from './NotFound';
 
 it('matches the snapshot', () => {
-  const wrapper = shallow(<Landing />);
+  const wrapper = shallow(<NotFound />);
   expect(wrapper).toMatchSnapshot();
 });
