@@ -6,6 +6,7 @@
     "install": "npm run install-client && npm run install-server",
     "install-client": "cd client && npm install",
     "install-server": "cd server && npm install",
+    "start": "echo 'To run the full application, execute `npm run server` and `npm run client` in two separate processes.'",
     "client": "cd client && npm start",
     "server": "cd server && npm start",
     "database": "cd server && npm run database",
