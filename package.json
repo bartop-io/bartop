@@ -13,7 +13,7 @@
     "test": "npm run test-server && npm run test-client",
     "test-server": "cd server && npm test",
     "test-client": "cd client && npm test",
-    "test-all": "npm run test-server-integration && npm run test-client-ci'",
+    "test-all": "npm run test-server-integration && npm run test-client-ci",
     "test-client-ci": "cd client && CI=true npm test -- -u",
     "test-server-integration": "cd server && npm run test-all",
     "lint": "npm run lint-server && npm run lint-client",
