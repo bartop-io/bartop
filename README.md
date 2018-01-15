@@ -22,24 +22,23 @@ To create a new database use the [RethinkDB dashboard](http://localhost:8080/#ta
 
 Make sure to start the database before starting the API server.
 
-### Running the App Locally
-BarTop runs on two servers - one serving the client and one serving our API.
-`npm start` - concurrently runs:
-* `npm run server` - the server at http://localhost:3001
-* `npm run client` - the client at http://localhost:3000
-
 ### Environment Variables
 
 The app is configured using `.env` files in both the client/ and server/ directories. Use the `.env.example` files in each respective directory as templates to create local versions.
 
+### Running the App Locally
+BarTop runs on two servers - one serving the client and one serving our API.
+* `npm run server` - starts the API server at http://localhost:3001
+* `npm run client` - starts the client server at http://localhost:3000
+
 ### Testing
 #### Unit Tests
-`npm test` - concurrently runs the unit tests:
+`npm test` - sequentially runs the unit tests:
 * `npm run test-server` - the server tests
 * `npm run test-client` - the client tests in non-interactive mode
 
 #### Integration Tests
-`npm run test-all` - concurrently runs the unit and integration tests.
+`npm run test-all` - sequentially runs the unit and integration tests.
 To run the integration tests, you _must_ be running a local instance of RethinkDB. See [this section](#starting-the-database) for more information.
 Travis CI will automatically run all tests (using this command) when a branch is pushed.
 

@@ -3,19 +3,21 @@
   "version": "0.0.1",
   "description": "Web framework for hobbyist and freelance bartenders",
   "scripts": {
-    "install": "concurrently 'cd client && npm install' 'cd server && npm install'",
-    "server": "cd server && npm start",
+    "install": "npm run install-client && npm run install-server",
+    "install-client": "cd client && npm install",
+    "install-server": "cd server && npm install",
     "client": "cd client && npm start",
+    "server": "cd server && npm start",
     "database": "cd server && npm run database",
-    "start": "concurrently 'npm run server' 'npm run client'",
+    "test": "npm run test-server && npm run test-client",
     "test-server": "cd server && npm test",
     "test-client": "cd client && npm test",
+    "test-all": "npm run test-server-integration && npm run test-client-ci'",
     "test-client-ci": "cd client && CI=true npm test -- -u",
-    "test": "concurrently 'npm run test-server' 'npm run test-client'",
-    "test-all": "concurrently 'cd server && npm run test-all' 'npm run test-client-ci'",
+    "test-server-integration": "cd server && npm run test-all",
+    "lint": "npm run lint-server && npm run lint-client",
     "lint-server": "cd server && npm run lint",
     "lint-client": "cd client && npm run lint && npm run lint:css",
-    "lint": "concurrently 'npm run lint-server' 'npm run lint-client'",
     "precommit": "npm run lint && npm test"
   },
   "repository": {
@@ -28,7 +30,6 @@
   "author": "Dustin Popp",
   "license": "MIT",
   "devDependencies": {
-    "concurrently": "^3.5.0",
     "husky": "^0.14.3"
   }
 }
