@@ -9,6 +9,9 @@ describe(`'drinks' route - api test`, function() {
   let token;
 
   before(async function() {
+    // increase hook timeout, tests require extensive environment setup
+    this.timeout(3000);
+
     // prime the database with test tables/data
     const tables = await dbAdapter.r.tableList();
     const drinkTestObjects = [
