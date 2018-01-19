@@ -75,7 +75,7 @@ describe('callAPI middleware', () => {
           expect(next.mock.calls[0]).toEqual([{ type: REQUEST }]);
         });
 
-        it('eventually calls next with the success & success response', () => {
+        it('eventually calls next with the success type & the response', () => {
           expect(next.mock.calls[1]).toEqual([{ type: SUCCESS, response }]);
         });
       });
@@ -93,7 +93,7 @@ describe('callAPI middleware', () => {
           expect(next.mock.calls[0]).toEqual([{ type: REQUEST }]);
         });
 
-        it('eventually calls next with the success & success response', () => {
+        it('eventually calls next with the failure type & the error', () => {
           expect(next.mock.calls[1]).toEqual([{ type: FAILURE, error }]);
         });
       });
