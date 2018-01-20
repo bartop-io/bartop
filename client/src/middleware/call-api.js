@@ -35,7 +35,7 @@ export default store => next => action => {
   // The request is dispatched immediately
   next(actionWith({ type: requestType }));
 
-  return call().then(
+  call().then(
     response =>
       next(
         actionWith({
