@@ -1,9 +1,10 @@
 require('dotenv').config();
+const logger = require('./src/utils/logger');
 
 const environment = process.env.NODE_ENV || 'development';
 
 if (!envFileIsValid()) {
-  console.error(
+  logger.error(
     ' necessary server environment variables not defined\n',
     'see server/.env.example for the expected variables'
   );
