@@ -28,6 +28,11 @@ app.use((err, req, res, next) => {
       res.status(401).json('Access... DENIED.');
       break;
 
+    case 'InvalidInputError':
+      logger.error(`${err.name}: ${err.message}`);
+      res.status(422).json('Invalid model.');
+      break;
+
     default:
       logger.error(`${err.name}: ${err.message}`);
       res.status(500).json('Something broke!');

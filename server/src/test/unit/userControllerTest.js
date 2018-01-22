@@ -13,7 +13,7 @@ describe('users controller - unit test', function(done) {
 
     const req = {
       params: {
-        id: 1234567
+        id: '1234567'
       }
     };
 
@@ -24,7 +24,7 @@ describe('users controller - unit test', function(done) {
     await controller(req, res, null);
 
     expect(jsonSpy.calledOnce).to.equal(true);
-    expect(jsonSpy.alwaysCalledWithExactly({ id: 1234567 })).to.equal(true);
+    expect(jsonSpy.alwaysCalledWithExactly({ id: '1234567' })).to.equal(true);
 
     expect(statusSpy.calledOnce).to.equal(true);
     expect(statusSpy.alwaysCalledWithExactly(201)).to.equal(true);
