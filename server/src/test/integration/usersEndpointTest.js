@@ -36,19 +36,19 @@ describe(`'users' route - api test`, function() {
 
   it(`POST - create a new user`, function(done) {
     request(app)
-      .post('/api/v1/users/12345')
+      .post('/api/v1/users/email|7984284578419749')
       .set('Authorization', 'Bearer ' + token)
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body).to.be.an('object');
-        expect(res.body).to.deep.equal({ id: '12345' });
+        expect(res.body).to.deep.equal({ id: 'email|7984284578419749' });
         done();
       });
   });
 
   it('POST - return a 401 if a user is unauthorized', function(done) {
     request(app)
-      .post('/api/v1/users/12345')
+      .post('/api/v1/users/email|7984284578419749')
       .end((err, res) => {
         expect(res.statusCode).to.equal(401);
         expect(res.body).to.equal(constants.errors.UNAUTHORIZED);
@@ -59,7 +59,7 @@ describe(`'users' route - api test`, function() {
   it('POST - handle error if db table is not available', async function() {
     await dbAdapter.r.tableDrop('users');
     const res = await request(app)
-      .post('/api/v1/users/0987')
+      .post('/api/v1/users/email|7984284578419749')
       .set('Authorization', 'Bearer ' + token);
 
     expect(res.statusCode).to.equal(500);
