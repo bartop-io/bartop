@@ -1,11 +1,19 @@
+import barTopAPI from '../../singletons/bartop-api';
 import { types as authTypes } from '../authentication/authentication';
 
 export const types = {
+  CREATE_REQUEST: 'USER/CREATE_REQUEST',
+  CREATE_SUCCESS: 'USER/CREATE_SUCCESS',
+  CREATE_FAILURE: 'USER/CREATE_FAILURE',
   REQUEST_NAME: 'USER/REQUEST_NAME',
   SET_NAME: 'USER/SET_NAME'
 };
 
 export const actions = {
+  create: id => ({
+    types: [types.CREATE_REQUEST, types.CREATE_SUCCESS, types.CREATE_FAILURE],
+    call: () => barTopAPI.createUser(id)
+  }),
   requestName: () => ({
     type: types.REQUEST_NAME
   }),
