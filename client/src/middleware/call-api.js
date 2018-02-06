@@ -1,8 +1,9 @@
+import serializeError from 'serialize-error';
 // Action key that carries API call info interpreted by this Redux middleware.
 export const CALL_API = 'Call API';
 
 // Redux middleware for handling actions that have CALL_API specified
-export default store => next => action => {
+export default ({ dispatch }) => next => action => {
   const callAPI = action[CALL_API];
   // Pass along actions that aren't for this middleware
   if (typeof callAPI === 'undefined') {
@@ -33,22 +34,25 @@ export default store => next => action => {
   const [requestType, successType, failureType] = types;
 
   // The request is dispatched immediately
-  next(actionWith({ type: requestType }));
+  dispatch(actionWith({ type: requestType }));
 
-  call().then(
-    response =>
-      next(
+  call()
+    .then(response => {
+      dispatch(
         actionWith({
           type: successType,
           response
         })
-      ),
-    error =>
-      next(
+      );
+    })
+    .catch(error => {
+      console.error('call api middleware error');
+      console.error(error);
+      dispatch(
         actionWith({
           type: failureType,
-          error
+          error: serializeError(error)
         })
-      )
-  );
+      );
+    });
 };

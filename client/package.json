@@ -14,6 +14,7 @@
     "redux-devtools-extension": "^2.13.2",
     "redux-localstorage": "^0.4.1",
     "redux-thunk": "^2.2.0",
+    "serialize-error": "^2.1.0",
     "styled-components": "^2.2.3"
   },
   "scripts": {

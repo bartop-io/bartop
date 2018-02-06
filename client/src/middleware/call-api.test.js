@@ -63,26 +63,26 @@ describe('callAPI middleware', () => {
       });
 
       describe('handles a successful API call', () => {
-        const next = jest.fn(action => {});
-        actionHandler = callAPIMiddleware({})(next);
+        const dispatch = jest.fn(action => {});
+        actionHandler = callAPIMiddleware({ dispatch })();
 
         const response = { data: 'data from API response' };
         const action = createActionWithCall(() => Promise.resolve(response));
 
         actionHandler(action);
 
-        it('immediately calls next with the request type', () => {
-          expect(next.mock.calls[0]).toEqual([{ type: REQUEST }]);
+        it('immediately calls dispatch with the request type', () => {
+          expect(dispatch.mock.calls[0]).toEqual([{ type: REQUEST }]);
         });
 
-        it('eventually calls next with the success type & the response', () => {
-          expect(next.mock.calls[1]).toEqual([{ type: SUCCESS, response }]);
+        it('eventually calls dispatch with the success type & the response', () => {
+          expect(dispatch.mock.calls[1]).toEqual([{ type: SUCCESS, response }]);
         });
       });
 
       describe('handles a failed API call', () => {
-        const next = jest.fn(action => {});
-        actionHandler = callAPIMiddleware({})(next);
+        const dispatch = jest.fn(action => {});
+        actionHandler = callAPIMiddleware({ dispatch })();
 
         const error = { message: 'the API call failed' };
         const action = createActionWithCall(() => Promise.reject(error));
@@ -90,11 +90,11 @@ describe('callAPI middleware', () => {
         actionHandler(action);
 
         it('immediately calls next with the request type', () => {
-          expect(next.mock.calls[0]).toEqual([{ type: REQUEST }]);
+          expect(dispatch.mock.calls[0]).toEqual([{ type: REQUEST }]);
         });
 
         it('eventually calls next with the failure type & the error', () => {
-          expect(next.mock.calls[1]).toEqual([{ type: FAILURE, error }]);
+          expect(dispatch.mock.calls[1]).toEqual([{ type: FAILURE, error }]);
         });
       });
     });
