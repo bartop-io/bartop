@@ -11,7 +11,7 @@ describe(`'users' route - api test`, function() {
 
   before(async function() {
     // increase hook timeout, tests require extensive environment setup
-    this.timeout(3000);
+    this.timeout(9000);
 
     // prime the database with test tables/data
     const tables = await dbAdapter.r.tableList();
