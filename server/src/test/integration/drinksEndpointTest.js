@@ -4,7 +4,7 @@ const expect = require('chai').expect;
 const dbAdapter = require('../../db/adapter');
 const axios = require('axios');
 const testObjects = require('../../utils/testObjects');
-const constants = require('../../utils/stringConstants');
+const strings = require('../../utils/stringConstants');
 
 describe(`'drinks' route - api test`, function() {
   let token;
@@ -46,7 +46,7 @@ describe(`'drinks' route - api test`, function() {
       .get('/api/v1/drinks')
       .end((err, res) => {
         expect(res.statusCode).to.equal(401);
-        expect(res.body).to.equal(constants.errors.UNAUTHORIZED);
+        expect(res.body).to.equal(strings.errors.UNAUTHORIZED);
         done();
       });
   });
