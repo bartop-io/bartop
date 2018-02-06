@@ -4,6 +4,7 @@ import thunk from 'redux-thunk';
 import reducer, { types, actions, initialState } from './user';
 import { types as authTypes } from '../authentication/authentication';
 import { mockId, mockName, mockUserInfo } from '../../test-helpers/state-mocks';
+import { CALL_API } from '../../middleware/call-api';
 
 describe('user actions', () => {
   it(`can request the user's name`, () => {
@@ -20,9 +21,9 @@ describe('user actions', () => {
       types.CREATE_SUCCESS,
       types.CREATE_FAILURE
     ];
-    const action = actions.create(mockId);
-    expect(action.types).toEqual(expectedTypes);
-    expect(typeof action.call).toEqual('function');
+    const callApi = actions.create(mockId)[CALL_API];
+    expect(callApi.types).toEqual(expectedTypes);
+    expect(typeof callApi.call).toEqual('function');
   });
 
   describe(`can set the user's name`, () => {

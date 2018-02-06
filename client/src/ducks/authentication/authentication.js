@@ -1,10 +1,15 @@
 import jwtDecode from 'jwt-decode';
+import serializeError from 'serialize-error';
 
-import auth from '../../singletons/authentication';
+import auth, {
+  nameClaim,
+  loginsCountClaim
+} from '../../singletons/authentication';
 import history from '../../singletons/history';
-import config from '../../config';
 import { willExpireAt } from '../../utils/utils';
 import { actions as userActions } from '../user/user';
+import bartopApi from '../../singletons/bartop-api';
+import { errors } from '../../strings';
 
 export const types = {
   LOGIN_REQUEST: 'AUTHENTICATION/LOGIN_REQUEST',
@@ -29,7 +34,7 @@ export const actions = {
   }),
   loginFailure: error => ({
     type: types.LOGIN_FAILURE,
-    error
+    error: serializeError(error)
   }),
   handleAuthentication: () =>
     // redux-thunk knows to handle action functions instead of normal action objects
@@ -51,18 +56,31 @@ export const actions = {
         if (authResult && authResult.accessToken && authResult.idToken) {
           try {
             const decodedIdToken = jwtDecode(authResult.idToken);
+            // TODO - alter API singleton so it auto-syncs to redux state / local storage
+            bartopApi.setToken(authResult.accessToken);
+
             const { email, phoneNumber } = decodedIdToken;
             const id = decodedIdToken.sub;
-            let name = decodedIdToken[`${config.auth0.claimNamespace}/name`];
+            const loginsCount = decodedIdToken[loginsCountClaim];
+            const name = decodedIdToken[nameClaim];
+
+            // Create the user in our db on their first login
+            if (loginsCount === 1) {
+              dispatch(userActions.create(id));
+            }
+
+            // Request their name until we get it
             if (!name) {
               dispatch(userActions.requestName());
             }
+
             const userInfo = {
               id,
               name,
               email,
               phoneNumber
             };
+
             dispatch(
               actions.loginSuccess(
                 authResult.accessToken,
@@ -77,9 +95,7 @@ export const actions = {
         } else if (err) {
           errorOut(err);
         } else {
-          errorOut({
-            message: 'An unknown error occurred while authenticating'
-          });
+          errorOut(new Error(errors.unknownDuringAuthentication));
         }
       });
     },

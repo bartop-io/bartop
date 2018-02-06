@@ -1,5 +1,6 @@
 import barTopAPI from '../../singletons/bartop-api';
 import { types as authTypes } from '../authentication/authentication';
+import { CALL_API } from '../../middleware/call-api';
 
 export const types = {
   CREATE_REQUEST: 'USER/CREATE_REQUEST',
@@ -11,8 +12,10 @@ export const types = {
 
 export const actions = {
   create: id => ({
-    types: [types.CREATE_REQUEST, types.CREATE_SUCCESS, types.CREATE_FAILURE],
-    call: () => barTopAPI.createUser(id)
+    [CALL_API]: {
+      types: [types.CREATE_REQUEST, types.CREATE_SUCCESS, types.CREATE_FAILURE],
+      call: () => barTopAPI.createUser(id)
+    }
   }),
   requestName: () => ({
     type: types.REQUEST_NAME

@@ -14,12 +14,9 @@ export default class API {
   }
 
   async fetchJSON(endpoint, init) {
-    const jsonInit = {
-      ...init,
-      headers: new Headers({ 'Content-Type': 'application/json' })
-    };
-    const response = await this.fetch(endpoint, jsonInit);
-    if (response.headers.get('Content-Type') !== 'application/json') {
+    const response = await this.fetch(endpoint, init);
+    const contentType = response.headers.get('Content-Type');
+    if (!contentType || contentType.indexOf('application/json') === -1) {
       throw new Error(errors.expectedJSONResponse);
     }
     return response.json();

@@ -39,18 +39,21 @@ describe('API base class', () => {
   describe('fetchJSON()', () => {
     const jsonHeaders = new Headers({ 'Content-Type': 'application/json' });
 
-    it('calls fetch() with the Content-Type set to json', async () => {
+    it('calls fetch() and passes through endpoint & init', async () => {
       const api = new API();
-      api.fetch = jest.fn(() =>
+
+      api.fetch = jest.fn((endpoint, init) =>
         Promise.resolve({
           headers: jsonHeaders,
           json: () => Promise.resolve({})
         })
       );
-      await api.fetchJSON();
-      expect(api.fetch).toBeCalledWith(undefined, {
-        headers: new Headers({ 'Content-Type': 'application/json' })
-      });
+      const endpoint = 'endpoint';
+      const init = {};
+
+      await api.fetchJSON(endpoint, init);
+
+      expect(api.fetch).toBeCalledWith(endpoint, init);
     });
 
     it('returns the result of json() from the Response', async () => {

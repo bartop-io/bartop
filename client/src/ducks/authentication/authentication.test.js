@@ -1,6 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
+import callApiMiddleware from '../../middleware/call-api';
 import reducer, { types, actions, initialState } from './authentication';
 import { types as userTypes } from '../user/user';
 import {
@@ -9,7 +10,8 @@ import {
   mockError,
   mockDecodedIdTokenWithName,
   mockDecodedIdTokenWithoutName,
-  mockAuthStatuses
+  mockAuthStatuses,
+  mockDecodedIdTokenFirstLogIn
 } from '../../test-helpers/state-mocks';
 
 // import & mock authentication's dependencies so we can spy on functions
@@ -64,7 +66,7 @@ describe('authentication actions', () => {
     let store;
 
     beforeAll(() => {
-      store = configureMockStore([thunk])();
+      store = configureMockStore([thunk, callApiMiddleware])();
     });
 
     afterEach(() => {
@@ -91,6 +93,33 @@ describe('authentication actions', () => {
       store.dispatch(actions.handleAuthentication());
       expect(auth.parseHash).toBeCalled();
       expect(jwtDecode).toBeCalledWith(mockAuthResult.idToken);
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+
+    it(`should create the user if it's their first time logging in`, () => {
+      auth.parseHash.mockImplementation(f => f(null, mockAuthResult)); // mock successful parseHash call
+      jwtDecode.mockImplementation(idToken => mockDecodedIdTokenFirstLogIn);
+      const expectedActions = [
+        {
+          type: types.HANDLE_AUTHENTICATION
+        },
+        {
+          type: userTypes.CREATE_REQUEST
+        },
+        {
+          type: userTypes.REQUEST_NAME
+        },
+        {
+          type: types.LOGIN_SUCCESS,
+          accessToken: mockAuthResult.accessToken,
+          expiresIn: mockAuthResult.expiresIn,
+          userInfo: {
+            ...mockUserInfo,
+            name: undefined
+          }
+        }
+      ];
+      store.dispatch(actions.handleAuthentication());
       expect(store.getActions()).toEqual(expectedActions);
     });
 

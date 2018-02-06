@@ -4,7 +4,7 @@ import { mockId } from '../test-helpers/state-mocks';
 jest.mock('../config', () => ({
   apis: {
     bartop: {
-      url: 'http://bartop.io/api'
+      url: 'http://bartop.io/api/v1'
     }
   },
   auth0: {
@@ -12,14 +12,15 @@ jest.mock('../config', () => ({
   }
 }));
 
-describe('BartTop API', () => {
+describe('BarTop API', () => {
   it('initializes with URL from config', () => {
     const api = new BarTopAPI();
-    expect(api.url).toBe('http://bartop.io/api');
+    expect(api.url).toBe('http://bartop.io/api/v1');
   });
 
-  it('POSTs to user/:id on createUser()', async () => {
+  it('POSTs to users/:id on createUser()', async () => {
     const api = new BarTopAPI();
+    api.setToken('token');
     api.fetch = jest.fn(() =>
       Promise.resolve({
         headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -27,7 +28,7 @@ describe('BartTop API', () => {
       })
     );
     await api.createUser(mockId);
-    expect(api.fetch.mock.calls[0][0]).toEqual(`user/${mockId}`);
+    expect(api.fetch.mock.calls[0][0]).toEqual(`users/${mockId}`);
     expect(api.fetch.mock.calls[0][1].method).toEqual('POST');
   });
 });

@@ -7,6 +7,7 @@ import persistState from 'redux-localstorage';
 import { Router, Route, Switch } from 'react-router-dom';
 import { injectGlobal } from 'styled-components';
 
+import callApiMiddleware from '../../middleware/call-api';
 import rootReducer from '../../ducks';
 import history from '../../singletons/history';
 import { actions as authActions } from '../../ducks/authentication/authentication';
@@ -20,7 +21,7 @@ const localStorageEnhancer = persistState(['authentication', 'user'], {
 });
 
 const enhancer = composeWithDevTools(
-  applyMiddleware(thunk),
+  applyMiddleware(thunk, callApiMiddleware),
   localStorageEnhancer
 );
 
