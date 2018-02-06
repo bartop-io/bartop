@@ -2,15 +2,16 @@ const app = require('../../server');
 const request = require('supertest');
 const expect = require('chai').expect;
 const dbAdapter = require('../../db/adapter');
-const auth = require('../../../config').auth;
 const axios = require('axios');
+const options = require('../../utils/testObjects').tokenRequestOptions;
+const strings = require('../../utils/stringConstants');
 
 describe(`'users' route - api test`, function() {
   let token;
 
   before(async function() {
     // increase hook timeout, tests require extensive environment setup
-    this.timeout(3000);
+    this.timeout(9000);
 
     // prime the database with test tables/data
     const tables = await dbAdapter.r.tableList();
@@ -20,13 +21,6 @@ describe(`'users' route - api test`, function() {
     await dbAdapter.r.tableCreate('users');
 
     // get a temporary bearer token for testing
-    const options = {
-      method: 'POST',
-      url: 'https://bartop.auth0.com/oauth/token',
-      headers: { 'content-type': 'application/json' },
-      data: `{"client_id":"${auth.id}","client_secret":"${auth.secret}","audience":"${auth.audience}","grant_type":"${auth.grant}"}`
-    };
-
     const response = await axios(options);
     token = response.data.access_token;
 
@@ -42,22 +36,22 @@ describe(`'users' route - api test`, function() {
 
   it(`POST - create a new user`, function(done) {
     request(app)
-      .post('/api/v1/users/12345')
+      .post(`/api/v1/users/${strings.test.ID}`)
       .set('Authorization', 'Bearer ' + token)
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body).to.be.an('object');
-        expect(res.body).to.deep.equal({ id: '12345' });
+        expect(res.body).to.deep.equal({ id: strings.test.ID });
         done();
       });
   });
 
   it('POST - return a 401 if a user is unauthorized', function(done) {
     request(app)
-      .post('/api/v1/users/12345')
+      .post(`/api/v1/users/${strings.test.ID}`)
       .end((err, res) => {
         expect(res.statusCode).to.equal(401);
-        expect(res.body).to.equal('Access... DENIED.');
+        expect(res.body).to.equal(strings.errors.UNAUTHORIZED);
         done();
       });
   });
@@ -65,10 +59,10 @@ describe(`'users' route - api test`, function() {
   it('POST - handle error if db table is not available', async function() {
     await dbAdapter.r.tableDrop('users');
     const res = await request(app)
-      .post('/api/v1/users/0987')
+      .post(`/api/v1/users/${strings.test.ID}`)
       .set('Authorization', 'Bearer ' + token);
 
     expect(res.statusCode).to.equal(500);
-    expect(res.body).to.equal('Something broke!');
+    expect(res.body.split(':')[0]).to.equal('ReqlOpFailedError');
   });
 });

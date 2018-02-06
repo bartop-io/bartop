@@ -1,7 +1,8 @@
 const expect = require('chai').expect;
 const controllerModule = require('../../api/user/userController');
 const sinon = require('sinon');
-const res = require('../../utils/mockObjects').res;
+const res = require('../../utils/testObjects').res;
+const strings = require('../../utils/stringConstants').test;
 
 describe('users controller - unit test', function(done) {
   it('.create - set correct status code and user object', async function() {
@@ -13,7 +14,7 @@ describe('users controller - unit test', function(done) {
 
     const req = {
       params: {
-        id: 1234567
+        id: strings.ID
       }
     };
 
@@ -24,7 +25,7 @@ describe('users controller - unit test', function(done) {
     await controller(req, res, null);
 
     expect(jsonSpy.calledOnce).to.equal(true);
-    expect(jsonSpy.alwaysCalledWithExactly({ id: 1234567 })).to.equal(true);
+    expect(jsonSpy.alwaysCalledWithExactly({ id: strings.ID })).to.equal(true);
 
     expect(statusSpy.calledOnce).to.equal(true);
     expect(statusSpy.alwaysCalledWithExactly(201)).to.equal(true);
