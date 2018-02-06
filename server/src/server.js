@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
+const cors = require('cors');
 const api = require('./api');
 const logger = require('./utils/logger');
 const checkJwt = require('./utils/auth');
@@ -10,6 +11,9 @@ const app = express();
 
 // use helmet to set up some good security practices
 app.use(helmet());
+
+// enable all cors requests (for now)
+app.use(cors());
 
 // set up basic logger middleware
 // using dev mode for now but this can be easily changed later on
