@@ -25,7 +25,7 @@ describe(`'bad' routes - api test`, function() {
         expect(res.body).to.equal(strings.errors.NONEXISTENT);
         done();
       });
-  })
+  });
 
   it('GET - return a 404 if api route does not exist', function(done) {
     request(app)
@@ -36,5 +36,5 @@ describe(`'bad' routes - api test`, function() {
         expect(res.body).to.equal(strings.errors.NONEXISTENT);
         done();
       });
-  })
-})
+  });
+});
