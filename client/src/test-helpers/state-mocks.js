@@ -30,6 +30,13 @@ export const mockDecodedIdTokenWithName = {
   [`${config.auth0.claimNamespace}/name`]: mockName
 };
 
+export const mockDecodedIdTokenFirstLogIn = {
+  sub: mockId,
+  email: mockEmail,
+  phoneNumber: mockPhoneNumber,
+  [`${config.auth0.claimNamespace}/loginsCount`]: 1
+};
+
 export const mockUserInfo = {
   id: mockId,
   name: mockName,
