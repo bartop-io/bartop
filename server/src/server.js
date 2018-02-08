@@ -5,7 +5,7 @@ const cors = require('cors');
 const api = require('./api');
 const logger = require('./utils/logger');
 const checkJwt = require('./utils/auth');
-const constants = require('./utils/stringConstants');
+const strings = require('./utils/stringConstants').errors;
 
 const app = express();
 
@@ -25,12 +25,24 @@ app.use(checkJwt);
 // set up the api as middleware
 app.use('/api/v1', api);
 
+// handle all incorrect routes under `/api`
+app.all('*', (req, res, next) => {
+  const err = new Error();
+  err.name = 'RouteNotFoundError';
+  next(err);
+});
+
 // global error handling middleware
 app.use((err, req, res, next) => {
   switch (err.name) {
+    case 'RouteNotFoundError':
+      logger.error(strings.NONEXISTENT);
+      res.status(404).json(strings.NONEXISTENT);
+      break;
+
     case 'UnauthorizedError':
-      logger.error(constants.errors.UNAUTHORIZED);
-      res.status(401).json(constants.errors.UNAUTHORIZED);
+      logger.error(strings.UNAUTHORIZED);
+      res.status(401).json(strings.UNAUTHORIZED);
       break;
 
     default:
