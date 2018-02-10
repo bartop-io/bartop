@@ -3,7 +3,26 @@
 [![Coverage](https://codecov.io/gh/dpopp07/bartop/branch/dev/graph/badge.svg)](https://codecov.io/gh/dpopp07/bartop)  
 Web framework for hobbyist and freelance bartenders 🍸
 
-## Development
+## Table of Contents
+* [UI](#ui)
+  * [Development](#ui-development)
+* [API](#api)
+
+## UI
+### UI Development
+*These instructions assume you're in the `/bartop-ui` directory*
+#### Running the UI
+1. Install dependencies with `npm install`
+2. The UI depends on the `.env` file located in `bartop-ui/.env`. Use the `bartop-ui/.env.example` file to structure your `.env`. Create an [Auth0](https://auth0.com/) tenant and add the appropriate permissions, and then add the corresponding `.env.` variables. We're working on an isolated dev environment so there isn't so much overhead to contribute, please check back soon :)
+3. Run the BarTop UI with `npm start`
+4. Visit http://localhost:3000 to view the BarTop UI
+5. ** BarTop is using [Create React App](https://github.com/facebook/create-react-app) as the starter for our UI. If you run into problems, please check out their [User Guide](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md) or hit us up with questions
+
+#### Testing
+1. Execute the UI unit tests with `npm test`
+
+## API
+### API Development
 
 ### Installing Dependencies
 `npm install` - installs the root, server, and client dependencies

@@ -9,7 +9,7 @@ cache:
   - node_modules
   - server/node_modules
   - client/node_modules
-after_success: concurrently 'cd server/ && npm run coverage' 'cd client/ && npm run coverage'
+after_success: concurrently 'cd bartop-api/ && npm run coverage' 'cd bartop-ui/ && npm run coverage'
 notifications:
   email: false
   slack:
