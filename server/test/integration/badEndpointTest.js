@@ -7,11 +7,6 @@ const strings = require('../../src/utils/stringConstants');
 describe(`'bad' routes - api test`, function() {
   const token = global.testToken;
 
-  before(async function() {
-    this.timeout(9000);
-    return;
-  });
-
   it('GET - return a 404 if top level route does not exist', function(done) {
     request(app)
       .get('/hamburgular')
