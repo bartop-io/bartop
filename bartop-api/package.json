@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon src/index.js",
     "database": "rethinkdb",
+    "integration-tests": "NODE_ENV=test nyc --all mocha src/test/integration/**/*.js",
     "test": "NODE_ENV=test nyc --all mocha src/test/unit/**/*.js",
     "test-all": "NODE_ENV=test nyc --all mocha src/test/**/*.js",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
@@ -59,7 +60,7 @@
     ],
     "exclude": [
       "**/src/utils/seed.js",
-      "**/src/utils/mockObjects.js",
+      "**/src/utils/testObjects.js",
       "**/src/test/**"
     ]
   }
