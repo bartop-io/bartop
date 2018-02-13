@@ -1,17 +1,3 @@
-const auth = require('../../config').auth;
-
-// axios request options for hitting the auth0 API
-// to get a test access token
-const options = {
-  method: 'POST',
-  url: 'https://bartop.auth0.com/oauth/token',
-  headers: { 'content-type': 'application/json' },
-  data: `{"client_id":"${auth.id}",
-          "client_secret":"${auth.secret}",
-          "audience":"${auth.audience}",
-          "grant_type":"${auth.grant}"}`
-};
-
 // test object to place in the database for testing
 // the GET drinks endpoint
 const drinkTestObjects = [
@@ -40,5 +26,4 @@ const Response = class {
 };
 
 module.exports.res = new Response();
-module.exports.tokenRequestOptions = options;
 module.exports.drinkTest = drinkTestObjects;
