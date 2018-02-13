@@ -43,9 +43,8 @@ The API is configured using a `.env` file. Use the `.env.example` file as a temp
 5. For local development, set your `REACT_APP_API_URL` to http://localhost:3001. CRA automatically proxies requests to whichever port you specify in the `proxy` field of your `package.json`, so make sure they match.
 
 #### Running the UI
-1. Install dependencies with `npm install`
-2. Make sure you have all your [environment variables](#environment-variables) set.
-3. Run the [API](#api-development)
+1. Make sure you have all your [environment variables](#environment-variables) set.
+2. Run the [API](#api-development)
 3. Run the UI with `npm start`
 4. Visit http://localhost:3000 to view the UI
 
@@ -53,7 +52,7 @@ The API is configured using a `.env` file. Use the `.env.example` file as a temp
 
 #### Testing
 1. Execute the UI unit tests with `npm test`
-2. Optionally, you can run the tests in watch mode with `npm run watch test`. This is nice when you're working on specific tests and want it to run on changes. 
+2. Optionally, you can run the tests in watch mode with `npm run watch-test`. This is nice when you're working on specific tests and want it to run on changes. 
 
 ## API
 ### API Development
