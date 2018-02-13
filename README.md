@@ -17,7 +17,7 @@ Web framework for hobbyist and freelance bartenders 🍸
 `npm install`
 
 #### Environment Variables
-The API is configured using a `.env` file. Use the `.env.example` file as a template to create a local version.
+The UI is configured using a `.env` file. Use the `.env.example` file as a template to create a local version.
 
 1. The `Auth0` environment variables require that you create an [Auth0](https://auth0.com/) tenant. Once created, add the supplied `AUTH0_DOMAIN` and `AUTH0_CLIENT_ID`.
 2. Add two [rules](https://auth0.com/docs/rules/current) to your tenant:
