@@ -12,15 +12,47 @@ Web framework for hobbyist and freelance bartenders 🍸
 ## UI
 ### UI Development
 *These instructions assume you're in the `/bartop-ui` directory*
+
+#### Install the dependencies
+`npm install`
+
+#### Environment Variables
+The API is configured using a `.env` file. Use the `.env.example` file as a template to create a local version.
+
+1. The `Auth0` environment variables require that you create an [Auth0](https://auth0.com/) tenant. Once created, add the supplied `AUTH0_DOMAIN` and `AUTH0_CLIENT_ID`.
+2. Add two [rules](https://auth0.com/docs/rules/current) to your tenant:
+    1. The first rule should add the user's `loginsCount` to `idToken`:
+    ```javascript
+    function(user, context, callback) {
+      var namespace = 'https://yournamespace';
+      context.idToken[namespace + '/loginsCount'] = context.stats.loginsCount;
+      callback(null, user, context);
+    }
+    ```
+    2. The second should add the user's `name` to `idToken`:
+    ```javascript
+    function (user, context, callback) {
+      var namespace = 'https://yournamespace';
+      context.idToken[namespace + '/name'] = user.user_metadata && user.user_metadata.name || undefined;
+      callback(null, user, context);
+    }
+    ```
+    3. Set your `AUTH0_CLAIM_NAMESPACE` environment variable to the `namespace` you chose in your rules
+3. BarTop uses the JWT Tokens provided by Auth0 to secure our API. In order to do this, we need to tell Auth0 who the [audience](https://auth0.com/docs/tokens/access-token#access-token-format) of our `accessToken` is. Set the `AUTH0_BARTOP_API_AUDIENCE` accordingly.
+4. For local development, set your `REACT_APP_URL` to http://localhost:3000
+5. For local development, set your `REACT_APP_API_URL` to http://localhost:3001. CRA automatically proxies requests to whichever port you specify in the `proxy` field of your `package.json`, so make sure they match.
+
 #### Running the UI
 1. Install dependencies with `npm install`
-2. The UI depends on the `.env` file located in `bartop-ui/.env`. Use the `bartop-ui/.env.example` file to structure your `.env`. Create an [Auth0](https://auth0.com/) tenant and add the appropriate permissions, and then add the corresponding `.env.` variables. We're working on an isolated dev environment so there isn't so much overhead to contribute, please check back soon :)
-3. Run the BarTop UI with `npm start`
-4. Visit http://localhost:3000 to view the BarTop UI
-5. ** BarTop is using [Create React App](https://github.com/facebook/create-react-app) as the starter for our UI. If you run into problems, please check out their [User Guide](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md) or hit us up with questions
+2. Make sure you have all your [environment variables](#environment-variables) set.
+3. Run the UI with `npm start`
+4. Visit http://localhost:3000 to view the UI
+
+    **SIDENOTE** BarTop is using [Create React App](https://github.com/facebook/create-react-app) as the starter for our UI. If you run into problems, please check out their [User Guide](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md) or reach out with questions
 
 #### Testing
 1. Execute the UI unit tests with `npm test`
+2. Optionally, you can run the tests in watch mode with `npm run watch test`. This is nice when you're working on specific tests and want it to run on changes. 
 
 ## API
 ### API Development
