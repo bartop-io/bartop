@@ -79,7 +79,7 @@ The API will be available for requests at http://localhost:3001 (if you set BART
 
 #### Test the API
 The API test suite consists of both unit tests and integration tests.
-To run the full test suitem run:
+To run the full test suite, use:
 `npm run test-all`
 
 ##### Unit tests

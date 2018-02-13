@@ -1,36 +1,19 @@
-const app = require('../../server');
+const app = require('../../src/server');
 const request = require('supertest');
 const expect = require('chai').expect;
-const dbAdapter = require('../../db/adapter');
-const axios = require('axios');
-const options = require('../../utils/testObjects').tokenRequestOptions;
-const strings = require('../../utils/stringConstants');
+const dbAdapter = require('../../src/db/adapter');
+const strings = require('../../src/utils/stringConstants');
 
 describe(`'users' route - api test`, function() {
-  let token;
+  const token = global.testToken;
 
   before(async function() {
-    // increase hook timeout, tests require extensive environment setup
-    this.timeout(9000);
-
     // prime the database with test tables/data
     const tables = await dbAdapter.r.tableList();
     if (tables.includes('users')) {
       await dbAdapter.r.tableDrop('users');
     }
     await dbAdapter.r.tableCreate('users');
-
-    // get a temporary bearer token for testing
-    const response = await axios(options);
-    token = response.data.access_token;
-
-    return;
-  });
-
-  // after the tests, drain the connection pool so the process exits properly
-  // this has to happen after the last tests are run
-  after(async function() {
-    await dbAdapter.r.getPoolMaster().drain();
     return;
   });
 

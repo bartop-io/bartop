@@ -1,18 +1,14 @@
-const app = require('../../server');
+const app = require('../../src/server');
 const request = require('supertest');
 const expect = require('chai').expect;
-const dbAdapter = require('../../db/adapter');
-const axios = require('axios');
-const testObjects = require('../../utils/testObjects');
-const strings = require('../../utils/stringConstants');
+const dbAdapter = require('../../src/db/adapter');
+const testObjects = require('../utils/testObjects');
+const strings = require('../../src/utils/stringConstants');
 
 describe(`'drinks' route - api test`, function() {
-  let token;
+  const token = global.testToken;
 
   before(async function() {
-    // increase hook timeout, tests require extensive environment setup
-    this.timeout(9000);
-
     // prime the database with test tables/data
     const tables = await dbAdapter.r.tableList();
 
@@ -21,10 +17,6 @@ describe(`'drinks' route - api test`, function() {
     }
     await dbAdapter.r.tableCreate('drinks', { primaryKey: 'name' });
     await dbAdapter.r.table('drinks').insert(testObjects.drinkTest);
-
-    const response = await axios(testObjects.tokenRequestOptions);
-    token = response.data.access_token;
-
     return;
   });
 
