@@ -6,12 +6,12 @@
   "scripts": {
     "start": "nodemon src/index.js",
     "database": "rethinkdb",
-    "integration-tests": "NODE_ENV=test nyc --all mocha src/test/integration/**/*.js",
-    "test": "NODE_ENV=test nyc --all mocha src/test/unit/**/*.js",
-    "test-all": "NODE_ENV=test nyc --all mocha src/test/**/*.js",
+    "integration-tests": "NODE_ENV=test nyc --all mocha test/integration/**/*.js",
+    "test": "NODE_ENV=test nyc --all mocha test/unit/**/*.js",
+    "test-all": "NODE_ENV=test nyc --all mocha test/**/*.js",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "lint": "eslint src",
-    "fix": "eslint --fix src"
+    "lint": "eslint src test",
+    "fix": "eslint --fix src test"
   },
   "repository": {
     "type": "git",
@@ -48,6 +48,7 @@
     "eslint-config-prettier": "^2.7.0",
     "eslint-plugin-prettier": "^2.3.1",
     "mocha": "^4.0.1",
+    "mocha-prepare": "^0.1.0",
     "nodemon": "^1.12.1",
     "nyc": "^11.3.0",
     "prettier": "^1.7.4",
@@ -59,9 +60,7 @@
       "**/src/**/*.js"
     ],
     "exclude": [
-      "**/src/utils/seed.js",
-      "**/src/utils/testObjects.js",
-      "**/src/test/**"
+      "**/src/utils/seed.js"
     ]
   }
 }

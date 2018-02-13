@@ -1,8 +1,8 @@
 const expect = require('chai').expect;
-const controllerModule = require('../../api/user/userController');
+const controllerModule = require('../../src/api/user/userController');
 const sinon = require('sinon');
-const res = require('../../utils/testObjects').res;
-const strings = require('../../utils/stringConstants').test;
+const res = require('../utils/testObjects').res;
+const strings = require('../../src/utils/stringConstants').test;
 
 describe('users controller - unit test', function(done) {
   it('.create - set correct status code and user object', async function() {
