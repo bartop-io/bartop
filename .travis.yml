@@ -7,9 +7,9 @@ script: npm run test-all
 cache:
   directories:
   - node_modules
-  - server/node_modules
-  - client/node_modules
-after_success: concurrently 'cd bartop-api/ && npm run coverage' 'cd bartop-ui/ && npm run coverage'
+  - bartop-api/node_modules
+  - bartop-ui/node_modules
+after_success: cd bartop-api && npm run coverage && cd ../bartop-ui/ && npm run coverage
 notifications:
   email: false
   slack:
