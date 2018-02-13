@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon src/index.js",
     "database": "rethinkdb",
+    "integration-tests": "NODE_ENV=test nyc --all mocha test/integration/**/*.js",
     "test": "NODE_ENV=test nyc --all mocha test/unit/**/*.js",
     "test-all": "NODE_ENV=test nyc --all mocha test/**/*.js",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
