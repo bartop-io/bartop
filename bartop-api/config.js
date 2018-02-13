@@ -12,7 +12,9 @@ if (!envFileIsValid()) {
 }
 
 let dbName;
-environment === 'test' ? (dbName = 'test') : (dbName = process.env.DB_NAME);
+environment === 'test'
+  ? (dbName = 'test')
+  : (dbName = process.env.BARTOP_DB_NAME);
 
 module.exports = {
   database: {
