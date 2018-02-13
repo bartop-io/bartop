@@ -45,6 +45,7 @@ The API is configured using a `.env` file. Use the `.env.example` file as a temp
 #### Running the UI
 1. Install dependencies with `npm install`
 2. Make sure you have all your [environment variables](#environment-variables) set.
+3. Run the [API](#api-development)
 3. Run the UI with `npm start`
 4. Visit http://localhost:3000 to view the UI
 
