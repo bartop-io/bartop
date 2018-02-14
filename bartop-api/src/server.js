@@ -2,12 +2,16 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
+const compression = require('compression');
 const api = require('./api');
 const logger = require('./utils/logger');
 const checkJwt = require('./utils/auth');
 const strings = require('./utils/stringConstants').errors;
 
 const app = express();
+
+// compress all responses
+app.use(compression());
 
 // use helmet to set up some good security practices
 app.use(helmet());
