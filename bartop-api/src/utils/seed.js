@@ -1,19 +1,13 @@
 const dbAdapter = require('../db/adapter');
 const logger = require('./logger');
-
-// put one drink into the database by default
-const drink = {
-  name: 'Old Fashioned',
-  ingredients: ['whiskey', 'sugar', 'bitters']
-};
+const seeds = require('../../test/utils/testObjects');
 
 // create a list of tables that can be assumed to exist at any given time
-// note: the drinks table is created later on
 const expectedTables = [
+  'drinks',
   'catalogs',
   'menus',
   'orders',
-  'sales',
   'sessions',
   'users'
 ];
@@ -38,17 +32,15 @@ const seed = async () => {
     // create the tables
     await Promise.all(promises);
 
-    // add 'drinks' as separate table and use the name as the primary key
-    if (!existingTables.includes('drinks')) {
-      await dbAdapter.r.tableCreate('drinks', { primaryKey: 'name' });
-      logger.info(`  > 'drinks' table created.`);
-    }
-
     // add the default drink
-    const res = await dbAdapter.r.table('drinks').insert(drink);
-    if (res.inserted === 1) {
-      logger.info(`    > default drink added to 'drinks' table.`);
+    const existingDrinks = await dbAdapter.r.table('drinks');
+    if (!existingDrinks.length) {
+      const res = await dbAdapter.r.table('drinks').insert(seeds.drinks.array);
+      if (res.inserted === seeds.drinks.array.length) {
+        logger.info(`  > default drinks added to 'drinks' table.`);
+      }
     }
+    logger.info('Dev DB is good to go!');
   } catch (err) {
     logger.error(err);
   }
