@@ -15,8 +15,8 @@ describe(`'drinks' route - api test`, function() {
     if (tables.includes('drinks')) {
       await dbAdapter.r.tableDrop('drinks');
     }
-    await dbAdapter.r.tableCreate('drinks', { primaryKey: 'name' });
-    await dbAdapter.r.table('drinks').insert(testObjects.drinkTest);
+    await dbAdapter.r.tableCreate('drinks');
+    await dbAdapter.r.table('drinks').insert(testObjects.drinks.array);
     return;
   });
 
@@ -26,9 +26,15 @@ describe(`'drinks' route - api test`, function() {
       .set('Authorization', 'Bearer ' + token)
       .end((err, res) => {
         expect(res.statusCode).to.equal(200);
-        expect(res.body).to.be.an('array');
-        expect(res.body[0].name).to.equal('Tom Collins');
-        expect(res.body[1].name).to.equal('Old Fashioned');
+        expect(res.body).to.be.an('object');
+
+        const firstDrinkObject = res.body.items[0];
+        expect(firstDrinkObject.id).to.be.an('string');
+        expect(firstDrinkObject.name).to.be.an('string');
+        expect(firstDrinkObject.instructions).to.be.an('array');
+        expect(firstDrinkObject.ingredients).to.be.an('array');
+        expect(firstDrinkObject.description).to.be.an('string');
+
         done();
       });
   });

@@ -1,33 +1,35 @@
 const expect = require('chai').expect;
-const controllerModule = require('../../src/api/drink/drinkController');
 const sinon = require('sinon');
+const controllerModule = require('../../src/api/drink/drinkController');
+const testObjects = require('../utils/testObjects');
 
 describe('drinks controller - unit test', function(done) {
   it('.list - pass data from ORM to response', async function() {
+    // set up an object to be mocked in the response
+    const dbResults = testObjects.drinks.array;
     const mockDb = {};
-    const dbResults = [
-      {
-        ingredients: ['whiskey', 'sugar', 'bitters'],
-        name: 'Old Fashioned'
-      }
-    ];
 
     mockDb.findAll = async tableName => {
       return Promise.resolve(dbResults);
     };
 
-    const res = {
-      json: data => data
-    };
+    const res = testObjects.res;
 
-    const spy = sinon.spy(res, 'json');
+    const jsonSpy = sinon.spy(res, 'json');
+    const statusSpy = sinon.spy(res, 'status');
 
     const controller = controllerModule(mockDb).list;
     await controller(null, res, null);
 
-    expect(spy.calledOnce).to.equal(true);
-    expect(spy.alwaysCalledWithExactly(dbResults)).to.equal(true);
+    expect(jsonSpy.calledOnce).to.equal(true);
+    expect(jsonSpy.alwaysCalledWithExactly({ items: dbResults })).to.equal(
+      true
+    );
 
-    spy.restore();
+    expect(statusSpy.calledOnce).to.equal(true);
+    expect(statusSpy.alwaysCalledWithExactly(200)).to.equal(true);
+
+    jsonSpy.restore();
+    statusSpy.restore();
   });
 });
