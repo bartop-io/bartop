@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
-const controllerModule = require('../../src/api/drink/drinkController');
+const controllerModule = require('../../src/api/drink/drink.controller');
 const testObjects = require('../utils/testObjects');
 
 describe('drinks controller - unit test', function(done) {

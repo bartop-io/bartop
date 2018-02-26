@@ -27,7 +27,7 @@ app.use(morgan('dev', { stream: logger.stream }));
 app.use(checkJwt);
 
 // set up the api as middleware
-app.use('/api/v1', api);
+app.use('/api', api);
 
 // handle all incorrect routes under `/api`
 app.all('*', (req, res, next) => {

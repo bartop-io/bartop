@@ -39,6 +39,21 @@ describe(`'drinks' route - api test`, function() {
       });
   });
 
+  it('graphql test!', function(done) {
+    request(app)
+      .get('/api/v2/graphql?query={drinks{name}}')
+      .set('Authorization', 'Bearer ' + token)
+      .end((err, res) => {
+        const drinks = res.body.data.drinks;
+        expect(res.statusCode).to.equal(200);
+        expect(drinks).to.be.an('array');
+        // expect only names to have been returned
+        expect(Object.keys(drinks[0]).length).to.equal(1);
+        expect(Object.keys(drinks[0])[0]).to.equal('name');
+        done();
+      });
+  });
+
   it('GET - return a 401 if a user is unauthorized', function(done) {
     request(app)
       .get('/api/v1/drinks')
