@@ -88,8 +88,6 @@ const tommyC = {
   ]
 };
 
-const arrayToReturn = [oldFashioned, tommyC];
-
 module.exports.oldFashioned = oldFashioned;
 module.exports.tomCollins = tommyC;
-module.exports.array = arrayToReturn;
+module.exports.drinkList = [oldFashioned, tommyC];

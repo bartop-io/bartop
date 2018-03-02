@@ -2,9 +2,9 @@ const app = require('../../src/server');
 const request = require('supertest');
 const expect = require('chai').expect;
 const dbAdapter = require('../../src/db/adapter');
-const strings = require('../../src/utils/stringConstants');
+const { users } = require('../utils/testObjects');
 
-describe(`'users' route - api test`, function() {
+describe('Resource - User', function() {
   const token = global.testToken;
 
   before(async function() {
@@ -14,38 +14,59 @@ describe(`'users' route - api test`, function() {
       await dbAdapter.r.tableDrop('users');
     }
     await dbAdapter.r.tableCreate('users');
+    await dbAdapter.r.table('users').insert(users.userList);
     return;
   });
 
-  it(`POST - create a new user`, function(done) {
-    request(app)
-      .post(`/api/v1/users/${strings.test.ID}`)
-      .set('Authorization', 'Bearer ' + token)
-      .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
-        expect(res.body).to.be.an('object');
-        expect(res.body).to.deep.equal({ id: strings.test.ID });
-        done();
-      });
+  describe('Rest', function() {
+    it('POST - create a new user', function(done) {
+      request(app)
+        .post(`/api/v1/users/${users.postUser.id}`)
+        .set('Authorization', 'Bearer ' + token)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(201);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.deep.equal({ id: users.postUser.id });
+          done();
+        });
+    });
   });
 
-  it('POST - return a 401 if a user is unauthorized', function(done) {
-    request(app)
-      .post(`/api/v1/users/${strings.test.ID}`)
-      .end((err, res) => {
-        expect(res.statusCode).to.equal(401);
-        expect(res.body).to.equal(strings.errors.UNAUTHORIZED);
-        done();
-      });
-  });
+  describe('GraphQL', function() {
+    it('Query - list ids for all users', function(done) {
+      request(app)
+        .get('/api/v2/graphql?query={listUsers{id}}')
+        .set('Authorization', 'Bearer ' + token)
+        .end((err, res) => {
+          const users = res.body.data.listUsers;
+          expect(res.statusCode).to.equal(200);
+          expect(users).to.be.an('array');
+          // expect only ids to have been returned
+          expect(Object.keys(users[0]).length).to.equal(1);
+          expect(Object.keys(users[0])[0]).to.equal('id');
+          done();
+        });
+    });
 
-  it('POST - handle error if db table is not available', async function() {
-    await dbAdapter.r.tableDrop('users');
-    const res = await request(app)
-      .post(`/api/v1/users/${strings.test.ID}`)
-      .set('Authorization', 'Bearer ' + token);
-
-    expect(res.statusCode).to.equal(500);
-    expect(res.body.split(':')[0]).to.equal('ReqlOpFailedError');
+    it('Mutation - create a new user', function(done) {
+      const query = `
+        mutation {
+          createUser(newUser: { id: "${users.testUser.id}" }) {
+            id
+          }
+        }`;
+      request(app)
+        .post('/api/v2/graphql')
+        .set('Authorization', 'Bearer ' + token)
+        .set('Content-Type', 'application/json')
+        .send({ query })
+        .end((err, res) => {
+          const user = res.body.data.createUser;
+          expect(res.statusCode).to.equal(200);
+          expect(user).to.be.an('object');
+          expect(user.id).to.equal(users.testUser.id);
+          done();
+        });
+    });
   });
 });

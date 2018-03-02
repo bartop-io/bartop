@@ -1,12 +1,4 @@
-// ***
-// type Query may need to be 'extend'ed to allow for multiple files used
-// need to implement Users first
-
 module.exports = `
-type Query {
-  drinks: [Drink]
-}
-
 # primary type
 type Drink {
   id: String
@@ -25,4 +17,8 @@ type Ingredient {
 type Amount {
   quantity: Int
   unit: String
+}
+
+extend type Query {
+  listDrinks: [Drink]
 }`;

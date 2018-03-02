@@ -39,6 +39,7 @@
     "js-data": "^3.0.1",
     "js-data-rethinkdb": "^3.0.0",
     "jwks-rsa": "^1.2.1",
+    "lodash.merge": "^4.6.1",
     "morgan": "^1.9.0",
     "rethinkdbdash": "^2.3.31",
     "winston": "^2.4.0"
