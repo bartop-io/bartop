@@ -2,10 +2,9 @@ const app = require('../../src/server');
 const request = require('supertest');
 const expect = require('chai').expect;
 const dbAdapter = require('../../src/db/adapter');
-const testObjects = require('../utils/testObjects');
-const strings = require('../../src/utils/stringConstants');
+const { drinks } = require('../utils/testObjects');
 
-describe(`'drinks' route - api test`, function() {
+describe('Resource - Drink', function() {
   const token = global.testToken;
 
   before(async function() {
@@ -16,46 +15,56 @@ describe(`'drinks' route - api test`, function() {
       await dbAdapter.r.tableDrop('drinks');
     }
     await dbAdapter.r.tableCreate('drinks');
-    await dbAdapter.r.table('drinks').insert(testObjects.drinks.array);
+    await dbAdapter.r.table('drinks').insert(drinks.drinkList);
     return;
   });
 
-  it(`GET - return array of drinks`, function(done) {
-    request(app)
-      .get('/api/v1/drinks')
-      .set('Authorization', 'Bearer ' + token)
-      .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
-        expect(res.body).to.be.an('object');
+  after(async function() {
+    // drop the drinks table once we're finished with it
+    // for the 'Resource - Errors' test
+    const tables = await dbAdapter.r.tableList();
 
-        const firstDrinkObject = res.body.items[0];
-        expect(firstDrinkObject.id).to.be.an('string');
-        expect(firstDrinkObject.name).to.be.an('string');
-        expect(firstDrinkObject.instructions).to.be.an('array');
-        expect(firstDrinkObject.ingredients).to.be.an('array');
-        expect(firstDrinkObject.description).to.be.an('string');
-
-        done();
-      });
+    if (tables.includes('drinks')) {
+      await dbAdapter.r.tableDrop('drinks');
+    }
+    return;
   });
 
-  it('GET - return a 401 if a user is unauthorized', function(done) {
-    request(app)
-      .get('/api/v1/drinks')
-      .end((err, res) => {
-        expect(res.statusCode).to.equal(401);
-        expect(res.body).to.equal(strings.errors.UNAUTHORIZED);
-        done();
-      });
+  describe('Rest', function() {
+    it(`GET - return array of drinks`, function(done) {
+      request(app)
+        .get('/api/v1/drinks')
+        .set('Authorization', 'Bearer ' + token)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body).to.be.an('object');
+
+          const firstDrinkObject = res.body.items[0];
+          expect(firstDrinkObject.id).to.be.an('string');
+          expect(firstDrinkObject.name).to.be.an('string');
+          expect(firstDrinkObject.instructions).to.be.an('array');
+          expect(firstDrinkObject.ingredients).to.be.an('array');
+          expect(firstDrinkObject.description).to.be.an('string');
+
+          done();
+        });
+    });
   });
 
-  it('GET - handle error if db table is not available', async function() {
-    await dbAdapter.r.tableDrop('drinks');
-    const res = await request(app)
-      .get('/api/v1/drinks')
-      .set('Authorization', 'Bearer ' + token);
-
-    expect(res.statusCode).to.equal(500);
-    expect(res.body.split(':')[0]).to.equal('ReqlOpFailedError');
+  describe('GraphQL', function() {
+    it('Query - list ids for all users', function(done) {
+      request(app)
+        .get('/api/v2/graphql?query={listDrinks{name}}')
+        .set('Authorization', 'Bearer ' + token)
+        .end((err, res) => {
+          const drinks = res.body.data.listDrinks;
+          expect(res.statusCode).to.equal(200);
+          expect(drinks).to.be.an('array');
+          // expect only names to have been returned
+          expect(Object.keys(drinks[0]).length).to.equal(1);
+          expect(Object.keys(drinks[0])[0]).to.equal('name');
+          done();
+        });
+    });
   });
 });

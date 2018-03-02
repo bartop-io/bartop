@@ -13,6 +13,7 @@ module.exports = {
   rules: {
 
     'prettier/prettier': ['error', {'singleQuote': true}],
+    'no-console': 'off',
     'no-var': 'error',
     'prefer-const': 'error', 
     'camelcase': 'warn',
