@@ -1,8 +1,9 @@
-const app = require('../../src/server');
 const request = require('supertest');
 const expect = require('chai').expect;
+const app = require('../../src/server');
 const dbAdapter = require('../../src/db/adapter');
 const { users } = require('../utils/testObjects');
+const { BODY_MODEL, CONTENT_TYPE } = require('../../src/utils/errorConstants');
 
 describe('Resource - User', function() {
   const token = global.testToken;
@@ -21,12 +22,60 @@ describe('Resource - User', function() {
   describe('Rest', function() {
     it('POST - create a new user', function(done) {
       request(app)
-        .post(`/api/v1/users/${users.postUser.id}`)
-        .set('Authorization', 'Bearer ' + token)
+        .post('/api/v1/users')
+        .set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ authoId: users.postUser.authoId })
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
           expect(res.body).to.be.an('object');
-          expect(res.body).to.deep.equal({ id: users.postUser.id });
+          expect(res.body.id).to.be.a('string');
+          expect(res.body.authoId).to.equal(users.postUser.authoId);
+          done();
+        });
+    });
+
+    it('POST - throw error if body does not match model', function(done) {
+      request(app)
+        .post('/api/v1/users')
+        .set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ id: users.postUser.authoId })
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(BODY_MODEL.code);
+          expect(res.body).to.equal(BODY_MODEL.message);
+          done();
+        });
+    });
+
+    it('POST - throw error if content-type is unsupported', function(done) {
+      request(app)
+        .post('/api/v1/users')
+        .set('Content-Type', 'multipart/form-data')
+        .set('Authorization', `Bearer ${token}`)
+        // if content-type is not set to json,
+        // the send() method expects a string
+        .send(`{ id: ${users.postUser.authoId} }`)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(CONTENT_TYPE.code);
+          expect(res.body).to.equal(CONTENT_TYPE.message);
+          done();
+        });
+    });
+
+    it(`GET - return array of users`, function(done) {
+      request(app)
+        .get('/api/v1/users')
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body).to.be.an('object');
+          expect(res.body.items).to.be.an('array');
+
+          const firstUserObject = res.body.items[0];
+          expect(firstUserObject.id).to.be.a('string');
+          expect(firstUserObject.authoId).to.be.a('string');
+
           done();
         });
     });
@@ -36,7 +85,7 @@ describe('Resource - User', function() {
     it('Query - list ids for all users', function(done) {
       request(app)
         .get('/api/v2/graphql?query={listUsers{id}}')
-        .set('Authorization', 'Bearer ' + token)
+        .set('Authorization', `Bearer ${token}`)
         .end((err, res) => {
           const users = res.body.data.listUsers;
           expect(res.statusCode).to.equal(200);
@@ -51,20 +100,20 @@ describe('Resource - User', function() {
     it('Mutation - create a new user', function(done) {
       const query = `
         mutation {
-          createUser(newUser: { id: "${users.testUser.id}" }) {
+          createUser(newUser: { authoId: "${users.testUser.authoId}" }) {
             id
           }
         }`;
       request(app)
         .post('/api/v2/graphql')
-        .set('Authorization', 'Bearer ' + token)
+        .set('Authorization', `Bearer ${token}`)
         .set('Content-Type', 'application/json')
         .send({ query })
         .end((err, res) => {
           const user = res.body.data.createUser;
           expect(res.statusCode).to.equal(200);
           expect(user).to.be.an('object');
-          expect(user.id).to.equal(users.testUser.id);
+          expect(user.id).to.not.equal(users.testUser.id);
           done();
         });
     });

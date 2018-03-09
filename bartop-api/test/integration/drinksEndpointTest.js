@@ -34,14 +34,15 @@ describe('Resource - Drink', function() {
     it(`GET - return array of drinks`, function(done) {
       request(app)
         .get('/api/v1/drinks')
-        .set('Authorization', 'Bearer ' + token)
+        .set('Authorization', `Bearer ${token}`)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           expect(res.body).to.be.an('object');
+          expect(res.body.items).to.be.an('array');
 
           const firstDrinkObject = res.body.items[0];
-          expect(firstDrinkObject.id).to.be.an('string');
-          expect(firstDrinkObject.name).to.be.an('string');
+          expect(firstDrinkObject.id).to.be.a('string');
+          expect(firstDrinkObject.name).to.be.a('string');
           expect(firstDrinkObject.instructions).to.be.an('array');
           expect(firstDrinkObject.ingredients).to.be.an('array');
           expect(firstDrinkObject.description).to.be.an('string');
@@ -55,7 +56,7 @@ describe('Resource - Drink', function() {
     it('Query - list ids for all users', function(done) {
       request(app)
         .get('/api/v2/graphql?query={listDrinks{name}}')
-        .set('Authorization', 'Bearer ' + token)
+        .set('Authorization', `Bearer ${token}`)
         .end((err, res) => {
           const drinks = res.body.data.listDrinks;
           expect(res.statusCode).to.equal(200);

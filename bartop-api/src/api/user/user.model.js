@@ -1,8 +1,8 @@
 module.exports = {
   type: 'object',
-  required: ['id'],
+  required: ['authoId'],
   properties: {
-    id: {
+    authoId: {
       type: 'string'
     }
   }
