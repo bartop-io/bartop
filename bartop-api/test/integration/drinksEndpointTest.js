@@ -52,7 +52,7 @@ describe('Resource - Drink', function() {
   });
 
   describe('GraphQL', function() {
-    it('Query - list ids for all users', function(done) {
+    it('Query - return names for all drinks', function(done) {
       request(app)
         .get('/api/v2/graphql?query={listDrinks{name}}')
         .set('Authorization', 'Bearer ' + token)
