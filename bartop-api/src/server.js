@@ -29,7 +29,7 @@ app.use(checkJwt);
 // set up the api as middleware
 app.use('/api', api);
 
-// handle all incorrect routes under `/api`
+// handle all incorrect routes
 app.all('*', (req, res, next) => {
   const err = new Error();
   err.name = 'RouteNotFoundError';
