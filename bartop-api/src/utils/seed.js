@@ -36,7 +36,7 @@ const seed = async () => {
     const existingDrinks = await dbAdapter.r.table('drinks');
     if (!existingDrinks.length) {
       const res = await dbAdapter.r.table('drinks').insert(seeds.drinks.drinkList);
-      if (res.inserted === seeds.drinks.array.length) {
+      if (res.inserted === seeds.drinks.drinkList.length) {
         logger.info(`  > default drinks added to 'drinks' table.`);
       }
     }
