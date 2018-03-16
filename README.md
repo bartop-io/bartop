@@ -75,7 +75,13 @@ To create a new database use the [RethinkDB dashboard](http://localhost:8080/#ta
 #### Run the server locally
 First, make sure the database is running. Then, start the API server:
 `npm start`
-The API will be available for requests at http://localhost:3001 (if you set BARTOP_API_PORT to 3001 in your `.env` file).
+The API will be available for requests at http://localhost:3001 (if you set BARTOP_API_PORT to 3001 in your `.env` file, which is recommended). Requests to the API in development do not need to be authorized. For testing and production, the API requires authentication/authorization using JSON Web Tokens.
+
+##### Explore the v1 REST API
+The REST API is available under the route `/api/v1`. Use a tool like [Postman](https://www.getpostman.com/apps) to test different endpoints. Documentation coming soon...
+
+##### Explore the v2 GraphQL API
+The v2 GraphQL API is available under the single endpoint `/api/v2/graphql`. The recommended way to explore this API is using the GraphIQL tool, available by visiting [the above route](http://localhost:3001/api/v2/graphql) in a browser. Here, there is an environment to test queries alongside a panel with documentation. If desired, the v2 GraphQL API can also be explored using a tool like Postman.
 
 #### Test the API
 The API test suite consists of both unit tests and integration tests.
