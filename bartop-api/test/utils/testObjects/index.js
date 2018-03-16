@@ -1,4 +1,5 @@
-const drinkTestObjects = require('./drinks');
+const drinkTestObjects = require('./drink');
+const userTestObjects = require('./user');
 
 // mocked response object
 const Response = class {
@@ -16,3 +17,4 @@ const Response = class {
 
 module.exports.res = new Response();
 module.exports.drinks = drinkTestObjects;
+module.exports.users = userTestObjects;

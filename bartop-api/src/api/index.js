@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const drinksRouter = require('./drink/drinkRouter');
-const usersRouter = require('./user/userRouter');
+const restRouter = require('./restRouter');
+const graphqlRouter = require('./graphqlRouter');
 
-router.use('/drinks', drinksRouter);
-router.use('/users', usersRouter);
+router.use('/v1', restRouter);
+router.use('/v2/graphql', graphqlRouter);
 
 module.exports = router;

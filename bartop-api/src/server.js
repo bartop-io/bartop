@@ -6,7 +6,7 @@ const compression = require('compression');
 const api = require('./api');
 const logger = require('./utils/logger');
 const checkJwt = require('./utils/auth');
-const strings = require('./utils/stringConstants').errors;
+const errors = require('./utils/errorMessages');
 
 const app = express();
 
@@ -27,9 +27,9 @@ app.use(morgan('dev', { stream: logger.stream }));
 app.use(checkJwt);
 
 // set up the api as middleware
-app.use('/api/v1', api);
+app.use('/api', api);
 
-// handle all incorrect routes under `/api`
+// handle all incorrect routes
 app.all('*', (req, res, next) => {
   const err = new Error();
   err.name = 'RouteNotFoundError';
@@ -40,13 +40,13 @@ app.all('*', (req, res, next) => {
 app.use((err, req, res, next) => {
   switch (err.name) {
     case 'RouteNotFoundError':
-      logger.error(strings.NONEXISTENT);
-      res.status(404).json(strings.NONEXISTENT);
+      logger.error(errors.NONEXISTENT);
+      res.status(404).json(errors.NONEXISTENT);
       break;
 
     case 'UnauthorizedError':
-      logger.error(strings.UNAUTHORIZED);
-      res.status(401).json(strings.UNAUTHORIZED);
+      logger.error(errors.UNAUTHORIZED);
+      res.status(401).json(errors.UNAUTHORIZED);
       break;
 
     default:
