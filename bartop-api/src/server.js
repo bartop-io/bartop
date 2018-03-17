@@ -44,18 +44,18 @@ app.all('*', (req, res, next) => {
 app.use((err, req, res, next) => {
   switch (err.name) {
     case 'RouteNotFoundError':
-      logger.error(errors.NONEXISTENT);
+      logger.error(errors.NONEXISTENT.message);
       res.status(errors.NONEXISTENT.code).json(errors.NONEXISTENT.message);
       break;
 
     case 'UnauthorizedError':
-      logger.error(errors.UNAUTHORIZED);
+      logger.error(errors.UNAUTHORIZED.message);
       res.status(errors.UNAUTHORIZED.code).json(errors.UNAUTHORIZED.message);
       break;
 
     case 'InvalidModelError':
-      logger.error(errors.BODY_MODEL);
-      // this error 'message' is an array or objects, we want to get key
+      logger.error(errors.BODY_MODEL.message);
+      // the 'message' property of `err` is an array or objects, we want to get key
       // 'message' from within this object
       //logger.error(`${err.name}: ${err.message}`);
       // ^ will be resolved in #92
@@ -64,7 +64,7 @@ app.use((err, req, res, next) => {
 
     case 'InvalidContentTypeError':
       logger.error(`${err.name}: ${err.message}`);
-      logger.error(errors.CONTENT_TYPE);
+      logger.error(errors.CONTENT_TYPE.message);
       res.status(errors.CONTENT_TYPE.code).json(errors.CONTENT_TYPE.message);
       break;
 

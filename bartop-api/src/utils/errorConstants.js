@@ -1,6 +1,6 @@
 module.exports = {
   UNAUTHORIZED: {
-    message: 'Request is not authorized.',
+    message: 'Access token is missing or invalid.',
     code: 401
   },
   NONEXISTENT: {
