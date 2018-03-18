@@ -14,6 +14,7 @@ import { actions as authActions } from '../../ducks/authentication/authenticatio
 import Landing from '../Landing/Landing';
 import Callback from '../Callback/Callback';
 import NotFound from '../NotFound/NotFound';
+import Modal from '../Modal/Modal';
 
 // persist all of our auth & user state to local storage
 const localStorageEnhancer = persistState(['authentication', 'user'], {
@@ -56,6 +57,7 @@ export default class App extends React.Component {
             />
             <Route component={NotFound} />
           </Switch>
+          <Modal />
         </Router>
       </Provider>
     );
