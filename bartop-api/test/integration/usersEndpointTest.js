@@ -113,7 +113,29 @@ describe('Resource - User', function() {
           const user = res.body.data.createUser;
           expect(res.statusCode).to.equal(200);
           expect(user).to.be.an('object');
-          expect(user.id).to.not.equal(users.testUser.id);
+          expect(user.id).to.not.equal(users.testUser.authoId);
+          done();
+        });
+    });
+
+    it('Mutation - error on creating user with bad schema', function(done) {
+      const query = `
+        mutation {
+          createUser(newUser: { id: "${users.testUser.authoId}" }) {
+            id
+          }
+        }`;
+      request(app)
+        .post('/api/v2/graphql')
+        .set('Authorization', `Bearer ${token}`)
+        .set('Content-Type', 'application/json')
+        .send({ query })
+        .end((err, res) => {
+          const error = res.body.errors[0];
+          expect(res.statusCode).to.equal(400);
+          expect(error.message).to.equal(
+            'Field "id" is not defined by type UserInput.'
+          );
           done();
         });
     });
