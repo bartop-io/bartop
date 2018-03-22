@@ -12,6 +12,7 @@ import bartopApi from '../../singletons/bartop-api';
 import { errors } from '../../strings';
 
 export const types = {
+  SUBMIT_LOGIN_FORM: 'AUTHENTICATION/SUBMIT_LOGIN_FORM',
   LOGIN_REQUEST: 'AUTHENTICATION/LOGIN_REQUEST',
   LOGIN_SUCCESS: 'AUTHENTICATION/LOGIN_SUCCESS',
   LOGIN_FAILURE: 'AUTHENTICATION/LOGIN_FAILURE',
@@ -20,6 +21,22 @@ export const types = {
 };
 
 export const actions = {
+  submitLoginForm: emailAddress => {
+    // TODO - call auth.passwordlessStart() and send code
+    history.replace({
+      pathname: '/auth/verify',
+      state: {
+        emailAddress
+      }
+    });
+    return {
+      type: types.SUBMIT_LOGIN_FORM
+    };
+  },
+  submitVerifyForm: () => {
+    // TODO - call auth.passwordlessLogin and verify code
+    // this will redirect to our callback where we parse the hash
+  },
   loginRequest: () => {
     auth.authorize();
     return {

@@ -8,7 +8,7 @@ const Wrapper = styled.div`
 
 const NotFound = () => (
   <Wrapper>
-    Oops! This page doesn't seem to exist{' '}
+    Oops! This page doesn&apos;t seem to exist&nbsp;
     <span role="img" aria-label="frowning face">
       ☹️
     </span>

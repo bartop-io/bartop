@@ -4,7 +4,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import persistState from 'redux-localstorage';
-import { Router, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import { injectGlobal } from 'styled-components';
 
 import callApiMiddleware from '../../middleware/call-api';
@@ -12,9 +12,9 @@ import rootReducer from '../../ducks';
 import history from '../../singletons/history';
 import { actions as authActions } from '../../ducks/authentication/authentication';
 import Landing from '../Landing/Landing';
+import Auth from '../Auth/Auth';
 import Callback from '../Callback/Callback';
 import NotFound from '../NotFound/NotFound';
-import Modal from '../Modal/Modal';
 
 // persist all of our auth & user state to local storage
 const localStorageEnhancer = persistState(['authentication', 'user'], {
@@ -36,7 +36,11 @@ export default class App extends React.Component {
   render() {
     // styled components helper for adding styles to global dom elements like body
     injectGlobal`
-      body {
+      html,
+      body,
+      #root {
+        width: 100%;
+        height: 100%;
         margin: 0;
         padding: 0;
         font-family: sans-serif;
@@ -46,10 +50,12 @@ export default class App extends React.Component {
       <Provider store={store}>
         <Router history={history}>
           <Switch>
-            <Route path="/" exact component={Landing} />
+            <Redirect exact from="/" to="/landing" />
+            <Route path="/landing" component={Landing} />
+            <Route path="/auth" component={Auth} />
             <Route
-              path="/callback"
               exact
+              path="/callback"
               render={() => {
                 store.dispatch(authActions.handleAuthentication());
                 return <Callback />;
@@ -57,7 +63,6 @@ export default class App extends React.Component {
             />
             <Route component={NotFound} />
           </Switch>
-          <Modal />
         </Router>
       </Provider>
     );
