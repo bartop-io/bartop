@@ -9,11 +9,10 @@ import { injectGlobal } from 'styled-components';
 
 import callApiMiddleware from '../../middleware/call-api';
 import rootReducer from '../../ducks';
+import auth from '../../singletons/authentication';
 import history from '../../singletons/history';
-import { actions as authActions } from '../../ducks/authentication/authentication';
 import Landing from '../Landing/Landing';
 import Auth from '../Auth/Auth';
-import Callback from '../Callback/Callback';
 import NotFound from '../NotFound/NotFound';
 
 // persist all of our auth & user state to local storage
@@ -52,14 +51,11 @@ export default class App extends React.Component {
           <Switch>
             <Redirect exact from="/" to="/landing" />
             <Route path="/landing" component={Landing} />
-            <Route path="/auth" component={Auth} />
             <Route
-              exact
-              path="/callback"
-              render={() => {
-                store.dispatch(authActions.handleAuthentication());
-                return <Callback />;
-              }}
+              path="/auth"
+              render={({ match, history }) => (
+                <Auth match={match} history={history} auth={auth} />
+              )}
             />
             <Route component={NotFound} />
           </Switch>

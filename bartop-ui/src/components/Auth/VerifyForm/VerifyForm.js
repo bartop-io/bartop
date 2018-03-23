@@ -10,24 +10,49 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const VerifyConfirmation = styled.p;
+const ErrorMessage = styled.p``;
 
-const CodeTextInput = styled.input;
+const VerifyConfirmation = styled.p``;
 
-const SubmitButton = styled.button;
+const CodeTextInput = styled.input``;
 
-export const VerifyForm = ({ emailAddress }) => (
+const SubmitButton = styled.button``;
+
+export const VerifyForm = ({
+  email,
+  verificationCode,
+  setCode,
+  verifyCode,
+  verifyCodeError
+}) => (
   <Wrapper>
-    <VerifyConfirmation>
-      An email with the code has been sent to {emailAddress}.
-    </VerifyConfirmation>
-    <CodeTextInput type="text" placeholder="Your Code" />
-    <SubmitButton>SUBMIT</SubmitButton>
+    {verifyCodeError ? (
+      <ErrorMessage>
+        Something went wrong. Please go back to try again.
+      </ErrorMessage>
+    ) : (
+      <div>
+        <VerifyConfirmation>
+          An email with the code has been sent to {email}.
+        </VerifyConfirmation>
+        <CodeTextInput
+          type="text"
+          placeholder="Your Code"
+          value={verificationCode}
+          onChange={e => setCode(e.target.value)}
+        />
+        <SubmitButton onClick={verifyCode}>SUBMIT</SubmitButton>
+      </div>
+    )}
   </Wrapper>
 );
 
 VerifyForm.propTypes = {
-  emailAddress: PropTypes.string.isRequired
+  email: PropTypes.string.isRequired,
+  verificationCode: PropTypes.string.isRequired,
+  setCode: PropTypes.func.isRequired,
+  verifyCode: PropTypes.func.isRequired,
+  verifyCodeError: PropTypes.object
 };
 
 export default VerifyForm;

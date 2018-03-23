@@ -12,8 +12,7 @@ import bartopApi from '../../singletons/bartop-api';
 import { errors } from '../../strings';
 
 export const types = {
-  SUBMIT_LOGIN_FORM: 'AUTHENTICATION/SUBMIT_LOGIN_FORM',
-  LOGIN_REQUEST: 'AUTHENTICATION/LOGIN_REQUEST',
+  START_LOGIN: 'AUTHENTICATION/START_LOGIN',
   LOGIN_SUCCESS: 'AUTHENTICATION/LOGIN_SUCCESS',
   LOGIN_FAILURE: 'AUTHENTICATION/LOGIN_FAILURE',
   HANDLE_AUTHENTICATION: 'AUTHENTICATION/HANDLE_AUTHENTICATION',
@@ -21,26 +20,10 @@ export const types = {
 };
 
 export const actions = {
-  submitLoginForm: emailAddress => {
-    // TODO - call auth.passwordlessStart() and send code
-    history.replace({
-      pathname: '/auth/verify',
-      state: {
-        emailAddress
-      }
-    });
+  startLogin: () => {
+    history.replace('/auth/login');
     return {
-      type: types.SUBMIT_LOGIN_FORM
-    };
-  },
-  submitVerifyForm: () => {
-    // TODO - call auth.passwordlessLogin and verify code
-    // this will redirect to our callback where we parse the hash
-  },
-  loginRequest: () => {
-    auth.authorize();
-    return {
-      type: types.LOGIN_REQUEST
+      type: types.START_LOGIN
     };
   },
   loginSuccess: (accessToken, expiresIn, userInfo) => ({
@@ -49,10 +32,13 @@ export const actions = {
     expiresIn,
     userInfo
   }),
-  loginFailure: error => ({
-    type: types.LOGIN_FAILURE,
-    error: serializeError(error)
-  }),
+  loginFailure: error => {
+    history.replace('/auth/failure');
+    return {
+      type: types.LOGIN_FAILURE,
+      error: serializeError(error)
+    };
+  },
   handleAuthentication: () =>
     // redux-thunk knows to handle action functions instead of normal action objects
     // this allows us to dispatch actions within actions, as well as access state
@@ -65,8 +51,6 @@ export const actions = {
       const errorOut = err => {
         console.error(err);
         dispatch(actions.loginFailure(err));
-        // TODO - go somewhere for failure or unauthenticated jawns
-        history.replace('/');
       };
 
       auth.parseHash((err, authResult) => {
@@ -126,12 +110,13 @@ export const initialState = {
     loggingIn: false,
     loggedIn: false,
     error: null
-  }
+  },
+  sendCodeError: null
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case types.LOGIN_REQUEST:
+    case types.START_LOGIN:
       return {
         ...state,
         status: {

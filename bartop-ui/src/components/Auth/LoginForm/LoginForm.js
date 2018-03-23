@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -10,42 +10,41 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const EmailAddressPrompt = styled.p;
+const ErrorMessage = styled.p``;
 
-const EmailAddressTextInput = styled.input;
+const EmailAddressPrompt = styled.p``;
 
-const SubmitButton = styled.button;
+const EmailAddressTextInput = styled.input``;
 
-class LoginForm extends Component {
-  constructor() {
-    super();
-    this.state = {
-      emailAddress: ''
-    };
-  }
+const SubmitButton = styled.button``;
 
-  render() {
-    const { submitLoginForm } = this.props;
-    return (
-      <Wrapper>
+export const LoginForm = ({ email, setEmail, sendCode, sendCodeError }) => (
+  <Wrapper>
+    {sendCodeError ? (
+      <ErrorMessage>
+        Something went wrong. Please refresh to try again.
+      </ErrorMessage>
+    ) : (
+      <div>
         <EmailAddressPrompt>
           Enter your email to sign in or create an account
         </EmailAddressPrompt>
         <EmailAddressTextInput
           type="text"
           placeholder="bilbo@btbb.io"
-          onChange={e => this.setState({ emailAddress: e.target.value })}
+          onChange={e => setEmail(e.target.value)}
         />
-        <SubmitButton onClick={() => submitLoginForm(this.state.emailAddress)}>
-          SUBMIT
-        </SubmitButton>
-      </Wrapper>
-    );
-  }
-}
+        <SubmitButton onClick={sendCode}>SUBMIT</SubmitButton>
+      </div>
+    )}
+  </Wrapper>
+);
 
 LoginForm.propTypes = {
-  submitLoginForm: PropTypes.func.isRequired
+  email: PropTypes.string.isRequired,
+  setEmail: PropTypes.func.isRequired,
+  sendCode: PropTypes.func.isRequired,
+  sendCodeError: PropTypes.object
 };
 
 export default LoginForm;

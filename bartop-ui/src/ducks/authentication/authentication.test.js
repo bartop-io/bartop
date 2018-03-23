@@ -17,10 +17,12 @@ import {
 // import & mock authentication's dependencies so we can spy on functions
 import jwtDecode from 'jwt-decode';
 import auth from '../../singletons/authentication';
+import history from '../../singletons/history';
 import * as utils from '../../utils/utils';
 
 jest.mock('jwt-decode');
 jest.mock('../../singletons/authentication');
+jest.mock('../../singletons/history');
 jest.mock('../../utils/utils');
 
 describe('authentication actions', () => {
@@ -28,14 +30,14 @@ describe('authentication actions', () => {
     jest.resetAllMocks();
   });
 
-  it('should call auth authorize when requesting login', () => {
+  it('should call redirect to /auth/login when startLogin()', () => {
     const expectedAction = {
-      type: types.LOGIN_REQUEST
+      type: types.START_LOGIN
     };
-    expect(auth.authorize).not.toBeCalled();
-    const action = actions.loginRequest();
+
+    const action = actions.startLogin();
     expect(action).toEqual(expectedAction);
-    expect(auth.authorize).toBeCalled();
+    expect(history.replace).toBeCalledWith('/auth/login');
   });
 
   it('should call login success with result of authentication', () => {
@@ -53,13 +55,15 @@ describe('authentication actions', () => {
     expect(action).toEqual(expectedAction);
   });
 
-  it('should fail login with an error', () => {
+  it('should fail login with an error and redirect to /auth/failure', () => {
     const expectedAction = {
       type: types.LOGIN_FAILURE,
       error: mockError
     };
+
     const action = actions.loginFailure(mockError);
     expect(action).toEqual(expectedAction);
+    expect(history.replace).toBeCalledWith('/auth/failure');
   });
 
   describe('can handle authentication', () => {
@@ -198,12 +202,12 @@ describe('authentication reducer', () => {
     expect(reducer(undefined, {})).toEqual(initialState);
   });
 
-  it('should adjust status on login request', () => {
+  it('should adjust status on startLogin()', () => {
     const expectedState = {
       ...initialState,
       status: mockAuthStatuses.requesting
     };
-    expect(reducer(undefined, { type: types.LOGIN_REQUEST })).toEqual(
+    expect(reducer(undefined, { type: types.START_LOGIN })).toEqual(
       expectedState
     );
   });

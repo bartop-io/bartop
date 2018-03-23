@@ -22,16 +22,12 @@ AuthButton.propTypes = {
   logout: PropTypes.func.isRequired
 };
 
-AuthButton.defaultProps = {
-  expiresAt: null
-};
-
 const mapStateToProps = state => ({
   loggedIn: state.authentication.status.loggedIn
 });
 
 const mapDispatchToProps = {
-  login: actions.loginRequest,
+  login: actions.startLogin,
   logout: actions.logout
 };
 
