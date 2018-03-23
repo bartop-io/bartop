@@ -10,13 +10,21 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const ErrorMessage = styled.p``;
+const ErrorMessage = styled.p`
+  /* stylelint-disable-line block-no-empty */
+`;
 
-const VerifyConfirmation = styled.p``;
+const VerifyConfirmation = styled.p`
+  /* stylelint-disable-line block-no-empty */
+`;
 
-const CodeTextInput = styled.input``;
+const CodeTextInput = styled.input`
+  /* stylelint-disable-line block-no-empty */
+`;
 
-const SubmitButton = styled.button``;
+const SubmitButton = styled.button`
+  /* stylelint-disable-line block-no-empty */
+`;
 
 export const VerifyForm = ({
   email,

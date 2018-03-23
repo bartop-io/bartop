@@ -17,7 +17,8 @@ export class Auth extends Component {
     this.state = {
       email: '',
       sendCodeError: null,
-      verificationCode: ''
+      verificationCode: '',
+      verifyCodeError: null
     };
     this.setEmail = this.setEmail.bind(this);
     this.setCode = this.setCode.bind(this);

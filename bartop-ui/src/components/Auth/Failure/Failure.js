@@ -11,7 +11,9 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const FailureMessage = styled.p``;
+const FailureMessage = styled.p`
+  /* stylelint-disable-line block-no-empty */
+`;
 
 export const Failure = ({ error }) => (
   <Wrapper>

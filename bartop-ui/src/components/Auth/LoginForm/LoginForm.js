@@ -10,13 +10,21 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const ErrorMessage = styled.p``;
+const ErrorMessage = styled.p`
+  /* stylelint-disable-line block-no-empty */
+`;
 
-const EmailAddressPrompt = styled.p``;
+const EmailAddressPrompt = styled.p`
+  /* stylelint-disable-line block-no-empty */
+`;
 
-const EmailAddressTextInput = styled.input``;
+const EmailAddressTextInput = styled.input`
+  /* stylelint-disable-line */
+`;
 
-const SubmitButton = styled.button``;
+const SubmitButton = styled.button`
+  /* stylelint-disable-line block-no-empty */
+`;
 
 export const LoginForm = ({ email, setEmail, sendCode, sendCodeError }) => (
   <Wrapper>
