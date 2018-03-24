@@ -1,7 +1,11 @@
 const drinkTestObjects = require('./drink');
 const userTestObjects = require('./user');
 
-// mocked response object
+// some shared request headers
+const commonHeaders = {
+  'Content-Type': 'application/json'
+};
+
 const Response = class {
   constructor() {
     this.statusCode = 200;
@@ -15,6 +19,13 @@ const Response = class {
   }
 };
 
+const request = {
+  header: key => {
+    return commonHeaders[key];
+  }
+};
+
 module.exports.res = new Response();
+module.exports.req = request;
 module.exports.drinks = drinkTestObjects;
 module.exports.users = userTestObjects;

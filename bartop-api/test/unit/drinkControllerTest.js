@@ -1,19 +1,16 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
 const controllerModule = require('../../src/api/drink/drink.controller');
-const testObjects = require('../utils/testObjects');
+const { res, drinks } = require('../utils/testObjects');
 
 describe('drinks controller - unit test', function(done) {
-  it('.list - pass data from ORM to response', async function() {
-    // set up an object to be mocked in the response
-    const dbResults = testObjects.drinks.array;
+  it('.list() - pass data from ORM to response', async function() {
+    const dbResults = drinks.drinkList;
     const mockDb = {};
 
     mockDb.findAll = async tableName => {
       return Promise.resolve(dbResults);
     };
-
-    const res = testObjects.res;
 
     const jsonSpy = sinon.spy(res, 'json');
     const statusSpy = sinon.spy(res, 'status');
