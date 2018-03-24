@@ -77,7 +77,7 @@ First, make sure the database is running. Then, start the API server:
 `npm start`
 The API will be available for requests at http://localhost:3001 (if you set BARTOP_API_PORT to 3001 in your `.env` file, which is recommended). Requests to the API in development do not need to be authorized. For testing and production, the API requires authentication/authorization using JSON Web Tokens.
 
-**NOTE** Starting the API in development mode will automatically configure the database to assist with client development. The first time the server is started with a fresh database, it will create the following tables:
+_Note_ Starting the API in development mode will automatically configure the database to assist with client development. The first time the server is started with a fresh database, it will create the following tables:
 - `users`
 - `drinks`
 - `catalogs`
@@ -85,7 +85,7 @@ The API will be available for requests at http://localhost:3001 (if you set BART
 - `sessions`
 - `orders`
 
-and will seed the `drinks` table with sample drink objects.
+and will seed the `drinks` table with [sample drink objects](test/utils/testObjects/drink/index.js).
 
 ##### Explore the v1 REST API
 The REST API is available under the route `/api/v1`. Use a tool like [Postman](https://www.getpostman.com/apps) to test different endpoints. Documentation coming soon...
