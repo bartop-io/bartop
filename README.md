@@ -70,12 +70,22 @@ Once installed, start a local instance of the database:
 `npm run database`
 
 The default database, named `test`, is reserved for running the integration tests. Using this as your development database will have pretty unfortunate consequences, so you will want to create a new one.
-To create a new database use the [RethinkDB dashboard](http://localhost:8080/#tables) (while the database is running). Click on `+ Add Database` and enter your desired development database name. Make sure the name of this database matches the BARTOP_DB_NAME variable in your `.env` file.
+To create a new database use the [RethinkDB dashboard](http://localhost:8080/#tables) (while the database is running). Click on `+ Add Database` and enter your desired development database name. Make sure the name of this database matches the BARTOP_DB_NAME variable in your `.env` file. This dashboard is also useful for exploring your data.
 
 #### Run the server locally
 First, make sure the database is running. Then, start the API server:
 `npm start`
 The API will be available for requests at http://localhost:3001 (if you set BARTOP_API_PORT to 3001 in your `.env` file, which is recommended). Requests to the API in development do not need to be authorized. For testing and production, the API requires authentication/authorization using JSON Web Tokens.
+
+**NOTE** Starting the API in development mode will automatically configure the database to assist with client development. The first time the server is started with a fresh database, it will create the following tables:
+- `users`
+- `drinks`
+- `catalogs`
+- `menus`
+- `sessions`
+- `orders`
+
+and will seed the `drinks` table with sample drink objects.
 
 ##### Explore the v1 REST API
 The REST API is available under the route `/api/v1`. Use a tool like [Postman](https://www.getpostman.com/apps) to test different endpoints. Documentation coming soon...
