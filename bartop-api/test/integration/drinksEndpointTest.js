@@ -15,7 +15,7 @@ describe('Resource - Drink', function() {
       await dbAdapter.r.tableDrop('drinks');
     }
     await dbAdapter.r.tableCreate('drinks');
-    await dbAdapter.r.table('drinks').insert(drinks.drinkList);
+    await dbAdapter.r.table('drinks').insert(drinks.list);
     return;
   });
 

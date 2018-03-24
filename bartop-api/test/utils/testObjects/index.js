@@ -15,6 +15,10 @@ const Response = class {
   }
 };
 
+// create a list of tables that can be assumed to exist at any given time
+const tables = ['drinks', 'catalogs', 'menus', 'orders', 'sessions', 'users'];
+
 module.exports.res = new Response();
+module.exports.dbTables = tables;
 module.exports.drinks = drinkTestObjects;
 module.exports.users = userTestObjects;

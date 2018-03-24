@@ -90,4 +90,4 @@ const tommyC = {
 
 module.exports.oldFashioned = oldFashioned;
 module.exports.tomCollins = tommyC;
-module.exports.drinkList = [oldFashioned, tommyC];
+module.exports.list = [oldFashioned, tommyC];

@@ -6,7 +6,7 @@ const testObjects = require('../utils/testObjects');
 describe('drinks controller - unit test', function(done) {
   it('.list - pass data from ORM to response', async function() {
     // set up an object to be mocked in the response
-    const dbResults = testObjects.drinks.array;
+    const dbResults = testObjects.drinks.list;
     const mockDb = {};
 
     mockDb.findAll = async tableName => {
