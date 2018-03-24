@@ -85,7 +85,7 @@ _Note_ Starting the API in development mode will automatically configure the dat
 - `sessions`
 - `orders`
 
-and will seed the `drinks` table with [sample drink objects](test/utils/testObjects/drink/index.js).
+and will seed the `drinks` table with [sample drink objects](bartop-api/test/utils/testObjects/drink/index.js).
 
 ##### Explore the v1 REST API
 The REST API is available under the route `/api/v1`. Use a tool like [Postman](https://www.getpostman.com/apps) to test different endpoints. Documentation coming soon...
