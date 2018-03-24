@@ -15,7 +15,7 @@ describe('Resource - User', function() {
       await dbAdapter.r.tableDrop('users');
     }
     await dbAdapter.r.tableCreate('users');
-    await dbAdapter.r.table('users').insert(users.userList);
+    await dbAdapter.r.table('users').insert(users.list);
     return;
   });
 

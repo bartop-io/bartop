@@ -7,7 +7,12 @@ const port = config.api.port;
 
 // ##### for development only #####
 if (config.env === 'development') {
-  seed();
+  seed().catch(err => {
+    logger.error(err);
+    logger.info(
+      'An error occurred seeding the DB. The DB state may not be as expected.'
+    );
+  });
 }
 
 app.listen(port, () => {

@@ -17,4 +17,4 @@ const user3 = {
 // testUser is for controller and grapql create user
 module.exports.testUser = user0;
 module.exports.postUser = user1;
-module.exports.userList = [user2, user3];
+module.exports.list = [user2, user3];

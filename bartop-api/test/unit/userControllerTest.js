@@ -31,7 +31,7 @@ describe('users controller - unit test', function(done) {
   });
 
   it('.list() - pass data from ORM to response', async function() {
-    const dbResults = users.userList;
+    const dbResults = users.list;
     const mockDb = {};
 
     mockDb.findAll = async tableName => {

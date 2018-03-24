@@ -4,8 +4,9 @@ const controllerModule = require('../../src/api/drink/drink.controller');
 const { res, drinks } = require('../utils/testObjects');
 
 describe('drinks controller - unit test', function(done) {
-  it('.list() - pass data from ORM to response', async function() {
-    const dbResults = drinks.drinkList;
+  it('.list - pass data from ORM to response', async function() {
+    // set up an object to be mocked in the response
+    const dbResults = drinks.list;
     const mockDb = {};
 
     mockDb.findAll = async tableName => {
