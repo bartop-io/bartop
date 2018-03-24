@@ -1,66 +1,75 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import { Formik } from 'formik';
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-`;
-
-const ErrorMessage = styled.p`
-  /* stylelint-disable-line block-no-empty */
-`;
-
-const VerifyConfirmation = styled.p`
-  /* stylelint-disable-line block-no-empty */
-`;
-
-const CodeTextInput = styled.input`
-  /* stylelint-disable-line block-no-empty */
-`;
-
-const SubmitButton = styled.button`
-  /* stylelint-disable-line block-no-empty */
-`;
-
-export const VerifyForm = ({
-  email,
-  verificationCode,
-  setCode,
-  verifyCode,
-  verifyCodeError
-}) => (
-  <Wrapper>
-    {verifyCodeError ? (
-      <ErrorMessage>
-        Something went wrong. Please go back to try again.
-      </ErrorMessage>
-    ) : (
-      <div>
-        <VerifyConfirmation>
-          An email with the code has been sent to {email}.
-        </VerifyConfirmation>
-        <CodeTextInput
+const VerifyForm = ({ history, email, verifyCode }) => (
+  <Formik
+    initialValues={{
+      verificationCode: ''
+    }}
+    validate={({ verificationCode }) => {
+      const errors = {};
+      if (!verificationCode) {
+        errors.verificationCode = 'Required';
+      } else if (verificationCode.length !== 6) {
+        errors.verificationCode = 'Code must be six digits';
+      }
+      return errors;
+    }}
+    onSubmit={async (
+      { verificationCode },
+      { setSubmitting, setFieldError }
+    ) => {
+      try {
+        await verifyCode(email, verificationCode);
+        setSubmitting(false);
+        history.replace({
+          pathname: '/auth/callback'
+        });
+      } catch (err) {
+        setSubmitting(false);
+        setFieldError('verificationCode', err.message);
+      }
+    }}
+    render={({
+      values,
+      errors,
+      touched,
+      handleChange,
+      handleBlur,
+      handleSubmit,
+      isSubmitting
+    }) => (
+      <form onSubmit={handleSubmit}>
+        <p>An email with the code has been sent to {email}</p>
+        <input
           type="text"
-          placeholder="Your Code"
-          value={verificationCode}
-          onChange={e => setCode(e.target.value)}
+          name="verificationCode"
+          onChange={handleChange}
+          onBlur={handleBlur}
+          value={values.verificationCode}
         />
-        <SubmitButton onClick={verifyCode}>SUBMIT</SubmitButton>
-      </div>
+        {touched.verificationCode &&
+          errors.verificationCode && <div>{errors.verificationCode}</div>}
+        <button type="submit" disabled={isSubmitting}>
+          Submit
+        </button>
+        <div
+          onClick={() =>
+            history.replace({ pathname: '/auth/login', state: { email } })
+          }
+        >
+          Didn&#39;t receive the code?
+        </div>
+      </form>
     )}
-  </Wrapper>
+  />
 );
 
 VerifyForm.propTypes = {
+  history: PropTypes.object.isRequired,
   email: PropTypes.string.isRequired,
-  verificationCode: PropTypes.string.isRequired,
-  setCode: PropTypes.func.isRequired,
-  verifyCode: PropTypes.func.isRequired,
-  verifyCodeError: PropTypes.object
+  verifyCode: PropTypes.func.isRequired
 };
 
 export default VerifyForm;

@@ -1,58 +1,63 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import { Formik } from 'formik';
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-`;
-
-const ErrorMessage = styled.p`
-  /* stylelint-disable-line block-no-empty */
-`;
-
-const EmailAddressPrompt = styled.p`
-  /* stylelint-disable-line block-no-empty */
-`;
-
-const EmailAddressTextInput = styled.input`
-  /* stylelint-disable-line */
-`;
-
-const SubmitButton = styled.button`
-  /* stylelint-disable-line block-no-empty */
-`;
-
-export const LoginForm = ({ email, setEmail, sendCode, sendCodeError }) => (
-  <Wrapper>
-    {sendCodeError ? (
-      <ErrorMessage>
-        Something went wrong. Please refresh to try again.
-      </ErrorMessage>
-    ) : (
-      <div>
-        <EmailAddressPrompt>
-          Enter your email to sign in or create an account
-        </EmailAddressPrompt>
-        <EmailAddressTextInput
-          type="text"
-          placeholder="bilbo@btbb.io"
-          onChange={e => setEmail(e.target.value)}
+const LoginForm = ({ history, sendCode, prefillEmail }) => (
+  <Formik
+    initialValues={{
+      email: prefillEmail || ''
+    }}
+    validate={({ email }) => {
+      const errors = {};
+      if (!email) {
+        errors.email = 'Required';
+      } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+        errors.email = 'Invalid email address';
+      }
+      return errors;
+    }}
+    onSubmit={async ({ email }, { setSubmitting, setFieldError }) => {
+      try {
+        await sendCode(email);
+        setSubmitting(false);
+        history.replace({ pathname: '/auth/verify', state: { email } });
+      } catch (err) {
+        setSubmitting(false);
+        setFieldError('email', err.message);
+      }
+    }}
+    render={({
+      values,
+      errors,
+      touched,
+      handleChange,
+      handleBlur,
+      handleSubmit,
+      isSubmitting
+    }) => (
+      <form onSubmit={handleSubmit}>
+        <p>Enter your email to sign in or create an account</p>
+        <input
+          type="email"
+          name="email"
+          placeholder="bilbo@bartop.io"
+          onChange={handleChange}
+          onBlur={handleBlur}
+          value={values.email}
         />
-        <SubmitButton onClick={sendCode}>SUBMIT</SubmitButton>
-      </div>
+        {touched.email && errors.email && <div>{errors.email}</div>}
+        <button type="submit" disabled={isSubmitting}>
+          Submit
+        </button>
+      </form>
     )}
-  </Wrapper>
+  />
 );
 
 LoginForm.propTypes = {
-  email: PropTypes.string.isRequired,
-  setEmail: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
   sendCode: PropTypes.func.isRequired,
-  sendCodeError: PropTypes.object
+  prefillEmail: PropTypes.string
 };
 
 export default LoginForm;

@@ -22,8 +22,13 @@ exports[`matches the snapshot 1`] = `
   }
 >
   <Auth
+    auth={
+      Object {
+        "passwordlessLogin": [Function],
+        "passwordlessStart": [Function],
+      }
+    }
     handleAuthentication={[Function]}
-    history={Object {}}
     match={Object {}}
   />
 </Router>

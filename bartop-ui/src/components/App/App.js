@@ -53,9 +53,7 @@ export default class App extends React.Component {
             <Route path="/landing" component={Landing} />
             <Route
               path="/auth"
-              render={({ match, history }) => (
-                <Auth match={match} history={history} auth={auth} />
-              )}
+              render={({ match }) => <Auth match={match} auth={auth} />}
             />
             <Route component={NotFound} />
           </Switch>
