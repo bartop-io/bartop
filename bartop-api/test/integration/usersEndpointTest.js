@@ -25,12 +25,12 @@ describe('Resource - User', function() {
         .post('/api/v1/users')
         .set('Content-Type', 'application/json')
         .set('Authorization', `Bearer ${token}`)
-        .send({ authoId: users.postUser.authoId })
+        .send({ auth0Id: users.postUser.auth0Id })
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
           expect(res.body).to.be.an('object');
           expect(res.body.id).to.be.a('string');
-          expect(res.body.authoId).to.equal(users.postUser.authoId);
+          expect(res.body.auth0Id).to.equal(users.postUser.auth0Id);
           done();
         });
     });
@@ -40,7 +40,7 @@ describe('Resource - User', function() {
         .post('/api/v1/users')
         .set('Content-Type', 'application/json')
         .set('Authorization', `Bearer ${token}`)
-        .send({ id: users.postUser.authoId })
+        .send({ id: users.postUser.auth0Id })
         .end((err, res) => {
           expect(res.statusCode).to.equal(BODY_MODEL.code);
           expect(res.body).to.equal(BODY_MODEL.message);
@@ -55,7 +55,7 @@ describe('Resource - User', function() {
         .set('Authorization', `Bearer ${token}`)
         // if content-type is not set to json,
         // the send() method expects a string
-        .send(`{ id: ${users.postUser.authoId} }`)
+        .send(`{ id: ${users.postUser.auth0Id} }`)
         .end((err, res) => {
           expect(res.statusCode).to.equal(CONTENT_TYPE.code);
           expect(res.body).to.equal(CONTENT_TYPE.message);
@@ -74,7 +74,7 @@ describe('Resource - User', function() {
 
           const firstUserObject = res.body.items[0];
           expect(firstUserObject.id).to.be.a('string');
-          expect(firstUserObject.authoId).to.be.a('string');
+          expect(firstUserObject.auth0Id).to.be.a('string');
 
           done();
         });
@@ -100,7 +100,7 @@ describe('Resource - User', function() {
     it('Mutation - create a new user', function(done) {
       const query = `
         mutation {
-          createUser(newUser: { authoId: "${users.testUser.authoId}" }) {
+          createUser(newUser: { auth0Id: "${users.testUser.auth0Id}" }) {
             id
           }
         }`;
@@ -113,7 +113,7 @@ describe('Resource - User', function() {
           const user = res.body.data.createUser;
           expect(res.statusCode).to.equal(200);
           expect(user).to.be.an('object');
-          expect(user.id).to.not.equal(users.testUser.authoId);
+          expect(user.id).to.not.equal(users.testUser.auth0Id);
           done();
         });
     });
@@ -121,7 +121,7 @@ describe('Resource - User', function() {
     it('Mutation - error on creating user with bad schema', function(done) {
       const query = `
         mutation {
-          createUser(newUser: { id: "${users.testUser.authoId}" }) {
+          createUser(newUser: { id: "${users.testUser.auth0Id}" }) {
             id
           }
         }`;

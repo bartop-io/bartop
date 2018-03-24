@@ -1,11 +1,11 @@
 module.exports = `
 type User {
   id: String,
-  authoId: String
+  auth0Id: String
 }
 
 input UserInput {
-  authoId: String
+  auth0Id: String
 }
 
 type Query {

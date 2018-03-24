@@ -10,7 +10,7 @@ describe('users controller - unit test', function(done) {
       return Promise.resolve(newUser);
     };
 
-    req.body = { authoId: users.testUser.authoId };
+    req.body = { auth0Id: users.testUser.auth0Id };
 
     const jsonSpy = sinon.spy(res, 'json');
     const statusSpy = sinon.spy(res, 'status');
@@ -20,7 +20,7 @@ describe('users controller - unit test', function(done) {
 
     expect(jsonSpy.calledOnce).to.equal(true);
     expect(
-      jsonSpy.alwaysCalledWithExactly({ authoId: users.testUser.authoId })
+      jsonSpy.alwaysCalledWithExactly({ auth0Id: users.testUser.auth0Id })
     ).to.equal(true);
 
     expect(statusSpy.calledOnce).to.equal(true);
