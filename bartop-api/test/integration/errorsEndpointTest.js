@@ -1,52 +1,70 @@
-const app = require('../../src/server');
 const request = require('supertest');
 const expect = require('chai').expect;
-const errors = require('../../src/utils/errorMessages');
+const app = require('../../src/server');
+const errors = require('../../src/utils/errorConstants');
 
-// this test suite is for routes unhandled by the API routers
+// this test suite is for general errors, not tied to specific route
 describe(`Resource - Errors`, function() {
   const token = global.testToken;
 
   it('Nonexistent - if top level route does not exist', function(done) {
+    const thisError = errors.NONEXISTENT;
     request(app)
       .get('/hamburgular')
-      .set('Authorization', 'Bearer ' + token)
+      .set('Authorization', `Bearer ${token}`)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(404);
-        expect(res.body).to.equal(errors.NONEXISTENT);
+        expect(res.statusCode).to.equal(thisError.code);
+        expect(res.body).to.equal(thisError.message);
         done();
       });
   });
 
   it('Nonexistent - if /api/v1 route does not exist', function(done) {
+    const thisError = errors.NONEXISTENT;
     request(app)
       .post('/api/v1/hamburgular')
-      .set('Authorization', 'Bearer ' + token)
+      .set('Authorization', `Bearer ${token}`)
       .send({ fakeKey: 'with fake data' })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(404);
-        expect(res.body).to.equal(errors.NONEXISTENT);
+        expect(res.statusCode).to.equal(thisError.code);
+        expect(res.body).to.equal(thisError.message);
         done();
       });
   });
 
   it('Unauthorized - if a user does not pass a token', function(done) {
+    const thisError = errors.UNAUTHORIZED;
     request(app)
       .get('/api/v1/drinks')
       .end((err, res) => {
-        expect(res.statusCode).to.equal(401);
-        expect(res.body).to.equal(errors.UNAUTHORIZED);
+        expect(res.statusCode).to.equal(thisError.code);
+        expect(res.body).to.equal(thisError.message);
         done();
       });
   });
 
   it('Unauthorized - if a user passes an invalid token', function(done) {
+    const thisError = errors.UNAUTHORIZED;
     request(app)
       .get('/api/v1/users')
       .set('Authorization', 'Bearer BADTOKEN1234')
       .end((err, res) => {
-        expect(res.statusCode).to.equal(401);
-        expect(res.body).to.equal(errors.UNAUTHORIZED);
+        expect(res.statusCode).to.equal(thisError.code);
+        expect(res.body).to.equal(thisError.message);
+        done();
+      });
+  });
+
+  // any route that validates for content-type will require that it must be set
+  // as a header, so this is a general and route agnostic test
+  it('Content-Type - if no Content-Type is specified on POST', function(done) {
+    const thisError = errors.CONTENT_TYPE;
+    request(app)
+      .post('/api/v1/users')
+      .set('Authorization', `Bearer ${token}`)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(thisError.code);
+        expect(res.body).to.equal(thisError.message);
         done();
       });
   });
@@ -55,7 +73,7 @@ describe(`Resource - Errors`, function() {
   it('Generic - if db table has mysteriously disappeared', function(done) {
     request(app)
       .get('/api/v1/drinks')
-      .set('Authorization', 'Bearer ' + token)
+      .set('Authorization', `Bearer ${token}`)
       .end((err, res) => {
         expect(res.statusCode).to.equal(500);
         expect(res.body.split(':')[0]).to.equal('ReqlOpFailedError');
