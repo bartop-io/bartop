@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
+import strings from '../../../strings';
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -17,7 +19,9 @@ const FailureMessage = styled.p`
 
 export const Failure = ({ error }) => (
   <Wrapper>
-    <FailureMessage>{`Authentication failed. ${error.message}`}</FailureMessage>
+    <FailureMessage>{`${strings.auth.failure} ${
+      error ? error.message : ''
+    }`}</FailureMessage>
   </Wrapper>
 );
 

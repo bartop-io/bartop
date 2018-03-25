@@ -24,7 +24,8 @@ const InputFeedback = styled.div`
   text-align: left;
   color: red;
   font-size: small;
-  min-height: 15px;
+  min-height: 20px;
+  padding: 5px 0;
 `;
 
 const TextInput = ({

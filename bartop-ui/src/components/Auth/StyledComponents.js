@@ -5,6 +5,7 @@ export const StyledForm = styled(Form)`
   width: 100%;
   max-width: 600px;
   height: 100%;
+  max-height: 600px;
   margin: 0 auto;
   padding: 10px;
 `;

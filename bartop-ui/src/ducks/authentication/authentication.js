@@ -9,7 +9,7 @@ import history from '../../singletons/history';
 import { willExpireAt } from '../../utils/utils';
 import { actions as userActions } from '../user/user';
 import bartopApi from '../../singletons/bartop-api';
-import { errors } from '../../strings';
+import strings from '../../strings';
 
 export const types = {
   START_LOGIN: 'AUTHENTICATION/START_LOGIN',
@@ -96,7 +96,7 @@ export const actions = {
         } else if (err) {
           errorOut(err);
         } else {
-          errorOut(new Error(errors.unknownDuringAuthentication));
+          errorOut(new Error(strings.errors.unknownDuringAuthentication));
         }
       });
     },

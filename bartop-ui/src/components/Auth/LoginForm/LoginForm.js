@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 
 import TextInput from '../../TextInput/TextInput';
+import strings from '../../../strings';
+
 import {
   StyledForm,
   Prompt,
@@ -20,7 +22,7 @@ const LoginForm = ({ history, sendCode, prefillEmail }) => (
     validate={({ email }) => {
       const errors = {};
       if (!email || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
-        errors.email = 'Invalid email address 🧐';
+        errors.email = strings.auth.invalidEmailAddress;
       }
       return errors;
     }}
@@ -31,7 +33,7 @@ const LoginForm = ({ history, sendCode, prefillEmail }) => (
         history.replace({ pathname: '/auth/verify', state: { email } });
       } catch (err) {
         setSubmitting(false);
-        setFieldError('email', 'Uh oh! Please try again 🙏');
+        setFieldError('email', strings.auth.sendCodeFailureMessage);
       }
     }}
     render={({
@@ -45,13 +47,13 @@ const LoginForm = ({ history, sendCode, prefillEmail }) => (
     }) => (
       <StyledForm>
         <PromptContainer>
-          <Prompt>Enter your email to sign in or sign up</Prompt>
+          <Prompt>{strings.auth.loginPrompt}</Prompt>
         </PromptContainer>
         <InputContainer>
           <TextInput
             type="email"
             id="email"
-            placeholder="bilbo@bartop.io"
+            placeholder={strings.auth.emailInputPlaceholder}
             onChange={handleChange}
             onBlur={handleBlur}
             value={values.email}
@@ -60,7 +62,7 @@ const LoginForm = ({ history, sendCode, prefillEmail }) => (
         </InputContainer>
         <SubmitContainer>
           <SubmitButton type="submit" disabled={isSubmitting}>
-            Submit
+            {strings.auth.submitButtonText}
           </SubmitButton>
         </SubmitContainer>
       </StyledForm>

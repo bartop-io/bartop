@@ -1,17 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import strings from '../../strings';
+
 const Wrapper = styled.div`
   text-align: center;
   margin-top: 100px;
 `;
 
-const NotFound = () => (
-  <Wrapper>
-    Oops! This page doesn&apos;t seem to exist&nbsp;
-    <span role="img" aria-label="frowning face">
-      ☹️
-    </span>
-  </Wrapper>
-);
+const NotFound = () => <Wrapper>{strings.pageNotFound}</Wrapper>;
 export default NotFound;

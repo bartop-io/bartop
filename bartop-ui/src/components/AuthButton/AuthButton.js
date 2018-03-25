@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import { actions } from '../../ducks/authentication/authentication';
+import strings from '../../strings';
 
 const Button = styled.button`
   border: none;
@@ -11,9 +12,9 @@ const Button = styled.button`
 
 export const AuthButton = ({ loggedIn, login, logout }) =>
   !loggedIn ? (
-    <Button onClick={login}>Login</Button>
+    <Button onClick={login}>{strings.auth.login}</Button>
   ) : (
-    <Button onClick={logout}>Logout</Button>
+    <Button onClick={logout}>{strings.auth.logout}</Button>
   );
 
 AuthButton.propTypes = {

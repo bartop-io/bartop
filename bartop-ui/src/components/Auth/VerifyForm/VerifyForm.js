@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { Formik } from 'formik';
 
 import TextInput from '../../TextInput/TextInput';
+import strings from '../../../strings';
+
 import {
   StyledForm,
   PromptContainer,
@@ -42,7 +44,7 @@ const VerifyForm = ({ history, email, verifyCode }) => (
         setSubmitting(false);
         setFieldError(
           'verificationCode',
-          `Uh oh! The code you entered doesn't match.`
+          strings.auth.verifyCodeFailureMessage
         );
       }
     }}
@@ -56,22 +58,22 @@ const VerifyForm = ({ history, email, verifyCode }) => (
       isSubmitting,
       isValid
     }) => (
-      <StyledForm autocomplete="off">
+      <StyledForm autoComplete="off">
         <PromptContainer>
-          <Prompt>An email with the code has been sent to {email}</Prompt>
+          <Prompt>{`${strings.auth.verifyPrompt} ${email}`}</Prompt>
           <MissingCodePrompt
             onClick={() =>
               history.replace({ pathname: '/auth/login', state: { email } })
             }
           >
-            Didn&#39;t receive the code?
+            {strings.auth.missingCodePrompt}
           </MissingCodePrompt>
         </PromptContainer>
         <InputContainer>
           <TextInput
             type="text"
             id="verificationCode"
-            placeholder="Your code"
+            placeholder={strings.auth.codeInputPlaceholder}
             onChange={handleChange}
             onBlur={handleBlur}
             value={values.verificationCode}
@@ -80,7 +82,7 @@ const VerifyForm = ({ history, email, verifyCode }) => (
         </InputContainer>
         <SubmitContainer>
           <SubmitButton type="submit" disabled={isSubmitting || !isValid}>
-            Submit
+            {strings.auth.submitButtonText}
           </SubmitButton>
         </SubmitContainer>
       </StyledForm>
