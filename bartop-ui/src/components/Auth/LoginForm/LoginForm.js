@@ -2,6 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 
+import TextInput from '../../TextInput/TextInput';
+import {
+  StyledForm,
+  Prompt,
+  PromptContainer,
+  InputContainer,
+  SubmitContainer,
+  SubmitButton
+} from '../StyledComponents';
+
 const LoginForm = ({ history, sendCode, prefillEmail }) => (
   <Formik
     initialValues={{
@@ -9,10 +19,8 @@ const LoginForm = ({ history, sendCode, prefillEmail }) => (
     }}
     validate={({ email }) => {
       const errors = {};
-      if (!email) {
-        errors.email = 'Required';
-      } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
-        errors.email = 'Invalid email address';
+      if (!email || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+        errors.email = 'Invalid email address 🧐';
       }
       return errors;
     }}
@@ -23,7 +31,7 @@ const LoginForm = ({ history, sendCode, prefillEmail }) => (
         history.replace({ pathname: '/auth/verify', state: { email } });
       } catch (err) {
         setSubmitting(false);
-        setFieldError('email', err.message);
+        setFieldError('email', 'Uh oh! Please try again 🙏');
       }
     }}
     render={({
@@ -35,21 +43,27 @@ const LoginForm = ({ history, sendCode, prefillEmail }) => (
       handleSubmit,
       isSubmitting
     }) => (
-      <form onSubmit={handleSubmit}>
-        <p>Enter your email to sign in or create an account</p>
-        <input
-          type="email"
-          name="email"
-          placeholder="bilbo@bartop.io"
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={values.email}
-        />
-        {touched.email && errors.email && <div>{errors.email}</div>}
-        <button type="submit" disabled={isSubmitting}>
-          Submit
-        </button>
-      </form>
+      <StyledForm>
+        <PromptContainer>
+          <Prompt>Enter your email to sign in or sign up</Prompt>
+        </PromptContainer>
+        <InputContainer>
+          <TextInput
+            type="email"
+            id="email"
+            placeholder="bilbo@bartop.io"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.email}
+            error={touched.email && errors.email}
+          />
+        </InputContainer>
+        <SubmitContainer>
+          <SubmitButton type="submit" disabled={isSubmitting}>
+            Submit
+          </SubmitButton>
+        </SubmitContainer>
+      </StyledForm>
     )}
   />
 );

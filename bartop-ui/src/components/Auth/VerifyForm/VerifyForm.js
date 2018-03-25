@@ -1,21 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { Formik } from 'formik';
+
+import TextInput from '../../TextInput/TextInput';
+import {
+  StyledForm,
+  PromptContainer,
+  Prompt,
+  InputContainer,
+  SubmitContainer,
+  SubmitButton
+} from '../StyledComponents';
+
+const MissingCodePrompt = styled.p`
+  font-size: small;
+  font-style: italic;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
 
 const VerifyForm = ({ history, email, verifyCode }) => (
   <Formik
     initialValues={{
       verificationCode: ''
     }}
-    validate={({ verificationCode }) => {
-      const errors = {};
-      if (!verificationCode) {
-        errors.verificationCode = 'Required';
-      } else if (verificationCode.length !== 6) {
-        errors.verificationCode = 'Code must be six digits';
-      }
-      return errors;
-    }}
+    validate={({ verificationCode }) => ({})}
     onSubmit={async (
       { verificationCode },
       { setSubmitting, setFieldError }
@@ -28,7 +40,10 @@ const VerifyForm = ({ history, email, verifyCode }) => (
         });
       } catch (err) {
         setSubmitting(false);
-        setFieldError('verificationCode', err.message);
+        setFieldError(
+          'verificationCode',
+          `Uh oh! The code you entered doesn't match.`
+        );
       }
     }}
     render={({
@@ -38,30 +53,37 @@ const VerifyForm = ({ history, email, verifyCode }) => (
       handleChange,
       handleBlur,
       handleSubmit,
-      isSubmitting
+      isSubmitting,
+      isValid
     }) => (
-      <form onSubmit={handleSubmit}>
-        <p>An email with the code has been sent to {email}</p>
-        <input
-          type="text"
-          name="verificationCode"
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={values.verificationCode}
-        />
-        {touched.verificationCode &&
-          errors.verificationCode && <div>{errors.verificationCode}</div>}
-        <button type="submit" disabled={isSubmitting}>
-          Submit
-        </button>
-        <div
-          onClick={() =>
-            history.replace({ pathname: '/auth/login', state: { email } })
-          }
-        >
-          Didn&#39;t receive the code?
-        </div>
-      </form>
+      <StyledForm autocomplete="off">
+        <PromptContainer>
+          <Prompt>An email with the code has been sent to {email}</Prompt>
+          <MissingCodePrompt
+            onClick={() =>
+              history.replace({ pathname: '/auth/login', state: { email } })
+            }
+          >
+            Didn&#39;t receive the code?
+          </MissingCodePrompt>
+        </PromptContainer>
+        <InputContainer>
+          <TextInput
+            type="text"
+            id="verificationCode"
+            placeholder="Your code"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.verificationCode}
+            error={touched.verificationCode && errors.verificationCode}
+          />
+        </InputContainer>
+        <SubmitContainer>
+          <SubmitButton type="submit" disabled={isSubmitting || !isValid}>
+            Submit
+          </SubmitButton>
+        </SubmitContainer>
+      </StyledForm>
     )}
   />
 );

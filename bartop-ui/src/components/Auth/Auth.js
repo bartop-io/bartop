@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 
@@ -10,14 +9,6 @@ import Callback from './Callback/Callback';
 import Failure from './Failure/Failure';
 import { actions } from '../../ducks/authentication/authentication';
 import NotFound from '../NotFound/NotFound';
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-`;
 
 export class Auth extends Component {
   constructor() {
@@ -68,53 +59,51 @@ export class Auth extends Component {
     const { match, handleAuthentication } = this.props;
 
     return (
-      <Wrapper>
-        <Switch>
-          <Route
-            exact
-            path={`${match.url}/login`}
-            render={({ history, location }) => {
-              // if the user came back from verify, we will have their email in location state so we can prefill
-              const email =
-                location.state && location.state.email
-                  ? location.state.email
-                  : undefined;
-              return (
-                <LoginForm
-                  history={history}
-                  sendCode={this.sendCode}
-                  prefillEmail={email}
-                />
-              );
-            }}
-          />
-          <Route
-            exact
-            path={`${match.url}/verify`}
-            render={({ history, location }) =>
-              location.state && location.state.email ? (
-                <VerifyForm
-                  history={history}
-                  email={location.state.email}
-                  verifyCode={this.verifyCode}
-                />
-              ) : (
-                <NotFound />
-              )
-            }
-          />
-          <Route
-            exact
-            path={`${match.url}/callback`}
-            render={() => {
-              handleAuthentication();
-              return <Callback />;
-            }}
-          />
-          <Route exact path={`${match.url}/failure`} component={Failure} />
-          <Route component={NotFound} />
-        </Switch>
-      </Wrapper>
+      <Switch>
+        <Route
+          exact
+          path={`${match.url}/login`}
+          render={({ history, location }) => {
+            // if the user came back from verify, we will have their email in location state so we can prefill
+            const email =
+              location.state && location.state.email
+                ? location.state.email
+                : undefined;
+            return (
+              <LoginForm
+                history={history}
+                sendCode={this.sendCode}
+                prefillEmail={email}
+              />
+            );
+          }}
+        />
+        <Route
+          exact
+          path={`${match.url}/verify`}
+          render={({ history, location }) =>
+            location.state && location.state.email ? (
+              <VerifyForm
+                history={history}
+                email={location.state.email}
+                verifyCode={this.verifyCode}
+              />
+            ) : (
+              <NotFound />
+            )
+          }
+        />
+        <Route
+          exact
+          path={`${match.url}/callback`}
+          render={() => {
+            handleAuthentication();
+            return <Callback />;
+          }}
+        />
+        <Route exact path={`${match.url}/failure`} component={Failure} />
+        <Route component={NotFound} />
+      </Switch>
     );
   }
 }
