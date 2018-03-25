@@ -61,6 +61,7 @@ const VerifyForm = ({ history, email, verifyCode }) => (
       <StyledForm autoComplete="off">
         <PromptContainer>
           <Prompt>{`${strings.auth.verifyPrompt} ${email}`}</Prompt>
+          {/* if they didn't receive the code, allow them to go back a step while maintaining the email we sent the code to */}
           <MissingCodePrompt
             onClick={() =>
               history.replace({ pathname: '/auth/login', state: { email } })

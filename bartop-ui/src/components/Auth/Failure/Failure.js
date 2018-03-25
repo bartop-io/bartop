@@ -13,7 +13,7 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const FailureMessage = styled.p`
+export const FailureMessage = styled.p`
   /* stylelint-disable-line block-no-empty */
 `;
 
@@ -26,7 +26,7 @@ export const Failure = ({ error }) => (
 );
 
 Failure.propTypes = {
-  error: PropTypes.object.isRequired
+  error: PropTypes.object
 };
 
 const mapStateToProps = state => ({

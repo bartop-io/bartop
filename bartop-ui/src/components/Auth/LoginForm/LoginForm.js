@@ -30,6 +30,7 @@ const LoginForm = ({ history, sendCode, prefillEmail }) => (
       try {
         await sendCode(email);
         setSubmitting(false);
+        // advance to the verification step, passing email in the state so we can display where we sent the code
         history.replace({ pathname: '/auth/verify', state: { email } });
       } catch (err) {
         setSubmitting(false);

@@ -45,7 +45,7 @@ it('if path is /auth/login, renders LoginForm', () => {
   expect(wrapper.find(LoginForm).exists()).toBe(true);
 });
 
-// TODO - determine why setting location state is only not working in tests
+// TODO - determine why setting location state doesn't work in tests
 xit('if path is /auth/login and email is in location state, renders LoginForm with prefillEmail prop', () => {
   const wrapper = mountRouterAtLocation({
     pathname: '/auth/login',
@@ -57,7 +57,7 @@ xit('if path is /auth/login and email is in location state, renders LoginForm wi
   );
 });
 
-// TODO - determine why setting location state is only not working in tests
+// TODO - determine why setting location state doesn't work in tests
 xit('if path is /auth/verify and email is in location state, renders VerifyForm', () => {
   const wrapper = mountRouterAtLocation({
     pathname: '/auth/verify',
