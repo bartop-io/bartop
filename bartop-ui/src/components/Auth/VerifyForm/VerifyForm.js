@@ -29,6 +29,7 @@ const VerifyForm = ({ history, email, verifyCode }) => (
     initialValues={{
       verificationCode: ''
     }}
+    // empty validator to clear errors set from onSubmit
     validate={({ verificationCode }) => ({})}
     onSubmit={async (
       { verificationCode },
