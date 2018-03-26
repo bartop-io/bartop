@@ -4,9 +4,6 @@ coverage:
       default:
         target: 85%
         threshold: 5%
-    patch:
-      default:
-        target: 80%
   notify:
     slack:
       default:

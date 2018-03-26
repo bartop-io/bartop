@@ -1,5 +1,5 @@
 import API from './base';
-import { errors } from '../strings';
+import strings from '../strings';
 
 describe('API base class', () => {
   describe('fetch()', () => {
@@ -83,7 +83,7 @@ describe('API base class', () => {
       );
 
       await expect(api.fetchJSON()).rejects.toEqual(
-        new Error(errors.expectedJSONResponse) // Matcher can be toError in Jest v22
+        new Error(strings.errors.expectedJSONResponse) // Matcher can be toError in Jest v22
       );
     });
   });

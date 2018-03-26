@@ -9,10 +9,10 @@ import history from '../../singletons/history';
 import { willExpireAt } from '../../utils/utils';
 import { actions as userActions } from '../user/user';
 import bartopApi from '../../singletons/bartop-api';
-import { errors } from '../../strings';
+import strings from '../../strings';
 
 export const types = {
-  LOGIN_REQUEST: 'AUTHENTICATION/LOGIN_REQUEST',
+  START_LOGIN: 'AUTHENTICATION/START_LOGIN',
   LOGIN_SUCCESS: 'AUTHENTICATION/LOGIN_SUCCESS',
   LOGIN_FAILURE: 'AUTHENTICATION/LOGIN_FAILURE',
   HANDLE_AUTHENTICATION: 'AUTHENTICATION/HANDLE_AUTHENTICATION',
@@ -20,10 +20,10 @@ export const types = {
 };
 
 export const actions = {
-  loginRequest: () => {
-    auth.authorize();
+  startLogin: () => {
+    history.replace('/auth/login');
     return {
-      type: types.LOGIN_REQUEST
+      type: types.START_LOGIN
     };
   },
   loginSuccess: (accessToken, expiresIn, userInfo) => ({
@@ -32,10 +32,13 @@ export const actions = {
     expiresIn,
     userInfo
   }),
-  loginFailure: error => ({
-    type: types.LOGIN_FAILURE,
-    error: serializeError(error)
-  }),
+  loginFailure: error => {
+    history.replace('/auth/failure');
+    return {
+      type: types.LOGIN_FAILURE,
+      error: serializeError(error)
+    };
+  },
   handleAuthentication: () =>
     // redux-thunk knows to handle action functions instead of normal action objects
     // this allows us to dispatch actions within actions, as well as access state
@@ -48,8 +51,6 @@ export const actions = {
       const errorOut = err => {
         console.error(err);
         dispatch(actions.loginFailure(err));
-        // TODO - go somewhere for failure or unauthenticated jawns
-        history.replace('/');
       };
 
       auth.parseHash((err, authResult) => {
@@ -95,7 +96,7 @@ export const actions = {
         } else if (err) {
           errorOut(err);
         } else {
-          errorOut(new Error(errors.unknownDuringAuthentication));
+          errorOut(new Error(strings.errors.unknownDuringAuthentication));
         }
       });
     },
@@ -109,12 +110,13 @@ export const initialState = {
     loggingIn: false,
     loggedIn: false,
     error: null
-  }
+  },
+  sendCodeError: null
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case types.LOGIN_REQUEST:
+    case types.START_LOGIN:
       return {
         ...state,
         status: {

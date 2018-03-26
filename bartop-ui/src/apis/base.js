@@ -1,4 +1,4 @@
-import { errors } from '../strings';
+import strings from '../strings';
 
 export default class API {
   constructor(url) {
@@ -17,7 +17,7 @@ export default class API {
     const response = await this.fetch(endpoint, init);
     const contentType = response.headers.get('Content-Type');
     if (!contentType || contentType.indexOf('application/json') === -1) {
-      throw new Error(errors.expectedJSONResponse);
+      throw new Error(strings.errors.expectedJSONResponse);
     }
     return response.json();
   }
