@@ -35,7 +35,8 @@ paths:
                 properties:
                   items:
                     type: array
-                    items: $ref: '#/components/schemas/Drink'
+                    items:
+                      $ref: '#/components/schemas/Drink'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '500':
@@ -84,7 +85,8 @@ paths:
                 properties:
                   items:
                     type: array
-                    items: $ref: '#/components/schemas/User'
+                    items:
+                      $ref: '#/components/schemas/User'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '500':
@@ -115,12 +117,12 @@ components:
     InvalidBodyModel:
       description: Invalid model in body.
 
-  schemas:
+
     # model definitions
     User:
       type: object
       required:
-        - authoId
+        - auth0Id
       properties:
         authoId:
           type: string

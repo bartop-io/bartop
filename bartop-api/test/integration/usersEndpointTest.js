@@ -1,8 +1,9 @@
-const app = require('../../src/server');
 const request = require('supertest');
 const expect = require('chai').expect;
+const app = require('../../src/server');
 const dbAdapter = require('../../src/db/adapter');
 const { users } = require('../utils/testObjects');
+const { BODY_MODEL, CONTENT_TYPE } = require('../../src/utils/errorConstants');
 
 describe('Resource - User', function() {
   const token = global.testToken;
@@ -14,19 +15,67 @@ describe('Resource - User', function() {
       await dbAdapter.r.tableDrop('users');
     }
     await dbAdapter.r.tableCreate('users');
-    await dbAdapter.r.table('users').insert(users.userList);
+    await dbAdapter.r.table('users').insert(users.list);
     return;
   });
 
   describe('Rest', function() {
     it('POST - create a new user', function(done) {
       request(app)
-        .post(`/api/v1/users/${users.postUser.id}`)
-        .set('Authorization', 'Bearer ' + token)
+        .post('/api/v1/users')
+        .set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ auth0Id: users.postUser.auth0Id })
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
           expect(res.body).to.be.an('object');
-          expect(res.body).to.deep.equal({ id: users.postUser.id });
+          expect(res.body.id).to.be.a('string');
+          expect(res.body.auth0Id).to.equal(users.postUser.auth0Id);
+          done();
+        });
+    });
+
+    it('POST - throw error if body does not match model', function(done) {
+      request(app)
+        .post('/api/v1/users')
+        .set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ id: users.postUser.auth0Id })
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(BODY_MODEL.code);
+          expect(res.body).to.equal(BODY_MODEL.message);
+          done();
+        });
+    });
+
+    it('POST - throw error if content-type is unsupported', function(done) {
+      request(app)
+        .post('/api/v1/users')
+        .set('Content-Type', 'multipart/form-data')
+        .set('Authorization', `Bearer ${token}`)
+        // if content-type is not set to json,
+        // the send() method expects a string
+        .send(`{ id: ${users.postUser.auth0Id} }`)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(CONTENT_TYPE.code);
+          expect(res.body).to.equal(CONTENT_TYPE.message);
+          done();
+        });
+    });
+
+    it(`GET - return array of users`, function(done) {
+      request(app)
+        .get('/api/v1/users')
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body).to.be.an('object');
+          expect(res.body.items).to.be.an('array');
+
+          const firstUserObject = res.body.items[0];
+          expect(firstUserObject.id).to.be.a('string');
+          expect(firstUserObject.auth0Id).to.be.a('string');
+
           done();
         });
     });
@@ -36,7 +85,7 @@ describe('Resource - User', function() {
     it('Query - list ids for all users', function(done) {
       request(app)
         .get('/api/v2/graphql?query={listUsers{id}}')
-        .set('Authorization', 'Bearer ' + token)
+        .set('Authorization', `Bearer ${token}`)
         .end((err, res) => {
           const users = res.body.data.listUsers;
           expect(res.statusCode).to.equal(200);
@@ -51,20 +100,42 @@ describe('Resource - User', function() {
     it('Mutation - create a new user', function(done) {
       const query = `
         mutation {
-          createUser(newUser: { id: "${users.testUser.id}" }) {
+          createUser(newUser: { auth0Id: "${users.testUser.auth0Id}" }) {
             id
           }
         }`;
       request(app)
         .post('/api/v2/graphql')
-        .set('Authorization', 'Bearer ' + token)
+        .set('Authorization', `Bearer ${token}`)
         .set('Content-Type', 'application/json')
         .send({ query })
         .end((err, res) => {
           const user = res.body.data.createUser;
           expect(res.statusCode).to.equal(200);
           expect(user).to.be.an('object');
-          expect(user.id).to.equal(users.testUser.id);
+          expect(user.id).to.not.equal(users.testUser.auth0Id);
+          done();
+        });
+    });
+
+    it('Mutation - error on creating user with bad schema', function(done) {
+      const query = `
+        mutation {
+          createUser(newUser: { id: "${users.testUser.auth0Id}" }) {
+            id
+          }
+        }`;
+      request(app)
+        .post('/api/v2/graphql')
+        .set('Authorization', `Bearer ${token}`)
+        .set('Content-Type', 'application/json')
+        .send({ query })
+        .end((err, res) => {
+          const error = res.body.errors[0];
+          expect(res.statusCode).to.equal(400);
+          expect(error.message).to.equal(
+            'Field "id" is not defined by type UserInput.'
+          );
           done();
         });
     });
