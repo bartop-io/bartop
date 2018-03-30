@@ -58,7 +58,7 @@ describe('Resource - Drink', function() {
   describe('GraphQL', function() {
     it('Query - return names for all drinks', function(done) {
       request(app)
-        .get('/api/v2/graphql?query={listDrinks{name}}')
+        .get('/api/graphql?query={listDrinks{name}}')
         .set('Authorization', `Bearer ${token}`)
         .end((err, res) => {
           const drinks = res.body.data.listDrinks;

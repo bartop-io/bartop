@@ -87,7 +87,7 @@ describe('Resource - User', function() {
   describe('GraphQL', function() {
     it('Query - list ids for all users', function(done) {
       request(app)
-        .get('/api/v2/graphql?query={listUsers{id}}')
+        .get('/api/graphql?query={listUsers{id}}')
         .set('Authorization', `Bearer ${token}`)
         .end((err, res) => {
           const users = res.body.data.listUsers;
@@ -108,7 +108,7 @@ describe('Resource - User', function() {
           }
         }`;
       request(app)
-        .post('/api/v2/graphql')
+        .post('/api/graphql')
         .set('Authorization', `Bearer ${token}`)
         .set('Content-Type', 'application/json')
         .send({ query })
@@ -129,7 +129,7 @@ describe('Resource - User', function() {
           }
         }`;
       request(app)
-        .post('/api/v2/graphql')
+        .post('/api/graphql')
         .set('Authorization', `Bearer ${token}`)
         .set('Content-Type', 'application/json')
         .send({ query })
