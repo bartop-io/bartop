@@ -70,7 +70,7 @@
       "!src/index.js",
       "!src/registerServiceWorker.js",
       "!src/test-helpers/",
-      "!src/stories/"
+      "!src/**/*.stories.js"
     ],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
