@@ -30,7 +30,7 @@
     "lint:css": "stylelint './src/**/*.js'",
     "fix": "eslint --fix src",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 9001 -c .storybook"
+    "storybook": "start-storybook -p 9001 -s public"
   },
   "proxy": "http://localhost:3001",
   "repository": {
