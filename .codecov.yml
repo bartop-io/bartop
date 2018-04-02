@@ -7,8 +7,8 @@ coverage:
   notify:
     slack:
       default:
-        url: "secret:hM7+uktUBfU5KiJh4dL7Pw9abGO6+7AAUTf8WMVwV4dkM7tSfNO5eNmrw1gd27IHr7SIVtf3ShJ9hsAJJ+1sdqlt5TUyRJ27um3X8ZRzP2yf5NAJoWeIG35/Y7+/jY+bPOqhNiFgVfZt/TIgSq0ioFCISHD6TRkIzlr/EjohC1o="
-        threshold: 5%
+        url: "secret:m4WVFfUBxrTFhs78vbHCJMH0eMDtlOOGlIWx9HlcjvK7pfdoKzrnq12OG+fXE3Wsr+5I6U4i8VO6Rr66wuI8MtimddjEUNiNWyswiRD1bpyoQIh9oDhgfZQbANqwtqH9cSIjl8/ffcJYgTIBiEBsKBhqb6aRJBVEJI8QhdG8iGo="
+        threshold: 0%
         only_pulls: false
         branches: null
         flags: null
