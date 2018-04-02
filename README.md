@@ -90,8 +90,8 @@ and will seed the `drinks` table with [sample drink objects](bartop-api/test/uti
 ##### Explore the v1 REST API
 The REST API is available under the route `/api/v1`. Use a tool like [Postman](https://www.getpostman.com/apps) to test different endpoints. Documentation coming soon...
 
-##### Explore the v2 GraphQL API
-The v2 GraphQL API is available under the single endpoint `/api/v2/graphql`. The recommended way to explore this API is using the GraphIQL tool, available by visiting [the above route](http://localhost:3001/api/v2/graphql) in a browser. Here, there is an environment to test queries alongside a panel with documentation. If desired, the v2 GraphQL API can also be explored using a tool like Postman.
+##### Explore the GraphQL API
+The GraphQL API is available under the single endpoint `/api/graphql`. The recommended way to explore this API is using the GraphIQL tool, available by visiting [the above route](http://localhost:3001/api/graphql) in a browser. Here, there is an environment to test queries alongside a panel with documentation. If desired, the GraphQL API can also be explored using a tool like Postman.
 
 #### Test the API
 The API test suite consists of both unit tests and integration tests.

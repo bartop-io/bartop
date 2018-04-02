@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { StaticRouter, Route } from 'react-router-dom';
-import 'jest-styled-components';
 
 import { Auth } from './Auth';
 import LoginForm from './LoginForm/LoginForm';
