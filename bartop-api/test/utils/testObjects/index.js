@@ -26,7 +26,7 @@ const request = {
 };
 
 // create a list of tables that can be assumed to exist at any given time
-const tables = ['drinks', 'catalogs', 'menus', 'orders', 'sessions', 'users'];
+const tables = ['drinks', 'menus', 'orders', 'sessions', 'users'];
 
 module.exports.res = new Response();
 module.exports.req = request;

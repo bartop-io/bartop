@@ -80,7 +80,6 @@ The API will be available for requests at http://localhost:3001 (if you set BART
 _Note_ Starting the API in development mode will automatically configure the database to assist with client development. The first time the server is started with a fresh database, it will create the following tables:
 - `users`
 - `drinks`
-- `catalogs`
 - `menus`
 - `sessions`
 - `orders`

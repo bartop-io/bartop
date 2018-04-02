@@ -1,8 +1,10 @@
 const router = require('express').Router();
-const { drinksRouter } = require('./drink');
-const { usersRouter } = require('./user');
+const { userRouter } = require('./user');
+const { drinkRouter } = require('./drink');
+const { catalogRouter } = require('./catalog');
 
-router.use('/drinks', drinksRouter);
-router.use('/users', usersRouter);
+router.use('/users', userRouter);
+router.use('/drinks', drinkRouter);
+router.use('/catalogs', catalogRouter);
 
 module.exports = router;
