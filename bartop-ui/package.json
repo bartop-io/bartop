@@ -46,6 +46,8 @@
     "url": "https://github.com/dpopp07/bartop/issues"
   },
   "devDependencies": {
+    "@storybook/addon-centered": "^3.4.0",
+    "@storybook/react": "^3.4.0",
     "codecov": "^3.0.0",
     "enzyme": "^3.1.1",
     "enzyme-adapter-react-16": "^1.0.4",
@@ -61,8 +63,7 @@
     "stylelint": "^9.1.3",
     "stylelint-config-standard": "^18.2.0",
     "stylelint-config-styled-components": "^0.1.1",
-    "stylelint-processor-styled-components": "^1.3.1",
-    "@storybook/react": "^3.4.0"
+    "stylelint-processor-styled-components": "^1.3.1"
   },
   "jest": {
     "collectCoverageFrom": [
