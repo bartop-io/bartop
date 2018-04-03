@@ -29,7 +29,8 @@
     "lint": "eslint src",
     "lint:css": "stylelint './src/**/*.js'",
     "fix": "eslint --fix src",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "storybook": "start-storybook -p 9001 -s public"
   },
   "proxy": "http://localhost:3001",
   "repository": {
@@ -45,6 +46,8 @@
     "url": "https://github.com/dpopp07/bartop/issues"
   },
   "devDependencies": {
+    "@storybook/addon-centered": "^3.4.0",
+    "@storybook/react": "^3.4.0",
     "codecov": "^3.0.0",
     "enzyme": "^3.1.1",
     "enzyme-adapter-react-16": "^1.0.4",
@@ -67,7 +70,8 @@
       "src/**/*.{js,jsx}",
       "!src/index.js",
       "!src/registerServiceWorker.js",
-      "!src/test-helpers/"
+      "!src/test-helpers/",
+      "!src/**/*.stories.js"
     ],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"

@@ -6,13 +6,23 @@ Web framework for hobbyist and freelance bartenders 🍸
 ## Table of Contents
 * [UI](#ui)
   * [Development](#ui-development)
+    * [Developing with Storybook](#ui-development-with-storybook)
+    * [Integrated Development](#integrated-ui-development)
 * [API](#api)
   * [Development](#api-development)
 
 ## UI
 ### UI Development
-*These instructions assume you're in the `/bartop-ui` directory*
+*These instructions assume you're in the `/bartop-ui` directory*.
 
+### UI Development with Storybook
+The UI has a [Storybook](https://storybook.js.org/) for quickly designing & developing components. If you just want to make some visual changes, this is the fastest & easiest way.
+1. Install the dependencies - `npm install`
+2. Run the storybook - `npm run storybook`
+3. View the storybook at [localhost:9001](http://localhost:9001)
+
+### Integrated UI Development
+In order to develop for the UI with auth & data, you need to establish an [Auth0](https://auth0.com/) tenant and run the [API](#api-development). Read below for instructions to setup this full system. 
 #### Install the dependencies
 `npm install`
 
@@ -52,7 +62,8 @@ The UI is configured using a `.env` file. Use the `.env.example` file as a templ
 
 #### Testing
 1. Execute the UI unit tests with `npm test`
-2. Optionally, you can run the tests in watch mode with `npm run watch-test`. This is nice when you're working on specific tests and want it to run on changes. 
+2. Optionally, you can run the tests in watch mode with `npm run watch-test`. This is nice when you're working on specific tests and want it to run on changes.
+3. When making visual changes, it can help to view the [storybook](#ui-development-with-storybook) to play with components in an isolated environment.
 
 ## API
 ### API Development
