@@ -1,7 +1,7 @@
 const app = require('../../src/server');
 const request = require('supertest');
 const expect = require('chai').expect;
-const dbAdapter = require('../../src/db/adapter');
+const r = require('../../src/db');
 const { drinks } = require('../utils/testObjects');
 
 describe('Resource - Drink', function() {
@@ -12,23 +12,23 @@ describe('Resource - Drink', function() {
     this.timeout(9000);
 
     // prime the database with test tables/data
-    const tables = await dbAdapter.r.tableList();
+    const tables = await r.tableList();
 
     if (tables.includes('drinks')) {
-      await dbAdapter.r.tableDrop('drinks');
+      await r.tableDrop('drinks');
     }
-    await dbAdapter.r.tableCreate('drinks');
-    await dbAdapter.r.table('drinks').insert(drinks.list);
+    await r.tableCreate('drinks');
+    await r.table('drinks').insert(drinks.list);
     return;
   });
 
   after(async function() {
     // drop the drinks table once we're finished with it
     // for the 'Resource - Errors' test
-    const tables = await dbAdapter.r.tableList();
+    const tables = await r.tableList();
 
     if (tables.includes('drinks')) {
-      await dbAdapter.r.tableDrop('drinks');
+      await r.tableDrop('drinks');
     }
     return;
   });

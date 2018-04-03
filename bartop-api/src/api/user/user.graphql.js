@@ -25,5 +25,5 @@ type Query {
 # The root Mutation for BarTop's GraphQL interface
 type Mutation {
   # Creates a new user
-  createUser(newUser: UserInput!): User!
+  createUser(newUser: UserInput!): ID!
 }`;

@@ -1,4 +1,4 @@
-const dbAdapter = require('../db/adapter');
+const r = require('../db');
 const logger = require('./logger');
 const seeds = require('../../test/utils/testObjects');
 
@@ -8,7 +8,7 @@ const expectedTables = seeds.dbTables;
 
 // seed the database for development use
 const seed = async () => {
-  const existingTables = await dbAdapter.r.tableList();
+  const existingTables = await r.tableList();
 
   // determine what expected tables are missing from the db
   const neededTables = expectedTables.filter(table => {
@@ -17,7 +17,7 @@ const seed = async () => {
 
   // get together a bunch of promises to create tables
   const promises = neededTables.map(table => {
-    return dbAdapter.r
+    return r
       .tableCreate(table)
       .then(logger.info(`  > '${table}' table created.`));
   });
@@ -26,9 +26,9 @@ const seed = async () => {
   await Promise.all(promises);
 
   // add the default drink
-  const existingDrinks = await dbAdapter.r.table('drinks');
+  const existingDrinks = await r.table('drinks');
   if (!existingDrinks.length) {
-    const res = await dbAdapter.r.table('drinks').insert(seeds.drinks.list);
+    const res = await r.table('drinks').insert(seeds.drinks.list);
     if (res.inserted === seeds.drinks.list.length) {
       logger.info(`  > default drinks added to 'drinks' table.`);
     } else {

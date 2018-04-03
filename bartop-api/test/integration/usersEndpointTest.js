@@ -1,7 +1,7 @@
 const request = require('supertest');
 const expect = require('chai').expect;
 const app = require('../../src/server');
-const dbAdapter = require('../../src/db/adapter');
+const r = require('../../src/db');
 const { users } = require('../utils/testObjects');
 const { BODY_MODEL, CONTENT_TYPE } = require('../../src/utils/errorConstants');
 
@@ -13,12 +13,12 @@ describe('Resource - User', function() {
     this.timeout(9000);
 
     // prime the database with test tables/data
-    const tables = await dbAdapter.r.tableList();
+    const tables = await r.tableList();
     if (tables.includes('users')) {
-      await dbAdapter.r.tableDrop('users');
+      await r.tableDrop('users');
     }
-    await dbAdapter.r.tableCreate('users');
-    await dbAdapter.r.table('users').insert(users.list);
+    await r.tableCreate('users');
+    await r.table('users').insert(users.list);
     return;
   });
 
@@ -31,9 +31,8 @@ describe('Resource - User', function() {
         .send({ auth0Id: users.postUser.auth0Id })
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
-          expect(res.body).to.be.an('object');
-          expect(res.body.id).to.be.a('string');
-          expect(res.body.auth0Id).to.equal(users.postUser.auth0Id);
+          expect(res.body).to.be.an('string');
+          expect(res.body).to.not.equal(users.postUser.auth0Id);
           done();
         });
     });
@@ -103,9 +102,7 @@ describe('Resource - User', function() {
     it('Mutation - create a new user', function(done) {
       const query = `
         mutation {
-          createUser(newUser: { auth0Id: "${users.testUser.auth0Id}" }) {
-            id
-          }
+          createUser(newUser: { auth0Id: "${users.testUser.auth0Id}" })
         }`;
       request(app)
         .post('/api/graphql')
@@ -113,10 +110,10 @@ describe('Resource - User', function() {
         .set('Content-Type', 'application/json')
         .send({ query })
         .end((err, res) => {
-          const user = res.body.data.createUser;
+          const userId = res.body.data.createUser;
           expect(res.statusCode).to.equal(200);
-          expect(user).to.be.an('object');
-          expect(user.id).to.not.equal(users.testUser.auth0Id);
+          expect(userId).to.be.a('string');
+          expect(userId).to.not.equal(users.testUser.auth0Id);
           done();
         });
     });
@@ -124,9 +121,7 @@ describe('Resource - User', function() {
     it('Mutation - error on creating user with bad schema', function(done) {
       const query = `
         mutation {
-          createUser(newUser: { id: "${users.testUser.auth0Id}" }) {
-            id
-          }
+          createUser(newUser: { id: "${users.testUser.auth0Id}" })
         }`;
       request(app)
         .post('/api/graphql')

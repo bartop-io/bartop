@@ -6,9 +6,7 @@
   "scripts": {
     "start": "nodemon src/index.js",
     "database": "rethinkdb",
-    "integration-tests": "NODE_ENV=test nyc --all mocha test/integration/**/*.js",
-    "test": "NODE_ENV=test nyc --all mocha test/unit/**/*.js",
-    "test-all": "NODE_ENV=test nyc --all mocha test/**/*.js",
+    "test": "NODE_ENV=test nyc --all mocha test/**/*.js",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "lint": "eslint src test",
     "fix": "eslint --fix src test"
@@ -38,8 +36,6 @@
     "graphql": "^0.13.2",
     "graphql-tools": "^2.23.1",
     "helmet": "^3.12.0",
-    "js-data": "^3.0.2",
-    "js-data-rethinkdb": "^3.0.0",
     "jwks-rsa": "^1.2.1",
     "lodash.merge": "^4.6.1",
     "morgan": "^1.9.0",

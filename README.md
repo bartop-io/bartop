@@ -105,19 +105,12 @@ The REST API is available under the route `/api/v1`. Use a tool like [Postman](h
 The GraphQL API is available under the single endpoint `/api/graphql`. The recommended way to explore this API is using the GraphIQL tool, available by visiting [the above route](http://localhost:3001/api/graphql) in a browser. Here, there is an environment to test queries alongside a panel with documentation. If desired, the GraphQL API can also be explored using a tool like Postman.
 
 #### Test the API
-The API test suite consists of both unit tests and integration tests.
-To run the full test suite, use:
-`npm run test-all`
+The API test suite currently consists only of integration tests. These are used to test actual functionality of the API server by making requests and verifying responses with as little mocking as possible.
+To run the test suite, use:
+`npm run test`
 
-##### Unit tests
-These are used to test the controller logic for each endpoint. To run the unit tests, simply run:
-`npm test`
-
-##### Integration Tests
-These are used to test actual functionality of the API server by making requests and verifying responses with as little mocking as possible. To run the integration tests, run:
-`npm run integration-tests`
 To run the integration tests, you _must_ be running a local instance of RethinkDB. See [this section](#starting-the-database) for more information.
 
 ##### Testing with CI
-Travis CI will automatically run all tests (using `npm run test-all`) when a branch is pushed.
+Travis CI will automatically run all tests when a branch is pushed.
 
