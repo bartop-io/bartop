@@ -114,7 +114,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
-          $ref: '#/components/responses/NonExistant'
+          $ref: '#/components/responses/NonExistent'
         '406':
           $ref: '#/components/responses/InvalidContentType'
         '422':
@@ -138,7 +138,7 @@ components:
     Unauthorized:
       description: Access token is missing or invalid.
 
-    NonExistant:
+    NonExistent:
       description: Resource does not exist.
 
     InvalidContentType:
