@@ -26,7 +26,7 @@ describe('Resource - Catalog', function() {
   });
 
   describe('Rest', function() {
-    it('POST - create a new catalog', function(done) {
+    it('POST - create a new catalog for a user', function(done) {
       request(app)
         .post('/api/v1/catalogs')
         .set('Content-Type', 'application/json')
@@ -88,13 +88,15 @@ describe('Resource - Catalog', function() {
   });
 
   describe('GraphQL', function() {
-    it('Mutation - create a new user', function(done) {
+    it('Mutation - create a new catalog for a user', function(done) {
       const query = `
         mutation {
           createCatalog(newCatalog: { userId: "${userId}", drinkIds: ["${drinkIds.join(
         '", "'
       )}"] }) {
             id
+            auth0Id
+            catalog
           }
         }`;
       request(app)
@@ -103,10 +105,13 @@ describe('Resource - Catalog', function() {
         .set('Content-Type', 'application/json')
         .send({ query })
         .end((err, res) => {
+          // createCatalog returns the updated user object
           const user = res.body.data.createCatalog;
           expect(res.statusCode).to.equal(200);
           expect(user).to.be.an('object');
-          expect(user.id).to.not.equal(users.testUser.auth0Id);
+          expect(user.id).to.be.a('string');
+          expect(user.auth0Id).to.equal(users.testUser.auth0Id);
+          expect(user.catalog).to.deep.equal(drinkIds);
           done();
         });
     });
