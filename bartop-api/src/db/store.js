@@ -8,7 +8,8 @@ const store = new Container();
 store.registerAdapter('rethinkdb', adapter, { default: true });
 
 // a mapper must be defined for each table
-store.defineMapper('drinks');
 store.defineMapper('users');
+store.defineMapper('drinks');
+store.defineMapper('catalogs');
 
 module.exports = store;
