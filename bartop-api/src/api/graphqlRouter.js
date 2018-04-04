@@ -2,8 +2,9 @@ const { makeExecutableSchema } = require('graphql-tools');
 const graphqlHTTP = require('express-graphql');
 const merge = require('lodash.merge');
 const config = require('../../config');
-const { drinkSchema, drinkResolvers } = require('./drink');
 const { userSchema, userResolvers } = require('./user');
+const { drinkSchema, drinkResolvers } = require('./drink');
+const { catalogSchema, catalogResolvers } = require('./catalog');
 
 const baseSchema = `
   schema {
@@ -13,8 +14,8 @@ const baseSchema = `
 `;
 
 const schema = makeExecutableSchema({
-  typeDefs: [baseSchema, drinkSchema, userSchema],
-  resolvers: merge({}, drinkResolvers, userResolvers)
+  typeDefs: [baseSchema, drinkSchema, userSchema, catalogSchema],
+  resolvers: merge({}, drinkResolvers, userResolvers, catalogResolvers)
 });
 
 // export the graphql route and enable graphiql for development

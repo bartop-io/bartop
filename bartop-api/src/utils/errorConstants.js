@@ -7,6 +7,10 @@ module.exports = {
     message: 'This route does not exist.',
     code: 404
   },
+  NOT_FOUND: {
+    message: 'Resource not found.',
+    code: 404
+  },
   CONTENT_TYPE: {
     message: 'Invalid content type.',
     code: 406

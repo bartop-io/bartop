@@ -7,12 +7,15 @@ type User {
 
   # User ID provided by and used to interact with Auth0
   auth0Id: String
+
+  # Catalog containing all drinks a user can make
+  catalog: [ID] # todo: change to [Drink] and write a resolver to handle it
 }
 
 # Input type containing data needed to create a new User
 input UserInput {
 
-  # # User ID provided by and used to interact with Auth0
+  # User ID provided by and used to interact with Auth0
   auth0Id: String
 }
 

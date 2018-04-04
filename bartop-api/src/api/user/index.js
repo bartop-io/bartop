@@ -2,7 +2,7 @@ const restRouter = require('./user.restRouter');
 const { schema, resolvers } = require('./user.graphqlRouter');
 
 module.exports = {
-  usersRouter: restRouter,
+  userRouter: restRouter,
   userSchema: schema,
   userResolvers: resolvers
 };
