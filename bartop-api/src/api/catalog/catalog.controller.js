@@ -1,4 +1,4 @@
-const db = require('../../db/store');
+const db = require('../../db');
 const logic = require('./catalog.logic')(db);
 const model = require('./catalog.model');
 const asyncMiddleware = require('../../utils/asyncMiddleware');
