@@ -6,7 +6,7 @@ const { users } = require('../utils/testObjects');
 const errors = require('../../src/utils/errorConstants');
 
 describe('Resource - Catalog', function() {
-  const token = global.testToken;
+  const TOKEN = global.testToken;
   let userId;
 
   before(async function() {
@@ -31,7 +31,7 @@ describe('Resource - Catalog', function() {
       request(app)
         .post('/api/v1/catalogs')
         .set('Content-Type', 'application/json')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .send({ userId, drinkIds })
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
@@ -47,7 +47,7 @@ describe('Resource - Catalog', function() {
       request(app)
         .post('/api/v1/catalogs')
         .set('Content-Type', 'application/json')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .send({ userId, drinkIds })
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
@@ -64,7 +64,7 @@ describe('Resource - Catalog', function() {
       request(app)
         .post('/api/v1/catalogs')
         .set('Content-Type', 'application/json')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .send({ userId: 'Arnald', drinkIds })
         .end((err, res) => {
           expect(res.statusCode).to.equal(thisError.code);
@@ -78,7 +78,7 @@ describe('Resource - Catalog', function() {
       request(app)
         .post('/api/v1/catalogs')
         .set('Content-Type', 'application/json')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .send({ id: users.postUser.auth0Id })
         .end((err, res) => {
           expect(res.statusCode).to.equal(thisError.code);
@@ -92,7 +92,7 @@ describe('Resource - Catalog', function() {
       request(app)
         .post('/api/v1/catalogs')
         .set('Content-Type', 'multipart/form-data')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         // if content-type is not set to json,
         // the send() method expects a string
         .send(`{ id: ${users.postUser.auth0Id} }`)
@@ -120,7 +120,7 @@ describe('Resource - Catalog', function() {
         }`;
       request(app)
         .post('/api/graphql')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .set('Content-Type', 'application/json')
         .send({ query })
         .end((err, res) => {
@@ -144,7 +144,7 @@ describe('Resource - Catalog', function() {
         }`;
       request(app)
         .post('/api/graphql')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .set('Content-Type', 'application/json')
         .send({ query })
         .end((err, res) => {

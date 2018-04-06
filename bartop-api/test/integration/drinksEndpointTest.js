@@ -5,7 +5,7 @@ const r = require('../../src/db');
 const { drinks } = require('../utils/testObjects');
 
 describe('Resource - Drink', function() {
-  const token = global.testToken;
+  const TOKEN = global.testToken;
 
   before(async function() {
     // increase hook timeout, tests require extensive environment setup
@@ -37,7 +37,7 @@ describe('Resource - Drink', function() {
     it(`GET - return array of drinks`, function(done) {
       request(app)
         .get('/api/v1/drinks')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           expect(res.body).to.be.an('object');
@@ -59,7 +59,7 @@ describe('Resource - Drink', function() {
     it('Query - return names for all drinks', function(done) {
       request(app)
         .get('/api/graphql?query={listDrinks{name}}')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .end((err, res) => {
           const drinks = res.body.data.listDrinks;
           expect(res.statusCode).to.equal(200);
