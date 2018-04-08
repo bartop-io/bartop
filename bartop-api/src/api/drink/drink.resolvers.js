@@ -1,7 +1,8 @@
-const r = require('../../db');
+const db = require('../../db');
+const logic = require('./drink.logic')(db);
 
 const listDrinks = async () => {
-  return await r.table('drinks');
+  return await logic.list();
 };
 
 module.exports = {

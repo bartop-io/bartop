@@ -1,13 +1,12 @@
-const r = require('../../db');
+const db = require('../../db');
+const logic = require('./user.logic')(db);
 
 const listUsers = async () => {
-  return await r.table('users');
+  return await logic.list();
 };
 
 const createUser = async (root, { newUser }) => {
-  // just return the generated ID for now
-  const response = await r.table('users').insert(newUser);
-  return response.generated_keys[0];
+  return await logic.create(newUser);
 };
 
 module.exports = {
