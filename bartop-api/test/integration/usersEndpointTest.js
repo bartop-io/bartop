@@ -126,7 +126,7 @@ describe('Resource - User', function() {
     it('Mutation - error on creating user with bad schema', function(done) {
       const query = `
         mutation {
-          createUser(newUser: { id: "${users.testUser.auth0Id}" }) {
+          createUser(newUser: {}) {
             id
           }
         }`;
@@ -139,7 +139,7 @@ describe('Resource - User', function() {
           const error = res.body.errors[0];
           expect(res.statusCode).to.equal(400);
           expect(error.message).to.equal(
-            'Field "id" is not defined by type UserInput.'
+            'Field UserInput.auth0Id of required type String! was not provided.'
           );
           done();
         });

@@ -16,7 +16,7 @@ type User {
 input UserInput {
 
   # User ID provided by and used to interact with Auth0
-  auth0Id: String
+  auth0Id: String!
 }
 
 # The root Query for BarTop's GraphQL interface
