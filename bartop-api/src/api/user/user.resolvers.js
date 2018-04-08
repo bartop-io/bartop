@@ -6,8 +6,11 @@ const listUsers = async () => {
 
 const createUser = async (root, { newUser }) => {
   // just return the generated ID for now
-  const response = await r.table('users').insert(newUser);
-  return response.generated_keys[0];
+  const response = await r
+    .table('users')
+    .insert(newUser, { returnChanges: true });
+
+  return response.changes[0].new_val;
 };
 
 module.exports = {

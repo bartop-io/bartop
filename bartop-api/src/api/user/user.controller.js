@@ -5,10 +5,11 @@ const validateInput = require('../../utils/validators');
 module.exports = r => {
   const create = asyncMiddleware(async (req, res, next) => {
     validateInput.onPost(req, model);
+    const response = await r
+      .table('users')
+      .insert(req.body, { returnChanges: true });
 
-    const response = await r.table('users').insert(req.body);
-    // just return the generated ID for now
-    res.status(201).json(response.generated_keys[0]);
+    res.status(201).json(response.changes[0].new_val);
   });
 
   const list = asyncMiddleware(async (req, res, next) => {
