@@ -1,7 +1,7 @@
-const db = require('../../db/store');
+const r = require('../../db');
 
 const listDrinks = async () => {
-  return await db.findAll('drinks');
+  return await r.table('drinks');
 };
 
 module.exports = {

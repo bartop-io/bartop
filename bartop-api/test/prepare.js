@@ -1,6 +1,6 @@
 const prepare = require('mocha-prepare');
 const getToken = require('./utils/getTestToken');
-const dbAdapter = require('../src/db/adapter');
+const r = require('../src/db');
 
 /*
 
@@ -18,7 +18,7 @@ prepare(
     done();
   },
   async function(done) {
-    await dbAdapter.r.getPoolMaster().drain();
+    await r.getPoolMaster().drain();
     done();
   }
 );

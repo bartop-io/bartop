@@ -1,34 +1,34 @@
 const app = require('../../src/server');
 const request = require('supertest');
 const expect = require('chai').expect;
-const dbAdapter = require('../../src/db/adapter');
+const r = require('../../src/db');
 const { drinks } = require('../utils/testObjects');
 
 describe('Resource - Drink', function() {
-  const token = global.testToken;
+  const TOKEN = global.testToken;
 
   before(async function() {
     // increase hook timeout, tests require extensive environment setup
     this.timeout(9000);
 
     // prime the database with test tables/data
-    const tables = await dbAdapter.r.tableList();
+    const tables = await r.tableList();
 
     if (tables.includes('drinks')) {
-      await dbAdapter.r.tableDrop('drinks');
+      await r.tableDrop('drinks');
     }
-    await dbAdapter.r.tableCreate('drinks');
-    await dbAdapter.r.table('drinks').insert(drinks.list);
+    await r.tableCreate('drinks');
+    await r.table('drinks').insert(drinks.list);
     return;
   });
 
   after(async function() {
     // drop the drinks table once we're finished with it
     // for the 'Resource - Errors' test
-    const tables = await dbAdapter.r.tableList();
+    const tables = await r.tableList();
 
     if (tables.includes('drinks')) {
-      await dbAdapter.r.tableDrop('drinks');
+      await r.tableDrop('drinks');
     }
     return;
   });
@@ -37,7 +37,7 @@ describe('Resource - Drink', function() {
     it(`GET - return array of drinks`, function(done) {
       request(app)
         .get('/api/v1/drinks')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           expect(res.body).to.be.an('object');
@@ -59,7 +59,7 @@ describe('Resource - Drink', function() {
     it('Query - return names for all drinks', function(done) {
       request(app)
         .get('/api/graphql?query={listDrinks{name}}')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .end((err, res) => {
           const drinks = res.body.data.listDrinks;
           expect(res.statusCode).to.equal(200);

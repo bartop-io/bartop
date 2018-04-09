@@ -1,24 +1,24 @@
 const request = require('supertest');
 const expect = require('chai').expect;
 const app = require('../../src/server');
-const dbAdapter = require('../../src/db/adapter');
+const r = require('../../src/db');
 const { users } = require('../utils/testObjects');
 const { BODY_MODEL, CONTENT_TYPE } = require('../../src/utils/errorConstants');
 
 describe('Resource - User', function() {
-  const token = global.testToken;
+  const TOKEN = global.testToken;
 
   before(async function() {
     // increase hook timeout, tests require extensive environment setup
     this.timeout(9000);
 
     // prime the database with test tables/data
-    const tables = await dbAdapter.r.tableList();
+    const tables = await r.tableList();
     if (tables.includes('users')) {
-      await dbAdapter.r.tableDrop('users');
+      await r.tableDrop('users');
     }
-    await dbAdapter.r.tableCreate('users');
-    await dbAdapter.r.table('users').insert(users.list);
+    await r.tableCreate('users');
+    await r.table('users').insert(users.list);
     return;
   });
 
@@ -27,12 +27,12 @@ describe('Resource - User', function() {
       request(app)
         .post('/api/v1/users')
         .set('Content-Type', 'application/json')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .send({ auth0Id: users.postUser.auth0Id })
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
           expect(res.body).to.be.an('object');
-          expect(res.body.id).to.be.a('string');
+          expect(res.body.id).to.not.equal(users.postUser.auth0Id);
           expect(res.body.auth0Id).to.equal(users.postUser.auth0Id);
           done();
         });
@@ -42,7 +42,7 @@ describe('Resource - User', function() {
       request(app)
         .post('/api/v1/users')
         .set('Content-Type', 'application/json')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .send({ id: users.postUser.auth0Id })
         .end((err, res) => {
           expect(res.statusCode).to.equal(BODY_MODEL.code);
@@ -55,7 +55,7 @@ describe('Resource - User', function() {
       request(app)
         .post('/api/v1/users')
         .set('Content-Type', 'multipart/form-data')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         // if content-type is not set to json,
         // the send() method expects a string
         .send(`{ id: ${users.postUser.auth0Id} }`)
@@ -69,7 +69,7 @@ describe('Resource - User', function() {
     it(`GET - return array of users`, function(done) {
       request(app)
         .get('/api/v1/users')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);
           expect(res.body).to.be.an('object');
@@ -88,7 +88,7 @@ describe('Resource - User', function() {
     it('Query - list ids for all users', function(done) {
       request(app)
         .get('/api/graphql?query={listUsers{id}}')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .end((err, res) => {
           const users = res.body.data.listUsers;
           expect(res.statusCode).to.equal(200);
@@ -105,11 +105,12 @@ describe('Resource - User', function() {
         mutation {
           createUser(newUser: { auth0Id: "${users.testUser.auth0Id}" }) {
             id
+            auth0Id
           }
         }`;
       request(app)
         .post('/api/graphql')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .set('Content-Type', 'application/json')
         .send({ query })
         .end((err, res) => {
@@ -117,6 +118,7 @@ describe('Resource - User', function() {
           expect(res.statusCode).to.equal(200);
           expect(user).to.be.an('object');
           expect(user.id).to.not.equal(users.testUser.auth0Id);
+          expect(user.auth0Id).to.equal(users.testUser.auth0Id);
           done();
         });
     });
@@ -130,7 +132,7 @@ describe('Resource - User', function() {
         }`;
       request(app)
         .post('/api/graphql')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .set('Content-Type', 'application/json')
         .send({ query })
         .end((err, res) => {

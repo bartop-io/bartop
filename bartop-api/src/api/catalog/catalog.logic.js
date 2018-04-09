@@ -1,12 +1,18 @@
-const findUser = require('../../utils/validators/userExists');
+const processDbResult = require('../../utils/processDbResult');
 
-module.exports = db => {
+module.exports = r => {
   // create a new catalog
-  const create = async postBody => {
-    const { userId, drinkIds } = postBody;
-    const userToUpdate = await findUser(db, userId);
-    userToUpdate.catalog = drinkIds;
-    return await db.update('users', userId, userToUpdate);
+  const create = async body => {
+    const { userId, drinkIds } = body;
+    const dbOpResult = await r
+      .table('users')
+      .get(userId)
+      .update({ catalog: drinkIds }, { returnChanges: true });
+
+    return processDbResult.update(dbOpResult, userId, {
+      id: userId,
+      catalog: drinkIds
+    });
   };
 
   return { create };

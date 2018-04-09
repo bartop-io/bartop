@@ -1,36 +1,37 @@
 const request = require('supertest');
 const expect = require('chai').expect;
 const app = require('../../src/server');
-const dbAdapter = require('../../src/db/adapter');
+const r = require('../../src/db');
 const { users } = require('../utils/testObjects');
 const errors = require('../../src/utils/errorConstants');
 
 describe('Resource - Catalog', function() {
-  const token = global.testToken;
+  const TOKEN = global.testToken;
   let userId;
-  const drinkIds = ['drink1', 'drink2'];
 
   before(async function() {
     // increase hook timeout, tests require extensive environment setup
     this.timeout(9000);
 
     // prime the database with test tables/data
-    const tables = await dbAdapter.r.tableList();
+    const tables = await r.tableList();
     if (tables.includes('users')) {
-      await dbAdapter.r.tableDrop('users');
+      await r.tableDrop('users');
     }
-    await dbAdapter.r.tableCreate('users');
-    const response = await dbAdapter.r.table('users').insert(users.testUser);
+    await r.tableCreate('users');
+    const response = await r.table('users').insert(users.testUser);
     userId = response.generated_keys[0];
     return;
   });
 
   describe('Rest', function() {
+    const drinkIds = ['drink1', 'drink2'];
+
     it('POST - create a new catalog for a user', function(done) {
       request(app)
         .post('/api/v1/catalogs')
         .set('Content-Type', 'application/json')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .send({ userId, drinkIds })
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
@@ -42,12 +43,28 @@ describe('Resource - Catalog', function() {
         });
     });
 
+    it('POST - send metadata for unchanged catalog', function(done) {
+      request(app)
+        .post('/api/v1/catalogs')
+        .set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${TOKEN}`)
+        .send({ userId, drinkIds })
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(201);
+          expect(res.body).to.be.an('object');
+          expect(res.body.id).to.equal(userId);
+          expect(res.body.catalog).to.deep.equal(drinkIds);
+          expect(res.body.metadata.unchanged).to.equal(true);
+          done();
+        });
+    });
+
     it('POST - throw error if user does not exist', function(done) {
       const thisError = errors.NOT_FOUND;
       request(app)
         .post('/api/v1/catalogs')
         .set('Content-Type', 'application/json')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .send({ userId: 'Arnald', drinkIds })
         .end((err, res) => {
           expect(res.statusCode).to.equal(thisError.code);
@@ -61,7 +78,7 @@ describe('Resource - Catalog', function() {
       request(app)
         .post('/api/v1/catalogs')
         .set('Content-Type', 'application/json')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .send({ id: users.postUser.auth0Id })
         .end((err, res) => {
           expect(res.statusCode).to.equal(thisError.code);
@@ -75,7 +92,7 @@ describe('Resource - Catalog', function() {
       request(app)
         .post('/api/v1/catalogs')
         .set('Content-Type', 'multipart/form-data')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         // if content-type is not set to json,
         // the send() method expects a string
         .send(`{ id: ${users.postUser.auth0Id} }`)
@@ -88,6 +105,8 @@ describe('Resource - Catalog', function() {
   });
 
   describe('GraphQL', function() {
+    const drinkIds = ['drink3', 'drink4'];
+
     it('Mutation - create a new catalog for a user', function(done) {
       const query = `
         mutation {
@@ -101,7 +120,7 @@ describe('Resource - Catalog', function() {
         }`;
       request(app)
         .post('/api/graphql')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .set('Content-Type', 'application/json')
         .send({ query })
         .end((err, res) => {
@@ -125,7 +144,7 @@ describe('Resource - Catalog', function() {
         }`;
       request(app)
         .post('/api/graphql')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .set('Content-Type', 'application/json')
         .send({ query })
         .end((err, res) => {

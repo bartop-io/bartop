@@ -5,13 +5,13 @@ const errors = require('../../src/utils/errorConstants');
 
 // this test suite is for general errors, not tied to specific route
 describe(`Resource - Errors`, function() {
-  const token = global.testToken;
+  const TOKEN = global.testToken;
 
   it('Nonexistent - if top level route does not exist', function(done) {
     const thisError = errors.NONEXISTENT;
     request(app)
       .get('/hamburgular')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${TOKEN}`)
       .end((err, res) => {
         expect(res.statusCode).to.equal(thisError.code);
         expect(res.body).to.equal(thisError.message);
@@ -23,7 +23,7 @@ describe(`Resource - Errors`, function() {
     const thisError = errors.NONEXISTENT;
     request(app)
       .post('/api/v1/hamburgular')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${TOKEN}`)
       .send({ fakeKey: 'with fake data' })
       .end((err, res) => {
         expect(res.statusCode).to.equal(thisError.code);
@@ -32,7 +32,7 @@ describe(`Resource - Errors`, function() {
       });
   });
 
-  it('Unauthorized - if a user does not pass a token', function(done) {
+  it('Unauthorized - if a user does not pass a TOKEN', function(done) {
     const thisError = errors.UNAUTHORIZED;
     request(app)
       .get('/api/v1/drinks')
@@ -43,7 +43,7 @@ describe(`Resource - Errors`, function() {
       });
   });
 
-  it('Unauthorized - if a user passes an invalid token', function(done) {
+  it('Unauthorized - if a user passes an invalid TOKEN', function(done) {
     const thisError = errors.UNAUTHORIZED;
     request(app)
       .get('/api/v1/users')
@@ -61,7 +61,7 @@ describe(`Resource - Errors`, function() {
     const thisError = errors.CONTENT_TYPE;
     request(app)
       .post('/api/v1/users')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${TOKEN}`)
       .end((err, res) => {
         expect(res.statusCode).to.equal(thisError.code);
         expect(res.body).to.equal(thisError.message);
@@ -73,7 +73,7 @@ describe(`Resource - Errors`, function() {
   it('Generic - if db table has mysteriously disappeared', function(done) {
     request(app)
       .get('/api/v1/drinks')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${TOKEN}`)
       .end((err, res) => {
         expect(res.statusCode).to.equal(500);
         expect(res.body.split(':')[0]).to.equal('ReqlOpFailedError');
