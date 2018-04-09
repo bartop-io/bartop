@@ -1,6 +1,6 @@
 const merge = require('lodash.merge');
 
-module.exports.update = (dbOpResult, id, body) => {
+module.exports.update = (dbOpResult, id = '', body = {}) => {
   let result = {};
   if (!dbOpResult.changes.length) {
     if (dbOpResult.unchanged) {
