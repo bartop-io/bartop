@@ -103,7 +103,7 @@ describe('Resource - User', function() {
     it('Mutation - create a new user', function(done) {
       const query = `
         mutation {
-          createUser(newUser: { auth0Id: "${users.testUser.auth0Id}" }) {
+          createUser(input: { auth0Id: "${users.testUser.auth0Id}" }) {
             id
             auth0Id
           }
@@ -126,7 +126,7 @@ describe('Resource - User', function() {
     it('Mutation - error on creating user with bad schema', function(done) {
       const query = `
         mutation {
-          createUser(newUser: {}) {
+          createUser(input: {}) {
             id
           }
         }`;
@@ -139,7 +139,7 @@ describe('Resource - User', function() {
           const error = res.body.errors[0];
           expect(res.statusCode).to.equal(400);
           expect(error.message).to.equal(
-            'Field UserInput.auth0Id of required type String! was not provided.'
+            'Field CreateUserInput.auth0Id of required type String! was not provided.'
           );
           done();
         });

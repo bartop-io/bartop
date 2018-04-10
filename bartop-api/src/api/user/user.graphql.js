@@ -13,7 +13,7 @@ type User {
 }
 
 # Input type containing data needed to create a new User
-input UserInput {
+input CreateUserInput {
 
   # User ID provided by and used to interact with Auth0
   auth0Id: String!
@@ -28,5 +28,5 @@ type Query {
 # The root Mutation for BarTop's GraphQL interface
 type Mutation {
   # Creates a new user
-  createUser(newUser: UserInput!): User!
+  createUser(input: CreateUserInput!): User!
 }`;

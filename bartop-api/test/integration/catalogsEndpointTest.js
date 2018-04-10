@@ -110,7 +110,7 @@ describe('Resource - Catalog', function() {
     it('Mutation - create a new catalog for a user', function(done) {
       const query = `
         mutation {
-          createCatalog(newCatalog: { userId: "${userId}", drinkIds: ["${drinkIds.join(
+          createCatalog(input: { userId: "${userId}", drinkIds: ["${drinkIds.join(
         '", "'
       )}"] }) {
             id
@@ -138,7 +138,7 @@ describe('Resource - Catalog', function() {
     it('Mutation - error on creating user with bad schema', function(done) {
       const query = `
         mutation {
-          createCatalog(newCatalog: {}) {
+          createCatalog(input: {}) {
             id
           }
         }`;
@@ -152,10 +152,10 @@ describe('Resource - Catalog', function() {
           expect(res.statusCode).to.equal(400);
           expect(errorResponse.length).to.equal(2);
           expect(errorResponse[0].message).to.equal(
-            'Field CatalogInput.userId of required type ID! was not provided.'
+            'Field CreateCatalogInput.userId of required type ID! was not provided.'
           );
           expect(errorResponse[1].message).to.equal(
-            'Field CatalogInput.drinkIds of required type [ID]! was not provided.'
+            'Field CreateCatalogInput.drinkIds of required type [ID]! was not provided.'
           );
           done();
         });
