@@ -1,6 +1,5 @@
 const router = require('express').Router();
-const db = require('../../db');
-const controller = require('./user.controller')(db);
+const controller = require('./user.controller');
 
 // post users/
 router.route('/').post(controller.create);

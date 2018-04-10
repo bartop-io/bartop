@@ -9,7 +9,7 @@ module.exports = r => {
       .get(userId)
       .update({ catalog: drinkIds }, { returnChanges: true });
 
-    return processDbResult.update(dbOpResult, userId, {
+    return processDbResult(dbOpResult, userId, {
       id: userId,
       catalog: drinkIds
     });

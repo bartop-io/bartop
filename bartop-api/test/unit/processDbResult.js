@@ -12,7 +12,7 @@ describe('Util - Process DB Result', function() {
       skipped: 0,
       unchanged: 1
     };
-    const result = processDbResult.update(dbOpResult);
+    const result = processDbResult(dbOpResult);
     expect(result).to.be.an('object');
     expect(result.metadata.unchanged).to.equal(true);
     done();
@@ -31,7 +31,7 @@ describe('Util - Process DB Result', function() {
     const id = '05041995';
     let err = null;
     try {
-      processDbResult.update(dbOpResult, id);
+      processDbResult(dbOpResult, id);
     } catch (e) {
       err = e;
     }
@@ -55,7 +55,7 @@ describe('Util - Process DB Result', function() {
     };
     let err = null;
     try {
-      processDbResult.update(dbOpResult);
+      processDbResult(dbOpResult);
     } catch (e) {
       err = e;
     }
@@ -79,7 +79,7 @@ describe('Util - Process DB Result', function() {
     };
     let err = null;
     try {
-      processDbResult.update(dbOpResult);
+      processDbResult(dbOpResult);
     } catch (e) {
       err = e;
     }
@@ -99,7 +99,7 @@ describe('Util - Process DB Result', function() {
       skipped: 0,
       unchanged: 0
     };
-    const result = processDbResult.update(dbOpResult);
+    const result = processDbResult(dbOpResult);
     expect(result).to.be.an('object');
     expect(result.test).to.equal('data');
     done();
