@@ -6,7 +6,8 @@ const listUsers = async () => {
 };
 
 const createUser = async (root, { input }) => {
-  return await logic.create(input);
+  const newUser = await logic.create(input);
+  return { user: newUser };
 };
 
 module.exports = {

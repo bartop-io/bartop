@@ -104,8 +104,10 @@ describe('Resource - User', function() {
       const query = `
         mutation {
           createUser(input: { auth0Id: "${users.testUser.auth0Id}" }) {
-            id
-            auth0Id
+            user {
+              id
+              auth0Id
+            }
           }
         }`;
       request(app)
@@ -114,7 +116,7 @@ describe('Resource - User', function() {
         .set('Content-Type', 'application/json')
         .send({ query })
         .end((err, res) => {
-          const user = res.body.data.createUser;
+          const user = res.body.data.createUser.user;
           expect(res.statusCode).to.equal(200);
           expect(user).to.be.an('object');
           expect(user.id).to.not.equal(users.testUser.auth0Id);
@@ -127,7 +129,9 @@ describe('Resource - User', function() {
       const query = `
         mutation {
           createUser(input: {}) {
-            id
+            user {
+              id
+            }
           }
         }`;
       request(app)
