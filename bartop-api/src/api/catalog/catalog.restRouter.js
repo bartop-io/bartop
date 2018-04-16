@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const controller = require('./catalog.controller');
 
-// post catalogs/
-router.route('/').post(controller.create);
+// put catalogs/
+router.route('/').put(controller.replace);
 
 module.exports = router;

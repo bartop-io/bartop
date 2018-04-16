@@ -14,7 +14,7 @@ describe('Util - Process DB Result', function() {
     };
     const result = processDbResult(dbOpResult);
     expect(result).to.be.an('object');
-    expect(result.metadata.unchanged).to.equal(true);
+    expect(result.unchanged).to.equal(true);
     done();
   });
 

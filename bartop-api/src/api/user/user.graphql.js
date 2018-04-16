@@ -12,8 +12,15 @@ type User {
   catalog: [ID] # todo: change to [Drink] and write a resolver to handle it
 }
 
+# Return type of createUser
+type CreateUserPayload {
+
+  # The created User object
+  user: User
+}
+
 # Input type containing data needed to create a new User
-input UserInput {
+input CreateUserInput {
 
   # User ID provided by and used to interact with Auth0
   auth0Id: String!
@@ -28,5 +35,5 @@ type Query {
 # The root Mutation for BarTop's GraphQL interface
 type Mutation {
   # Creates a new user
-  createUser(newUser: UserInput!): User!
+  createUser(input: CreateUserInput!): CreateUserPayload!
 }`;

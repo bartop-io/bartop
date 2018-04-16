@@ -1,13 +1,11 @@
-const merge = require('lodash.merge');
-
-module.exports = (dbOpResult, id = '', body = {}) => {
+module.exports = (dbOpResult, id = '') => {
   let result = {};
   if (!dbOpResult.changes.length) {
     if (dbOpResult.unchanged) {
-      // the catalog was already the exact same
-      result = merge(body, { metadata: { unchanged: true } });
+      // the resource was already the exact same
+      result = { unchanged: true };
     } else if (dbOpResult.skipped) {
-      // the userid doesn't exist in the db
+      // the id doesn't exist in the db
       const newError = new Error();
       newError.name = 'ResourceNotFoundError';
       newError.message = `Resource with ID:${id} does not exist.`;

@@ -2,18 +2,22 @@ const processDbResult = require('../../utils/processDbResult');
 
 module.exports = r => {
   // create a new catalog
-  const create = async body => {
+  const replace = async body => {
     const { userId, drinkIds } = body;
     const dbOpResult = await r
       .table('users')
       .get(userId)
       .update({ catalog: drinkIds }, { returnChanges: true });
 
-    return processDbResult(dbOpResult, userId, {
-      id: userId,
-      catalog: drinkIds
-    });
+    let finalResult = processDbResult(dbOpResult, userId);
+    if (finalResult.unchanged) {
+      finalResult = { catalog: drinkIds, unchanged: true };
+    } else {
+      finalResult = { catalog: finalResult.catalog };
+    }
+
+    return finalResult;
   };
 
-  return { create };
+  return { replace };
 };

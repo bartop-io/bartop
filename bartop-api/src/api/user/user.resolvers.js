@@ -5,8 +5,9 @@ const listUsers = async () => {
   return await logic.list();
 };
 
-const createUser = async (root, { newUser }) => {
-  return await logic.create(newUser);
+const createUser = async (root, { input }) => {
+  const newUser = await logic.create(input);
+  return { user: newUser };
 };
 
 module.exports = {
