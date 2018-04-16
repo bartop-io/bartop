@@ -1,12 +1,12 @@
 const db = require('../../db');
 const logic = require('./catalog.logic')(db);
 
-const createCatalog = async (root, { newCatalog }) => {
-  return await logic.create(newCatalog);
+const replaceCatalog = async (root, { input }) => {
+  return await logic.replace(input);
 };
 
 module.exports = {
   Mutation: {
-    createCatalog
+    replaceCatalog
   }
 };

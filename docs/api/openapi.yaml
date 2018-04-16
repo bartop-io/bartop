@@ -93,24 +93,32 @@ paths:
           $ref: '#/components/responses/GeneralError'
 
   /catalogs:
-    post:
-      summary: Create a new catalog for a user.
-      description: Creates a new catalog for a user, consisting of entirely the passed-in drink IDs.
-      operationId: createCatalog
+    put:
+      summary: Replace an existing or empty catalog for a user.
+      description: Fully replaces the catalog for a user with the passed-in drink IDs. Can be used to initialize a user's catalog.
+      operationId: replaceCatalog
       requestBody:
         required: true
         description: JSON object containing the new Catalog to be created.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Catalog'
+              type: object
+              properties:
+                catalog:
+                  $ref: '#/components/schemas/DrinksArray'
+                unchanged:
+                  type: Boolean
+                  description: true if the catalog was not changed. Null, undefined, or false if catalog was replaced.
+
+              $ref: '#/components/schemas/DrinksArray'
       responses:
         '201':
           description: New Catalog successfully created.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/Catalog'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
