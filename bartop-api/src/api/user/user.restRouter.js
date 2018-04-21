@@ -7,4 +7,7 @@ router.route('/').post(controller.create);
 // get users/
 router.route('/').get(controller.list);
 
+// get users/:id
+router.route('/:id').get(controller.get);
+
 module.exports = router;
