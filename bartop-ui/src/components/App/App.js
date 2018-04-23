@@ -1,5 +1,5 @@
 import React from 'react';
-import { Provider } from 'react-redux';
+import { Provider as ReduxProvider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
@@ -7,7 +7,7 @@ import persistState from 'redux-localstorage';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import { injectGlobal } from 'styled-components';
 import ApolloClient from 'apollo-boost';
-import gql from 'graphql-tag';
+import { ApolloProvider } from 'react-apollo';
 
 import config from '../../config';
 import callApiMiddleware from '../../middleware/call-api';
@@ -25,20 +25,7 @@ const localStorageEnhancer = persistState(['authentication', 'user'], {
 
 const client = new ApolloClient({
   uri: `${config.apis.bartop.url}/graphql`
-  // uri: 'https://w5xlvm3vzz.lp.gql.zone/graphql'
 });
-
-client
-  .query({
-    query: gql`
-      {
-        listUsers {
-          id
-        }
-      }
-    `
-  })
-  .then(result => console.log(result));
 
 const enhancer = composeWithDevTools(
   applyMiddleware(thunk, callApiMiddleware),
@@ -66,19 +53,21 @@ export default class App extends React.Component {
       }
     `;
     return (
-      <Provider store={store}>
-        <Router history={history}>
-          <Switch>
-            <Redirect exact from="/" to="/landing" />
-            <Route path="/landing" component={Landing} />
-            <Route
-              path="/auth"
-              render={({ match }) => <Auth match={match} auth={auth} />}
-            />
-            <Route component={NotFound} />
-          </Switch>
-        </Router>
-      </Provider>
+      <ReduxProvider store={store}>
+        <ApolloProvider client={client}>
+          <Router history={history}>
+            <Switch>
+              <Redirect exact from="/" to="/landing" />
+              <Route path="/landing" component={Landing} />
+              <Route
+                path="/auth"
+                render={({ match }) => <Auth match={match} auth={auth} />}
+              />
+              <Route component={NotFound} />
+            </Switch>
+          </Router>
+        </ApolloProvider>
+      </ReduxProvider>
     );
   }
 }
