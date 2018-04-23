@@ -6,7 +6,10 @@ import thunk from 'redux-thunk';
 import persistState from 'redux-localstorage';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import { injectGlobal } from 'styled-components';
+import ApolloClient from 'apollo-boost';
+import gql from 'graphql-tag';
 
+import config from '../../config';
 import callApiMiddleware from '../../middleware/call-api';
 import rootReducer from '../../ducks';
 import auth from '../../singletons/authentication';
@@ -19,6 +22,23 @@ import NotFound from '../NotFound/NotFound';
 const localStorageEnhancer = persistState(['authentication', 'user'], {
   key: 'bartop'
 });
+
+const client = new ApolloClient({
+  uri: `${config.apis.bartop.url}/graphql`
+  // uri: 'https://w5xlvm3vzz.lp.gql.zone/graphql'
+});
+
+client
+  .query({
+    query: gql`
+      {
+        listUsers {
+          id
+        }
+      }
+    `
+  })
+  .then(result => console.log(result));
 
 const enhancer = composeWithDevTools(
   applyMiddleware(thunk, callApiMiddleware),

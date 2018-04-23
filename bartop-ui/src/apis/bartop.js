@@ -19,7 +19,7 @@ export default class BarTopAPI extends API {
     if (!this.token) {
       throw new Error('createUser endpoint requires auth token');
     }
-    const endpoint = `users/${id}`;
+    const endpoint = `/v1/users/${id}`;
 
     return this.fetchJSON(endpoint, {
       method: 'POST',
