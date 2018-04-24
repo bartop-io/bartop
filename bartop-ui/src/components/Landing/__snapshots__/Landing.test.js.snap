@@ -3,5 +3,6 @@
 exports[`matches the snapshot 1`] = `
 <styled.div>
   <Connect(Component) />
+  <DrinksList />
 </styled.div>
 `;

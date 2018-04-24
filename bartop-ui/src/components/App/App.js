@@ -1,12 +1,15 @@
 import React from 'react';
-import { Provider } from 'react-redux';
+import { Provider as ReduxProvider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import persistState from 'redux-localstorage';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import { injectGlobal } from 'styled-components';
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from 'react-apollo';
 
+import config from '../../config';
 import callApiMiddleware from '../../middleware/call-api';
 import rootReducer from '../../ducks';
 import auth from '../../singletons/authentication';
@@ -31,6 +34,18 @@ const store = createStore(
   enhancer // compose to combine enhancers for middlewares like thunk and other enhancers like dev tools
 );
 
+const client = new ApolloClient({
+  uri: `${config.apis.bartop.url}/graphql`,
+  request: operation => {
+    const token = store.getState().authentication.accessToken;
+    operation.setContext({
+      headers: {
+        Authorization: token ? `Bearer ${token}` : ''
+      }
+    });
+  }
+});
+
 export default class App extends React.Component {
   render() {
     // styled components helper for adding styles to global dom elements like body
@@ -46,19 +61,21 @@ export default class App extends React.Component {
       }
     `;
     return (
-      <Provider store={store}>
-        <Router history={history}>
-          <Switch>
-            <Redirect exact from="/" to="/landing" />
-            <Route path="/landing" component={Landing} />
-            <Route
-              path="/auth"
-              render={({ match }) => <Auth match={match} auth={auth} />}
-            />
-            <Route component={NotFound} />
-          </Switch>
-        </Router>
-      </Provider>
+      <ReduxProvider store={store}>
+        <ApolloProvider client={client}>
+          <Router history={history}>
+            <Switch>
+              <Redirect exact from="/" to="/landing" />
+              <Route path="/landing" component={Landing} />
+              <Route
+                path="/auth"
+                render={({ match }) => <Auth match={match} auth={auth} />}
+              />
+              <Route component={NotFound} />
+            </Switch>
+          </Router>
+        </ApolloProvider>
+      </ReduxProvider>
     );
   }
 }
