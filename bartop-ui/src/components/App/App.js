@@ -23,6 +23,17 @@ const localStorageEnhancer = persistState(['authentication', 'user'], {
   key: 'bartop'
 });
 
+const enhancer = composeWithDevTools(
+  applyMiddleware(thunk, callApiMiddleware),
+  localStorageEnhancer
+);
+
+const store = createStore(
+  rootReducer,
+  undefined, // optional preloaded state
+  enhancer // compose to combine enhancers for middlewares like thunk and other enhancers like dev tools
+);
+
 const client = new ApolloClient({
   uri: `${config.apis.bartop.url}/graphql`,
   request: operation => {
@@ -34,17 +45,6 @@ const client = new ApolloClient({
     });
   }
 });
-
-const enhancer = composeWithDevTools(
-  applyMiddleware(thunk, callApiMiddleware),
-  localStorageEnhancer
-);
-
-const store = createStore(
-  rootReducer,
-  undefined, // optional preloaded state
-  enhancer // compose to combine enhancers for middlewares like thunk and other enhancers like dev tools
-);
 
 export default class App extends React.Component {
   render() {
