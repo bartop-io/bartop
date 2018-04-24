@@ -24,7 +24,15 @@ const localStorageEnhancer = persistState(['authentication', 'user'], {
 });
 
 const client = new ApolloClient({
-  uri: `${config.apis.bartop.url}/graphql`
+  uri: `${config.apis.bartop.url}/graphql`,
+  request: operation => {
+    const token = store.getState().authentication.accessToken;
+    operation.setContext({
+      headers: {
+        Authorization: token ? `Bearer ${token}` : ''
+      }
+    });
+  }
 });
 
 const enhancer = composeWithDevTools(
