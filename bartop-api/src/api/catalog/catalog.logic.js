@@ -1,7 +1,7 @@
 const processDbResult = require('../../utils/processDbResult');
 
 module.exports = r => {
-  // create a new catalog
+  // replace a catalog with a new one (used to initialize catalogs also)
   const replace = async body => {
     const { userId, drinkIds } = body;
     const dbOpResult = await r
@@ -11,11 +11,11 @@ module.exports = r => {
 
     let finalResult = processDbResult(dbOpResult, userId);
     if (finalResult.unchanged) {
-      finalResult = { catalog: drinkIds, unchanged: true };
-    } else {
-      finalResult = { catalog: finalResult.catalog };
+      finalResult = { unchanged: true };
+    } else if (finalResult.catalog) {
+      const drinks = await r.table('drinks').getAll(...finalResult.catalog);
+      finalResult = { catalog: drinks };
     }
-
     return finalResult;
   };
 

@@ -97,33 +97,6 @@ describe('Resource - User', function() {
           done();
         });
     });
-
-    it(`GET /:id - return a user with the given id`, function(done) {
-      request(app)
-        .get(`/api/v1/users/${userId}`)
-        .set('Authorization', `Bearer ${TOKEN}`)
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
-          expect(res.body).to.be.an('object');
-          expect(res.body.auth0Id).to.equal(users.catalogUser.auth0Id);
-          expect(res.body.id).to.equal(userId);
-          expect(res.body.catalog).to.be.an('array');
-          expect(res.body.catalog.length).to.equal(drinks.list.length);
-          done();
-        });
-    });
-
-    it(`GET /:id - return a 401 if user with 'id' does not exist`, function(done) {
-      const thisError = errors.NOT_FOUND;
-      request(app)
-        .get(`/api/v1/users/discountonallswimwear`)
-        .set('Authorization', `Bearer ${TOKEN}`)
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(thisError.code);
-          expect(res.body).to.equal(thisError.message);
-          done();
-        });
-    });
   });
 
   describe('GraphQL', function() {

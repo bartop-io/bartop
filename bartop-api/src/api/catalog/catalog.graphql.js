@@ -12,15 +12,15 @@ input ReplaceCatalogInput {
 # Return type of replaceCatalog
 type ReplaceCatalogPayload {
 
-  # The new Catalog object for the User
-  catalog: [ID] # this should perhaps resolve the drinks
+  # The new Catalog object for the User. Will be 'null' if Catalog is unchanged
+  catalog: [Drink]
 
-  # A flag that will be 'true' if the given Catalog is identical to the existing Catalog, and 'null' otherwise.
+  # A flag that will be 'true' if the given Catalog is identical to the existing Catalog, and 'null' otherwise
   unchanged: Boolean
 }
 
 extend type Mutation {
 
-  # Completely replaces an existing catalog with a new one. Should be used to initialize catalogs (by replacing empty ones).
+  # Completely replaces an existing catalog with a new one. Should be used to initialize catalogs (by replacing empty ones)
   replaceCatalog(input: ReplaceCatalogInput!): ReplaceCatalogPayload!
 }`;
