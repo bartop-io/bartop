@@ -1,5 +1,6 @@
 import React from 'react';
 import { push as Menu } from 'react-burger-menu';
+import { NavLink } from 'react-router-dom';
 
 import { colors } from '../styleUtils';
 
@@ -41,9 +42,7 @@ const styles = {
 const Hamburger = props => (
   <Menu styles={styles} {...props}>
     <h2>BarTop</h2>
-    <a id="home" className="menu-item" href="/">
-      Home
-    </a>
+    <NavLink to="/">Home</NavLink>
   </Menu>
 );
 

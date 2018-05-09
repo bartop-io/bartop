@@ -58,7 +58,15 @@ export default class App extends React.Component {
         margin: 0;
         padding: 0;
         font-family: 'Raleway', sans-serif;
-        button{font-family:inherit;}
+        /* form elements should inherit font */
+        button, input {
+          font-family:inherit;
+        },
+        /* don't use default styling on links */
+        a {
+          color:inherit;
+          text-decoration: none;
+        }
       }
     `;
     return (

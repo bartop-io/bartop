@@ -28,18 +28,21 @@ const Header = styled.nav`
   background-color: ${colors.main};
 `;
 
-const PageWithHeader = ({ children }) => (
+const PageWithHeader = ({ children, showAuthButton }) => (
   <OuterContainer>
-    <Header>
-      <AuthButton />
-    </Header>
+    <Header>{showAuthButton && <AuthButton />}</Header>
     <Hamburger outerContainerId="outer-container" pageWrapId="page-wrapper" />
     <PageWrapper>{children}</PageWrapper>
   </OuterContainer>
 );
 
+PageWithHeader.defaultProps = {
+  showAuthButton: true
+};
+
 PageWithHeader.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  showAuthButton: PropTypes.bool
 };
 
 export default PageWithHeader;
