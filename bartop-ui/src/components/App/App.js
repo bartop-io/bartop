@@ -57,7 +57,8 @@ export default class App extends React.Component {
         height: 100%;
         margin: 0;
         padding: 0;
-        font-family: sans-serif;
+        font-family: 'Raleway', sans-serif;
+        button{font-family:inherit;}
       }
     `;
     return (
