@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import AuthButton from '../AuthButton/AuthButton';
+import PageWithHeader from '../Layouts/PageWithHeader/PageWithHeader';
 import DrinksList from '../DrinksList/DrinksList';
 
 const Wrapper = styled.div`
@@ -13,10 +13,11 @@ const Wrapper = styled.div`
 `;
 
 const Landing = () => (
-  <Wrapper>
-    <AuthButton />
-    <DrinksList />
-  </Wrapper>
+  <PageWithHeader>
+    <Wrapper>
+      <DrinksList />
+    </Wrapper>
+  </PageWithHeader>
 );
 
 export default Landing;
