@@ -39,6 +39,9 @@ type AddDrinkToCatalogPayload {
 
   # A flag that will be 'true' if the given drink is already present in the catalog, and 'null' otherwise.
   unchanged: Boolean
+
+  # A flag that will be 'true' if the given drink ID does not exist in the database, and 'null' otherwise
+  invalidDrink: Boolean
 }
 
 
@@ -58,8 +61,11 @@ type RemoveDrinkFromCatalogPayload {
   # The Drink object removed from the catalog
   drink: Drink
 
-  # A flag that will be 'true' if the given drink was already absent from the catalog, and 'null' otherwise.
+  # A flag that will be 'true' if the given drink was already absent from the catalog, and 'null' otherwise
   unchanged: Boolean
+
+  # A flag that will be 'true' if the given drink ID does not exist in the database, and 'null' otherwise
+  invalidDrink: Boolean
 }
 
 

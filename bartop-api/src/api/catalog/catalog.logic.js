@@ -19,5 +19,51 @@ module.exports = r => {
     return finalResult;
   };
 
-  return { replace };
+  const add = async body => {
+    const { userId, drinkId } = body;
+    const drink = await r.table('drinks').get(drinkId);
+    const finalResult = {};
+    if (!drink) {
+      finalResult.invalidDrink = true;
+    } else {
+      const dbOpResult = await r
+        .table('users')
+        .get(userId)
+        .update({
+          // setInsert returns an array of distinct values
+          // this prevents duplication
+          catalog: r.row('catalog').setInsert(drinkId)
+        });
+      const processed = processDbResult(dbOpResult, userId);
+      if (processed.unchanged) {
+        finalResult.unchanged = true;
+      }
+      finalResult.drink = drink;
+    }
+    return finalResult;
+  };
+
+  const remove = async body => {
+    const { userId, drinkId } = body;
+    const drink = await r.table('drinks').get(drinkId);
+    const finalResult = {};
+    if (!drink) {
+      finalResult.invalidDrink = true;
+    } else {
+      const dbOpResult = await r
+        .table('users')
+        .get(userId)
+        .update({
+          catalog: r.row('catalog').difference([drinkId])
+        });
+      const processed = processDbResult(dbOpResult, userId);
+      if (processed.unchanged) {
+        finalResult.unchanged = true;
+      }
+      finalResult.drink = drink;
+    }
+    return finalResult;
+  };
+
+  return { replace, add, remove };
 };

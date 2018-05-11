@@ -6,23 +6,11 @@ const replaceCatalog = async (root, { input }) => {
 };
 
 const addDrinkToCatalog = async (root, { input }) => {
-  // need from input:
-  // userid of catalog
-  // drinkid to add
-
-  // return:
-  // the single drink, resolved
-  return input;
+  return await logic.add(input);
 };
 
 const removeDrinkFromCatalog = async (root, { input }) => {
-  // need from input:
-  // userid of catalog
-  // drinkid to remove
-
-  // return:
-  // the single drink, resolved
-  return input;
+  return await logic.remove(input);
 };
 
 module.exports = {

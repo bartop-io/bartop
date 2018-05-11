@@ -1,6 +1,11 @@
 module.exports = (dbOpResult, id = '') => {
   let result = {};
-  if (!dbOpResult.changes.length) {
+  if (successfulOperation(dbOpResult)) {
+    // if changes were requested, return them
+    if (dbOpResult.changes) {
+      result = dbOpResult.changes[0].new_val;
+    }
+  } else {
     if (dbOpResult.unchanged) {
       // the resource was already the exact same
       result = { unchanged: true };
@@ -21,10 +26,16 @@ module.exports = (dbOpResult, id = '') => {
       newError.name = 'InternalDatabaseOperationError';
       throw newError;
     }
-  } else {
-    // if successfully updated, returned updated object
-    result = dbOpResult.changes[0].new_val;
   }
 
   return result;
 };
+
+function successfulOperation(obj) {
+  return (
+    obj.replaced ||
+    obj.inserted ||
+    obj.deleted ||
+    (obj.changes && obj.changes.length)
+  );
+}
