@@ -17,6 +17,7 @@ const PageWrapper = styled.main.attrs({
   id: 'page-wrapper'
 })`
   height: 100%;
+  background-color: ${colors.light};
 `;
 
 const Header = styled.nav`
@@ -25,7 +26,7 @@ const Header = styled.nav`
   position: fixed;
   display: flex;
   justify-content: flex-end;
-  background-color: ${colors.main};
+  background-color: ${colors.light};
 `;
 
 const PageWithHeader = ({ children, showAuthButton }) => (

@@ -31,7 +31,7 @@ const styles = {
     fill: '#373a47'
   },
   bmItemList: {
-    color: '#b8b7ad',
+    color: colors.light,
     padding: '0.8em'
   },
   bmOverlay: {

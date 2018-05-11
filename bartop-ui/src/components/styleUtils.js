@@ -8,8 +8,10 @@ export const animations = {
 };
 
 export const colors = {
-  main: 'rosybrown',
-  dark: 'black',
-  light: 'ghostwhite',
-  overlay: 'rgba(0, 0, 0, 0.3)'
+  light: '#DDE2E3',
+  medium: '#9AACB8',
+  dark: '#3C455C',
+  lightAccent: '#B37C57',
+  darkAccent: '#60412B',
+  overlay: 'rgb(60,69,92, 0.3)' // TODO - use defined variable like colors.dark then adjust opacity
 };

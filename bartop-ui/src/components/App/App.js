@@ -17,6 +17,7 @@ import history from '../../singletons/history';
 import Landing from '../Landing/Landing';
 import Auth from '../Auth/Auth';
 import NotFound from '../NotFound/NotFound';
+import { colors } from '../styleUtils';
 
 // persist all of our auth & user state to local storage
 const localStorageEnhancer = persistState(['authentication', 'user'], {
@@ -58,6 +59,7 @@ export default class App extends React.Component {
         margin: 0;
         padding: 0;
         font-family: 'Raleway', sans-serif;
+        color: ${colors.dark}
         /* form elements should inherit font */
         button, input {
           font-family:inherit;
