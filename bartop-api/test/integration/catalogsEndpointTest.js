@@ -2,12 +2,13 @@ const request = require('supertest');
 const expect = require('chai').expect;
 const app = require('../../src/server');
 const r = require('../../src/db');
-const { users } = require('../utils/testObjects');
+const { users, drinks } = require('../utils/testObjects');
 const errors = require('../../src/utils/errorConstants');
 
 describe('Resource - Catalog', function() {
   const TOKEN = global.testToken;
   let userId;
+  let oldFashionedId;
 
   before(async function() {
     // increase hook timeout, tests require extensive environment setup
@@ -19,8 +20,17 @@ describe('Resource - Catalog', function() {
       await r.tableDrop('users');
     }
     await r.tableCreate('users');
+
+    if (tables.includes('drinks')) {
+      await r.tableDrop('drinks');
+    }
+    await r.tableCreate('drinks');
+
     const response = await r.table('users').insert(users.testUser);
     userId = response.generated_keys[0];
+
+    const dbResponse = await r.table('drinks').insert(drinks.oldFashioned);
+    oldFashionedId = dbResponse.generated_keys[0];
     return;
   });
 
@@ -178,6 +188,180 @@ describe('Resource - Catalog', function() {
           expect(errorResponse[1].message).to.equal(
             'Field ReplaceCatalogInput.drinkIds of required type [ID]! was not provided.'
           );
+          done();
+        });
+    });
+
+    it('Mutation - add a single drink to a catalog', function(done) {
+      const query = `
+        mutation {
+          addDrinkToCatalog(
+            input: { userId: "${userId}", drinkId: "${oldFashionedId}" }
+          ) {
+            drink {
+              name
+            }
+            unchanged
+            invalidDrink
+          }
+        }`;
+      request(app)
+        .post('/api/graphql')
+        .set('Authorization', `Bearer ${TOKEN}`)
+        .set('Content-Type', 'application/json')
+        .send({ query })
+        .end((err, res) => {
+          const payload = res.body.data.addDrinkToCatalog;
+          expect(res.statusCode).to.equal(200);
+          expect(payload).to.be.an('object');
+          expect(payload.drink.name).to.equal('Old Fashioned');
+          expect(payload.unchanged).to.equal(null);
+          expect(payload.invalidDrink).to.equal(null);
+          done();
+        });
+    });
+
+    it('Mutation - re-add same drink, should be unchanged', function(done) {
+      const query = `
+        mutation {
+          addDrinkToCatalog(
+            input: { userId: "${userId}", drinkId: "${oldFashionedId}" }
+          ) {
+            drink {
+              name
+            }
+            unchanged
+            invalidDrink
+          }
+        }`;
+      request(app)
+        .post('/api/graphql')
+        .set('Authorization', `Bearer ${TOKEN}`)
+        .set('Content-Type', 'application/json')
+        .send({ query })
+        .end((err, res) => {
+          const payload = res.body.data.addDrinkToCatalog;
+          expect(res.statusCode).to.equal(200);
+          expect(payload).to.be.an('object');
+          expect(payload.drink.name).to.equal('Old Fashioned');
+          expect(payload.unchanged).to.equal(true);
+          expect(payload.invalidDrink).to.equal(null);
+          done();
+        });
+    });
+
+    it('Mutation - add a fake drink, should be invalid', function(done) {
+      const query = `
+        mutation {
+          addDrinkToCatalog(
+            input: { userId: "${userId}", drinkId: "bestfriend<insertname>" }
+          ) {
+            drink {
+              name
+            }
+            unchanged
+            invalidDrink
+          }
+        }`;
+      request(app)
+        .post('/api/graphql')
+        .set('Authorization', `Bearer ${TOKEN}`)
+        .set('Content-Type', 'application/json')
+        .send({ query })
+        .end((err, res) => {
+          const payload = res.body.data.addDrinkToCatalog;
+          expect(res.statusCode).to.equal(200);
+          expect(payload).to.be.an('object');
+          expect(payload.drink).to.equal(null);
+          expect(payload.unchanged).to.equal(null);
+          expect(payload.invalidDrink).to.equal(true);
+          done();
+        });
+    });
+
+    it('Mutation - remove a single drink from a catalog', function(done) {
+      const query = `
+        mutation {
+          removeDrinkFromCatalog(
+            input: { userId: "${userId}", drinkId: "${oldFashionedId}" }
+          ) {
+            drink {
+              name
+            }
+            unchanged
+            invalidDrink
+          }
+        }`;
+      request(app)
+        .post('/api/graphql')
+        .set('Authorization', `Bearer ${TOKEN}`)
+        .set('Content-Type', 'application/json')
+        .send({ query })
+        .end((err, res) => {
+          const payload = res.body.data.removeDrinkFromCatalog;
+          expect(res.statusCode).to.equal(200);
+          expect(payload).to.be.an('object');
+          expect(payload.drink.name).to.equal('Old Fashioned');
+          expect(payload.unchanged).to.equal(null);
+          expect(payload.invalidDrink).to.equal(null);
+          done();
+        });
+    });
+
+    it('Mutation - re-remove same drink, should be unchanged', function(done) {
+      const query = `
+        mutation {
+          removeDrinkFromCatalog(
+            input: { userId: "${userId}", drinkId: "${oldFashionedId}" }
+          ) {
+            drink {
+              name
+            }
+            unchanged
+            invalidDrink
+          }
+        }`;
+      request(app)
+        .post('/api/graphql')
+        .set('Authorization', `Bearer ${TOKEN}`)
+        .set('Content-Type', 'application/json')
+        .send({ query })
+        .end((err, res) => {
+          const payload = res.body.data.removeDrinkFromCatalog;
+          expect(res.statusCode).to.equal(200);
+          expect(payload).to.be.an('object');
+          expect(payload.drink.name).to.equal('Old Fashioned');
+          expect(payload.unchanged).to.equal(true);
+          expect(payload.invalidDrink).to.equal(null);
+          done();
+        });
+    });
+
+    it('Mutation - remove a fake drink, should be invalid', function(done) {
+      const query = `
+        mutation {
+          removeDrinkFromCatalog(
+            input: { userId: "${userId}", drinkId: "proxieseverywhere" }
+          ) {
+            drink {
+              name
+            }
+            unchanged
+            invalidDrink
+          }
+        }`;
+      request(app)
+        .post('/api/graphql')
+        .set('Authorization', `Bearer ${TOKEN}`)
+        .set('Content-Type', 'application/json')
+        .send({ query })
+        .end((err, res) => {
+          const payload = res.body.data.removeDrinkFromCatalog;
+          expect(res.statusCode).to.equal(200);
+          expect(payload).to.be.an('object');
+          expect(payload.drink).to.equal(null);
+          expect(payload.unchanged).to.equal(null);
+          expect(payload.invalidDrink).to.equal(true);
           done();
         });
     });
