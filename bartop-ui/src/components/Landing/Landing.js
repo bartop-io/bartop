@@ -2,20 +2,33 @@ import React from 'react';
 import styled from 'styled-components';
 
 import PageWithHeader from '../Layouts/PageWithHeader/PageWithHeader';
-import DrinksList from '../DrinksList/DrinksList';
+
+import { fontSizes, spacing } from '../styleUtils';
 
 const Wrapper = styled.div`
-  height: 100%;
+  max-width: 600px;
+  height: 60%;
+  margin: 0 auto;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  padding: ${spacing.tightHorizontalMargin};
+`;
+
+const Greeting = styled.h1`
+  font-size: ${fontSizes.largest};
 `;
 
 const Landing = () => (
   <PageWithHeader>
     <Wrapper>
-      <DrinksList />
+      <Greeting>
+        Welcome to BarTop{' '}
+        <span role="img" aria-label="champagne-clink">
+          🥂
+        </span>
+      </Greeting>
     </Wrapper>
   </PageWithHeader>
 );

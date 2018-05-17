@@ -8,10 +8,23 @@ export const animations = {
 };
 
 export const colors = {
-  light: '#DDE2E3',
-  medium: '#9AACB8',
-  dark: '#3C455C',
-  lightAccent: '#B37C57',
-  darkAccent: '#60412B',
-  overlay: 'rgb(60,69,92, 0.3)' // TODO - use defined variable like colors.dark then adjust opacity
+  lightest: '#FFF',
+  light: '#F4F4F4',
+  medium: '#D8D2D2',
+  dark: '#ADADAD',
+  darkest: '#262626',
+  overlay: 'rgba(0, 0, 0, 0.35)'
+};
+
+export const spacing = {
+  tightHorizontalMargin: '15px'
+};
+
+// 🙌 @ http://carbondesignsystem.com
+export const shadows = {
+  raised: '0 1px 2px 0 rgba(0,0,0,0.10);'
+};
+
+export const fontSizes = {
+  largest: '54px'
 };

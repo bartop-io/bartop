@@ -1,37 +1,35 @@
 import React from 'react';
-import { push as Menu } from 'react-burger-menu';
+import { slide as Menu } from 'react-burger-menu';
 import { NavLink } from 'react-router-dom';
 
-import { colors } from '../styleUtils';
+import { colors, spacing } from '../styleUtils';
 
 const styles = {
   bmBurgerButton: {
     position: 'fixed',
-    width: '30px',
-    height: '25px',
-    left: '30px',
+    width: '25px',
+    height: '20px',
+    left: spacing.tightHorizontalMargin,
     top: '15px'
   },
   bmBurgerBars: {
-    background: colors.dark
+    background: colors.darkest
   },
   bmCrossButton: {
     height: '24px',
-    width: '24px'
+    width: '24px',
+    float: 'left'
   },
   bmCross: {
-    background: colors.light
+    background: colors.darkest
   },
   bmMenu: {
-    background: colors.dark,
+    background: colors.light,
     padding: '2em 1.5em 0',
     fontSize: '1.15em'
   },
-  bmMorphShape: {
-    fill: '#373a47'
-  },
   bmItemList: {
-    color: colors.light,
+    color: colors.darkest,
     padding: '0.8em'
   },
   bmOverlay: {

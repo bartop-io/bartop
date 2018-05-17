@@ -59,11 +59,7 @@ export default class App extends React.Component {
         margin: 0;
         padding: 0;
         font-family: 'Raleway', sans-serif;
-        color: ${colors.dark}
-        /* form elements should inherit font */
-        button, input {
-          font-family:inherit;
-        },
+        color: ${colors.darkest};
         /* don't use default styling on links */
         a {
           color:inherit;

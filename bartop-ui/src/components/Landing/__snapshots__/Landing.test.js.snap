@@ -5,7 +5,16 @@ exports[`matches the snapshot 1`] = `
   showAuthButton={true}
 >
   <styled.div>
-    <DrinksList />
+    <styled.h1>
+      Welcome to BarTop
+       
+      <span
+        aria-label="champagne-clink"
+        role="img"
+      >
+        🥂
+      </span>
+    </styled.h1>
   </styled.div>
 </PageWithHeader>
 `;
