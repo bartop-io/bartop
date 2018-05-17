@@ -21,7 +21,7 @@ export const types = {
 
 export const actions = {
   startLogin: () => {
-    history.replace('/auth/login');
+    history.push('/auth/login');
     return {
       type: types.START_LOGIN
     };
