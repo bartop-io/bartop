@@ -2,11 +2,12 @@ const request = require('supertest');
 const expect = require('chai').expect;
 const app = require('../../src/server');
 const r = require('../../src/db');
-const { users } = require('../utils/testObjects');
-const { BODY_MODEL, CONTENT_TYPE } = require('../../src/utils/errorConstants');
+const { users, drinks } = require('../utils/testObjects');
+const errors = require('../../src/utils/errorConstants');
 
 describe('Resource - User', function() {
   const TOKEN = global.testToken;
+  let userId;
 
   before(async function() {
     // increase hook timeout, tests require extensive environment setup
@@ -19,6 +20,18 @@ describe('Resource - User', function() {
     }
     await r.tableCreate('users');
     await r.table('users').insert(users.list);
+
+    // prime db with drinks for catalog
+    if (tables.includes('drinks')) {
+      await r.tableDrop('drinks');
+    }
+    await r.tableCreate('drinks');
+    const drinkResponse = await r.table('drinks').insert(drinks.list);
+    const drinkIds = drinkResponse.generated_keys;
+    const { catalogUser } = users;
+    catalogUser.catalog = drinkIds;
+    const userResponse = await r.table('users').insert(catalogUser);
+    userId = userResponse.generated_keys[0];
     return;
   });
 
@@ -39,19 +52,21 @@ describe('Resource - User', function() {
     });
 
     it('POST - throw error if body does not match model', function(done) {
+      const thisError = errors.BODY_MODEL;
       request(app)
         .post('/api/v1/users')
         .set('Content-Type', 'application/json')
         .set('Authorization', `Bearer ${TOKEN}`)
         .send({ id: users.postUser.auth0Id })
         .end((err, res) => {
-          expect(res.statusCode).to.equal(BODY_MODEL.code);
-          expect(res.body).to.equal(BODY_MODEL.message);
+          expect(res.statusCode).to.equal(thisError.code);
+          expect(res.body).to.equal(thisError.message);
           done();
         });
     });
 
     it('POST - throw error if content-type is unsupported', function(done) {
+      const thisError = errors.CONTENT_TYPE;
       request(app)
         .post('/api/v1/users')
         .set('Content-Type', 'multipart/form-data')
@@ -60,8 +75,8 @@ describe('Resource - User', function() {
         // the send() method expects a string
         .send(`{ id: ${users.postUser.auth0Id} }`)
         .end((err, res) => {
-          expect(res.statusCode).to.equal(CONTENT_TYPE.code);
-          expect(res.body).to.equal(CONTENT_TYPE.message);
+          expect(res.statusCode).to.equal(thisError.code);
+          expect(res.body).to.equal(thisError.message);
           done();
         });
     });
@@ -145,6 +160,45 @@ describe('Resource - User', function() {
           expect(error.message).to.equal(
             'Field CreateUserInput.auth0Id of required type String! was not provided.'
           );
+          done();
+        });
+    });
+
+    it('Query - get user by ID', function(done) {
+      const query = `
+        query {
+          getUserById(id: "${userId}") {
+            id
+            auth0Id
+            catalog {
+              name
+            }
+          }
+        }`;
+      request(app)
+        .get(`/api/graphql?query=${query}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
+        .end((err, res) => {
+          const user = res.body.data.getUserById;
+          expect(res.statusCode).to.equal(200);
+          expect(user).to.be.an('object');
+          expect(user.id).to.equal(userId);
+          expect(user.auth0Id).to.equal(users.catalogUser.auth0Id);
+          expect(user.catalog).to.be.an('array');
+          expect(user.catalog.length).to.equal(drinks.list.length);
+          expect(user.catalog[0].name).to.be.a('string');
+          done();
+        });
+    });
+
+    it('Query - return null for user that does not exist', function(done) {
+      request(app)
+        .get('/api/graphql?query={getUserById(id: "userthatlikeschilis"){id}}')
+        .set('Authorization', `Bearer ${TOKEN}`)
+        .end((err, res) => {
+          const user = res.body.data.getUserById;
+          expect(res.statusCode).to.equal(200);
+          expect(user).to.equal(null);
           done();
         });
     });
