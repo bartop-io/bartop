@@ -6,14 +6,11 @@ module.exports = (dbOpResult, id = '') => {
       result = dbOpResult.changes[0].new_val;
     }
   } else {
-    if (dbOpResult.unchanged) {
-      // the resource was already the exact same
-      result = { unchanged: true };
-    } else if (dbOpResult.skipped) {
+    if (dbOpResult.skipped) {
       // the id doesn't exist in the db
       const newError = new Error();
       newError.name = 'ResourceNotFoundError';
-      newError.message = `Resource with ID:${id} does not exist.`;
+      newError.message = `Resource with ID: ${id} does not exist.`;
       throw newError;
     } else if (dbOpResult.errors) {
       // unexpected post-write error in the db operation
@@ -36,6 +33,7 @@ function successfulOperation(obj) {
     obj.replaced ||
     obj.inserted ||
     obj.deleted ||
+    obj.unchanged ||
     (obj.changes && obj.changes.length)
   );
 }

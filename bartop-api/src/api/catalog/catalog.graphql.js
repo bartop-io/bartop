@@ -1,82 +1,56 @@
 module.exports = `
 
-# Input type containing data needed to create a catalog for a user
-input ReplaceCatalogInput {
+type Error {
+  message: String
+}
 
-  # The catalog will be replaced for the User with this unique ID
+# Input type containing data needed to add drinks to a user's catalog
+input AddDrinksToCatalogInput {
+
+  # The unique ID of the user that corresponds to the catalog to be updated
   userId: ID!
 
-  # List of IDs that correspond to Drink objects in the DB
+  # The unique IDs of the drinks to be added to the catalog
   drinkIds: [ID]!
 }
 
-# Return type of replaceCatalog
-type ReplaceCatalogPayload {
+# Return type of addDrinksToCatalog
+type AddDrinksToCatalogPayload {
 
-  # The new Catalog object for the User
-  catalog: [ID] # this should perhaps resolve the drinks
+  # The Drink objects added to the catalog
+  drinks: [Drink]
 
-  # A flag that will be 'true' if the given Catalog is identical to the existing Catalog, and 'null' otherwise.
-  unchanged: Boolean
+  # Errors that occurred while executing the request
+  errors: [Error]
 }
 
 
-# Input type containing data needed to add a drink to a user's catalog
-input AddDrinkToCatalogInput {
+# Input type containing data needed to remove drinks from a user's catalog
+input RemoveDrinksFromCatalogInput {
 
   # The unique ID of the user that corresponds to the catalog to be updated
   userId: ID!
 
-  # The unique ID of the drink to be added to the catalog
-  drinkId: ID!
+  # The unique IDs of the drinks to be removed from the catalog
+  drinkIds: [ID]!
 }
 
-# Return type of addDrinkToCatalog
-type AddDrinkToCatalogPayload {
+# Return type of removeDrinksFromCatalog
+type RemoveDrinksFromCatalogPayload {
 
-  # The Drink object added to the catalog
-  drink: Drink
+  # The Drink objects removed from the catalog
+  drinks: [Drink]
 
-  # A flag that will be 'true' if the given drink is already present in the catalog, and 'null' otherwise.
-  unchanged: Boolean
-
-  # A flag that will be 'true' if the given drink ID does not exist in the database, and 'null' otherwise
-  invalidDrink: Boolean
-}
-
-
-# Input type containing data needed to remove a drink from a user's catalog
-input RemoveDrinkFromCatalogInput {
-
-  # The unique ID of the user that corresponds to the catalog to be updated
-  userId: ID!
-
-  # The unique ID of the drink to be removed from the catalog
-  drinkId: ID!
-}
-
-# Return type of removeDrinkFromCatalog
-type RemoveDrinkFromCatalogPayload {
-
-  # The Drink object removed from the catalog
-  drink: Drink
-
-  # A flag that will be 'true' if the given drink was already absent from the catalog, and 'null' otherwise
-  unchanged: Boolean
-
-  # A flag that will be 'true' if the given drink ID does not exist in the database, and 'null' otherwise
-  invalidDrink: Boolean
+  # Errors that occurred while executing the request
+  errors: [Error]
 }
 
 
 extend type Mutation {
 
-  # Completely replaces an existing catalog with a new one. Should be used to initialize catalogs (by replacing empty ones).
-  replaceCatalog(input: ReplaceCatalogInput!): ReplaceCatalogPayload!
-
   # Add a single drink to a user's catalog, by ID
-  addDrinkToCatalog(input: AddDrinkToCatalogInput!): AddDrinkToCatalogPayload!
+  addDrinksToCatalog(input: AddDrinksToCatalogInput!): AddDrinksToCatalogPayload!
 
   # Remove a single drink from a user's catalog, by ID
-  removeDrinkFromCatalog(input: RemoveDrinkFromCatalogInput!): RemoveDrinkFromCatalogPayload!
+  removeDrinksFromCatalog(input: RemoveDrinksFromCatalogInput!): RemoveDrinksFromCatalogPayload!
 }`;

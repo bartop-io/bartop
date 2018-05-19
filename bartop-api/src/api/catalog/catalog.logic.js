@@ -1,69 +1,51 @@
 const processDbResult = require('../../utils/processDbResult');
 
 module.exports = r => {
-  // create a new catalog
-  const replace = async body => {
-    const { userId, drinkIds } = body;
-    const dbOpResult = await r
-      .table('users')
-      .get(userId)
-      .update({ catalog: drinkIds }, { returnChanges: true });
-
-    let finalResult = processDbResult(dbOpResult, userId);
-    if (finalResult.unchanged) {
-      finalResult = { catalog: drinkIds, unchanged: true };
-    } else {
-      finalResult = { catalog: finalResult.catalog };
-    }
-
-    return finalResult;
-  };
-
   const add = async body => {
-    const { userId, drinkId } = body;
-    const drink = await r.table('drinks').get(drinkId);
+    const { userId, drinkIds } = body;
+    const drinks = await r.table('drinks').getAll(...drinkIds);
     const finalResult = {};
-    if (!drink) {
-      finalResult.invalidDrink = true;
+    if (!drinks.length) {
+      finalResult.errors = [];
+      finalResult.errors.push({
+        message: 'None of the given drinks are valid.'
+      });
     } else {
       const dbOpResult = await r
         .table('users')
         .get(userId)
         .update({
-          // setInsert returns an array of distinct values
+          // setUnion returns an array of distinct values
           // this prevents duplication
-          catalog: r.row('catalog').setInsert(drinkId)
+          catalog: r.row('catalog').setUnion(drinkIds)
         });
-      const processed = processDbResult(dbOpResult, userId);
-      if (processed.unchanged) {
-        finalResult.unchanged = true;
-      }
-      finalResult.drink = drink;
+      processDbResult(dbOpResult, userId);
+      finalResult.drinks = drinks;
     }
     return finalResult;
   };
 
   const remove = async body => {
-    const { userId, drinkId } = body;
-    const drink = await r.table('drinks').get(drinkId);
+    const { userId, drinkIds } = body;
+    const drinks = await r.table('drinks').getAll(...drinkIds);
     const finalResult = {};
-    if (!drink) {
-      finalResult.invalidDrink = true;
+    if (!drinks.length) {
+      finalResult.errors = [];
+      finalResult.errors.push({
+        message: 'None of the given drinks are valid.'
+      });
     } else {
       const dbOpResult = await r
         .table('users')
         .get(userId)
         .update({
-          catalog: r.row('catalog').difference([drinkId])
+          catalog: r.row('catalog').difference(drinkIds)
         });
-      const processed = processDbResult(dbOpResult, userId);
-      if (processed.unchanged) {
-        finalResult.unchanged = true;
-      }
-      finalResult.drink = drink;
+      processDbResult(dbOpResult, userId);
+      finalResult.drinks = drinks;
     }
     return finalResult;
   };
 
-  return { replace, add, remove };
+  return { add, remove };
 };
