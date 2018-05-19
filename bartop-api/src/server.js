@@ -48,11 +48,6 @@ app.use((err, req, res, next) => {
       res.status(errors.NONEXISTENT.code).json(errors.NONEXISTENT.message);
       break;
 
-    case 'ResourceNotFoundError':
-      logger.error(errors.NOT_FOUND.message);
-      res.status(errors.NOT_FOUND.code).json(errors.NOT_FOUND.message);
-      break;
-
     case 'UnauthorizedError':
       logger.error(errors.UNAUTHORIZED.message);
       res.status(errors.UNAUTHORIZED.code).json(errors.UNAUTHORIZED.message);
