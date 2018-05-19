@@ -4,6 +4,7 @@ import App from './App';
 
 jest.mock('redux-localstorage');
 jest.mock('redux');
+jest.mock('apollo-boost');
 
 it('renders', () => {
   const wrapper = shallow(<App />);
