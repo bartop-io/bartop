@@ -1,7 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`matches the snapshot 1`] = `
-<styled.div>
-  Oops! This page doesn't seem to exist 😓
-</styled.div>
+<PageWithHeader
+  showAuthButton={true}
+>
+  <styled.div>
+    Oops! This page doesn't seem to exist 😓
+  </styled.div>
+</PageWithHeader>
 `;

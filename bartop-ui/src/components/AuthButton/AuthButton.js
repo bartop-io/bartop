@@ -1,23 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
 
+import Button from '../Button/Button';
 import { actions } from '../../ducks/authentication/authentication';
 import strings from '../../strings';
 
-const Button = styled.button`
-  border: none;
-`;
-
-export const AuthButton = ({ loggedIn, login, logout }) =>
+export const AuthButton = ({ className, loggedIn, login, logout }) =>
   !loggedIn ? (
-    <Button onClick={login}>{strings.auth.login}</Button>
+    <Button className={className} onClick={login}>
+      {strings.auth.login}
+    </Button>
   ) : (
-    <Button onClick={logout}>{strings.auth.logout}</Button>
+    <Button className={className} onClick={logout}>
+      {strings.auth.logout}
+    </Button>
   );
 
 AuthButton.propTypes = {
+  className: PropTypes.string,
   loggedIn: PropTypes.bool.isRequired,
   login: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired
