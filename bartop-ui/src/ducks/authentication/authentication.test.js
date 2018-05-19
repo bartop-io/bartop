@@ -37,7 +37,7 @@ describe('authentication actions', () => {
 
     const action = actions.startLogin();
     expect(action).toEqual(expectedAction);
-    expect(history.replace).toBeCalledWith('/auth/login');
+    expect(history.push).toBeCalledWith('/auth/login');
   });
 
   it('should call login success with result of authentication', () => {

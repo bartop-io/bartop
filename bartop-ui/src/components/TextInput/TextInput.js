@@ -17,6 +17,7 @@ const Input = styled.input`
   display: block;
   font-size: large;
   padding: 5px;
+  font-family: inherit;
 `;
 
 const InputFeedback = styled.div`
