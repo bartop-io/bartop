@@ -89,7 +89,7 @@ describe('Resource - Catalog', function() {
         expect(payload.drinks).to.equal(null);
         expect(payload.errors).to.be.an('array');
         expect(payload.errors[0].message).to.equal(
-          'None of the given drinks are valid.'
+          'The following drink ids are invalid: bestfriend<insertname>'
         );
         done();
       });
@@ -159,7 +159,7 @@ describe('Resource - Catalog', function() {
     const query = `
       mutation {
         removeDrinksFromCatalog(
-          input: { userId: "${userId}", drinkIds: ["proxieseverywhere"] }
+          input: { userId: "${userId}", drinkIds: ["proxieseverywhere", "run"] }
         ) {
           drinks {
             name
@@ -181,7 +181,7 @@ describe('Resource - Catalog', function() {
         expect(payload.drinks).to.equal(null);
         expect(payload.errors).to.be.an('array');
         expect(payload.errors[0].message).to.equal(
-          'None of the given drinks are valid.'
+          'The following drink ids are invalid: proxieseverywhere, run'
         );
         done();
       });

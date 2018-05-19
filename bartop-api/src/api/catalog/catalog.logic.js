@@ -5,10 +5,13 @@ module.exports = r => {
     const { userId, drinkIds } = body;
     const drinks = await r.table('drinks').getAll(...drinkIds);
     const finalResult = {};
-    if (!drinks.length) {
+    if (drinks.length !== drinkIds.length) {
       finalResult.errors = [];
+      const invalidDrinkIds = listInvalidDrinks(drinkIds, drinks);
       finalResult.errors.push({
-        message: 'None of the given drinks are valid.'
+        message: `The following drink ids are invalid: ${invalidDrinkIds.join(
+          ', '
+        )}`
       });
     } else {
       const dbOpResult = await r
@@ -29,10 +32,13 @@ module.exports = r => {
     const { userId, drinkIds } = body;
     const drinks = await r.table('drinks').getAll(...drinkIds);
     const finalResult = {};
-    if (!drinks.length) {
+    if (drinks.length !== drinkIds.length) {
       finalResult.errors = [];
+      const invalidDrinkIds = listInvalidDrinks(drinkIds, drinks);
       finalResult.errors.push({
-        message: 'None of the given drinks are valid.'
+        message: `The following drink ids are invalid: ${invalidDrinkIds.join(
+          ', '
+        )}`
       });
     } else {
       const dbOpResult = await r
@@ -49,3 +55,8 @@ module.exports = r => {
 
   return { add, remove };
 };
+
+function listInvalidDrinks(givenDrinkIds, actualDrinks) {
+  const actualDrinkIds = actualDrinks.map(drink => drink.id);
+  return givenDrinkIds.filter(id => !actualDrinkIds.includes(id));
+}
