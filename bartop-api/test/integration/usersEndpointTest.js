@@ -186,6 +186,7 @@ describe('Resource - User', function() {
           expect(user.auth0Id).to.equal(users.catalogUser.auth0Id);
           expect(user.catalog).to.be.an('array');
           expect(user.catalog.length).to.equal(drinks.list.length);
+          expect(user.catalog[0].name).to.be.a('string');
           done();
         });
     });
