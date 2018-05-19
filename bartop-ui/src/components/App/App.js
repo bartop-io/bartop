@@ -17,6 +17,7 @@ import history from '../../singletons/history';
 import Landing from '../Landing/Landing';
 import Auth from '../Auth/Auth';
 import NotFound from '../NotFound/NotFound';
+import { colors } from '../styleUtils';
 
 // persist all of our auth & user state to local storage
 const localStorageEnhancer = persistState(['authentication', 'user'], {
@@ -57,7 +58,13 @@ export default class App extends React.Component {
         height: 100%;
         margin: 0;
         padding: 0;
-        font-family: sans-serif;
+        font-family: 'Raleway', sans-serif;
+        color: ${colors.darkest};
+        /* don't use default styling on links */
+        a {
+          color:inherit;
+          text-decoration: none;
+        }
       }
     `;
     return (
