@@ -1,6 +1,8 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { StaticRouter, Route } from 'react-router-dom';
+import configureMockStore from 'redux-mock-store';
+import { Provider } from 'react-redux';
 
 import { Auth } from './Auth';
 import LoginForm from './LoginForm/LoginForm';
@@ -8,6 +10,7 @@ import VerifyForm from './VerifyForm/VerifyForm';
 import Callback from './Callback/Callback';
 import NotFound from '../NotFound/NotFound';
 import Failure from './Failure/Failure';
+import { mockAuthStatuses } from '../../test-helpers/state-mocks';
 
 jest.mock('./Failure/Failure');
 
@@ -20,12 +23,23 @@ const requiredProps = {
   }
 };
 
+// mock the auth status for AuthButton
+const store = configureMockStore()({
+  authentication: {
+    status: mockAuthStatuses.default
+  }
+});
+
 const mountRouterAtLocation = location =>
   mount(
     <StaticRouter context={{}} location={location}>
       <Route
         path="/auth"
-        render={({ match }) => <Auth {...requiredProps} match={match} />}
+        render={({ match }) => (
+          <Provider store={store}>
+            <Auth {...requiredProps} match={match} />
+          </Provider>
+        )}
       />
     </StaticRouter>
   );

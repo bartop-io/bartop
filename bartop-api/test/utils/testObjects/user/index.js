@@ -18,7 +18,15 @@ const user3 = {
   catalog: []
 };
 
+const user4 = {
+  auth0Id: 'peteforpres@midearth.com|2461849122549183',
+  catalog: []
+};
+
 // testUser is for controller and grapql create user
 module.exports.testUser = user0;
+// postUser is a user object to test POSTing
 module.exports.postUser = user1;
 module.exports.list = [user2, user3];
+// catalogUser is for getting a user by id with a catalog
+module.exports.catalogUser = user4;

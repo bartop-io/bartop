@@ -1,3 +1,5 @@
+const throwError = require('./errorCreator');
+
 module.exports = (dbOpResult, id = '') => {
   let result = {};
   if (successfulOperation(dbOpResult)) {
@@ -8,10 +10,7 @@ module.exports = (dbOpResult, id = '') => {
   } else {
     if (dbOpResult.skipped) {
       // the id doesn't exist in the db
-      const newError = new Error();
-      newError.name = 'ResourceNotFoundError';
-      newError.message = `Resource with ID: ${id} does not exist.`;
-      throw newError;
+      throwError.notFound(id);
     } else if (dbOpResult.errors) {
       // unexpected post-write error in the db operation
       const newError = new Error(dbOpResult.first_error);

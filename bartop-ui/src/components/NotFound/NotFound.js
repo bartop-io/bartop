@@ -1,12 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import PageWithHeader from '../Layouts/PageWithHeader/PageWithHeader';
 import strings from '../../strings';
 
 const Wrapper = styled.div`
+  padding-top: 200px;
   text-align: center;
-  margin-top: 100px;
 `;
 
-const NotFound = () => <Wrapper>{strings.pageNotFound}</Wrapper>;
+const NotFound = () => (
+  <PageWithHeader>
+    <Wrapper>{strings.pageNotFound}</Wrapper>
+  </PageWithHeader>
+);
 export default NotFound;
