@@ -2,22 +2,6 @@ const expect = require('chai').expect;
 const processDbResult = require('../../src/utils/processDbResult');
 
 describe('Util - Process DB Result', function() {
-  it('returns with correct metadata if dbOp.unchanged > 0', function(done) {
-    const dbOpResult = {
-      changes: [],
-      deleted: 0,
-      errors: 0,
-      inserted: 0,
-      replaced: 0,
-      skipped: 0,
-      unchanged: 1
-    };
-    const result = processDbResult(dbOpResult);
-    expect(result).to.be.an('object');
-    expect(result.unchanged).to.equal(true);
-    done();
-  });
-
   it('throws a `not found` error if dbOp.skipped > 0', function(done) {
     const dbOpResult = {
       changes: [],
@@ -37,7 +21,7 @@ describe('Util - Process DB Result', function() {
     }
     expect(err).to.not.equal(null);
     expect(err.name).to.equal('ResourceNotFoundError');
-    expect(err.message).to.equal(`Resource with ID:${id} does not exist.`);
+    expect(err.message).to.equal(`Resource with ID: ${id} does not exist.`);
     done();
   });
 

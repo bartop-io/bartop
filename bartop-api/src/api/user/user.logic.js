@@ -5,6 +5,10 @@ const TABLE_NAME = 'users';
 module.exports = r => {
   // create a new user
   const create = async body => {
+    // assign users an empty catalog by default
+    if (!body.catalog) {
+      body.catalog = [];
+    }
     const dbOpResult = await r
       .table(TABLE_NAME)
       .insert(body, { returnChanges: true });

@@ -2,11 +2,13 @@ const throwError = require('./errorCreator');
 
 module.exports = (dbOpResult, id = '') => {
   let result = {};
-  if (!dbOpResult.changes.length) {
-    if (dbOpResult.unchanged) {
-      // the resource was already the exact same
-      result = { unchanged: true };
-    } else if (dbOpResult.skipped) {
+  if (successfulOperation(dbOpResult)) {
+    // if changes were requested, return them
+    if (dbOpResult.changes) {
+      result = dbOpResult.changes[0].new_val;
+    }
+  } else {
+    if (dbOpResult.skipped) {
       // the id doesn't exist in the db
       throwError.notFound(id);
     } else if (dbOpResult.errors) {
@@ -20,10 +22,17 @@ module.exports = (dbOpResult, id = '') => {
       newError.name = 'InternalDatabaseOperationError';
       throw newError;
     }
-  } else {
-    // if successfully updated, returned updated object
-    result = dbOpResult.changes[0].new_val;
   }
 
   return result;
 };
+
+function successfulOperation(obj) {
+  return (
+    obj.replaced ||
+    obj.inserted ||
+    obj.deleted ||
+    obj.unchanged ||
+    (obj.changes && obj.changes.length)
+  );
+}
