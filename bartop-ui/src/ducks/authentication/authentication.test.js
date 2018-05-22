@@ -18,7 +18,6 @@ import {
 // import & mock authentication's dependencies so we can spy on functions
 import jwtDecode from 'jwt-decode';
 import auth from '../../singletons/authentication';
-import history from '../../singletons/history';
 import * as utils from '../../utils/utils';
 
 jest.mock('jwt-decode');
