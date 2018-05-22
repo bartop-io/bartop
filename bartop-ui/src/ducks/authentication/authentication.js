@@ -173,14 +173,6 @@ export const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case types.START_LOGIN:
-      return {
-        ...state,
-        status: {
-          ...state.status,
-          loggingIn: true
-        }
-      };
     case types.LOGIN_SUCCESS:
       const { accessToken, expiresIn } = action;
       const expiresAt = willExpireAt(expiresIn);

@@ -21,7 +21,7 @@ import {
   SubmitButton
 } from '../StyledComponents';
 
-const LoginModal = ({ sendCode, showModal, prefillEmail }) => (
+export const LoginModal = ({ sendCode, showModal, prefillEmail }) => (
   <Modal>
     <Formik
       initialValues={{

@@ -4,6 +4,7 @@ import thunk from 'redux-thunk';
 import callApiMiddleware from '../../middleware/call-api';
 import reducer, { types, actions, initialState } from './authentication';
 import { types as userTypes } from '../user/user';
+import { types as modalTypes, MODAL_TYPES } from '../modals/modals';
 import {
   mockAuthResult,
   mockUserInfo,
@@ -30,16 +31,6 @@ describe('authentication actions', () => {
     jest.resetAllMocks();
   });
 
-  it('should call redirect to /auth/login when startLogin()', () => {
-    const expectedAction = {
-      type: types.START_LOGIN
-    };
-
-    const action = actions.startLogin();
-    expect(action).toEqual(expectedAction);
-    expect(history.push).toBeCalledWith('/auth/login');
-  });
-
   it('should call login success with result of authentication', () => {
     const expectedAction = {
       type: types.LOGIN_SUCCESS,
@@ -55,15 +46,25 @@ describe('authentication actions', () => {
     expect(action).toEqual(expectedAction);
   });
 
-  it('should fail login with an error and redirect to /auth/failure', () => {
-    const expectedAction = {
-      type: types.LOGIN_FAILURE,
-      error: mockError
-    };
+  it('should fail login with an error and show the LoginFailureModal', () => {
+    const store = configureMockStore([thunk, callApiMiddleware])();
 
-    const action = actions.loginFailure(mockError);
-    expect(action).toEqual(expectedAction);
-    expect(history.replace).toBeCalledWith('/auth/failure');
+    const expectedActions = [
+      {
+        type: types.LOGIN_FAILURE,
+        error: mockError
+      },
+      {
+        type: modalTypes.SHOW_MODAL,
+        modalType: MODAL_TYPES.LOGIN_FAILURE_MODAL,
+        modalProps: {
+          error: mockError
+        }
+      }
+    ];
+
+    store.dispatch(actions.loginFailure(mockError));
+    expect(store.getActions()).toEqual(expectedActions);
   });
 
   describe('can handle authentication', () => {
@@ -160,6 +161,11 @@ describe('authentication actions', () => {
         {
           type: types.LOGIN_FAILURE,
           error: mockError
+        },
+        {
+          type: modalTypes.SHOW_MODAL,
+          modalType: MODAL_TYPES.LOGIN_FAILURE_MODAL,
+          modalProps: { error: mockError }
         }
       ];
       store.dispatch(actions.handleAuthentication());
@@ -178,6 +184,11 @@ describe('authentication actions', () => {
         {
           type: types.LOGIN_FAILURE,
           error: mockError
+        },
+        {
+          type: modalTypes.SHOW_MODAL,
+          modalType: MODAL_TYPES.LOGIN_FAILURE_MODAL,
+          modalProps: { error: mockError }
         }
       ];
       store.dispatch(actions.handleAuthentication());
@@ -200,16 +211,6 @@ describe('authentication reducer', () => {
 
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toEqual(initialState);
-  });
-
-  it('should adjust status on startLogin()', () => {
-    const expectedState = {
-      ...initialState,
-      status: mockAuthStatuses.requesting
-    };
-    expect(reducer(undefined, { type: types.START_LOGIN })).toEqual(
-      expectedState
-    );
   });
 
   it('should update state on login success', () => {

@@ -1,14 +1,16 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import LoginForm from './LoginForm';
+import { LoginModal } from './LoginModal';
+import { noop } from '../../test-helpers/utils';
 
 const requiredProps = {
   history: {},
-  sendCode: jest.fn()
+  sendCode: noop,
+  showModal: noop
 };
 
 it('matches the snapshot', () => {
-  const wrapper = shallow(<LoginForm {...requiredProps} />);
+  const wrapper = shallow(<LoginModal {...requiredProps} />);
   expect(wrapper).toMatchSnapshot();
 });
