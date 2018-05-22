@@ -10,35 +10,92 @@ import { willExpireAt } from '../../utils/utils';
 import { actions as userActions } from '../user/user';
 import bartopApi from '../../singletons/bartop-api';
 import strings from '../../strings';
+import { CALL_API } from '../../middleware/call-api';
+import { actions as modalActions, MODAL_TYPES } from '../modals/modals';
 
 export const types = {
-  START_LOGIN: 'AUTHENTICATION/START_LOGIN',
   LOGIN_SUCCESS: 'AUTHENTICATION/LOGIN_SUCCESS',
   LOGIN_FAILURE: 'AUTHENTICATION/LOGIN_FAILURE',
+  SEND_CODE_REQUEST: 'AUTHENTICATION/SEND_CODE_REQUEST',
+  SEND_CODE_SUCCESS: 'AUTHENTICATION/SEND_CODE_SUCCESS',
+  SEND_CODE_FAILURE: 'AUTHENTICATION/SEND_CODE_FAILURE',
+  VERIFY_CODE_REQUEST: 'AUTHENTICATION/SEND_CODE_REQUEST',
+  VERIFY_CODE_SUCCESS: 'AUTHENTICATION/VERIFY_CODE_SUCCESS',
+  VERIFY_CODE_FAILURE: 'AUTHENTICATION/VERIFY_CODE_FAILURE',
   HANDLE_AUTHENTICATION: 'AUTHENTICATION/HANDLE_AUTHENTICATION',
   LOGOUT: 'AUTHENTICATION/LOGOUT'
 };
 
 export const actions = {
-  startLogin: () => {
-    history.push('/auth/login');
-    return {
-      type: types.START_LOGIN
-    };
-  },
   loginSuccess: (accessToken, expiresIn, userInfo) => ({
     type: types.LOGIN_SUCCESS,
     accessToken,
     expiresIn,
     userInfo
   }),
-  loginFailure: error => {
-    history.replace('/auth/failure');
-    return {
+  loginFailure: error => dispatch => {
+    dispatch({
       type: types.LOGIN_FAILURE,
       error: serializeError(error)
-    };
+    });
+    dispatch(
+      modalActions.showModal(MODAL_TYPES.LOGIN_FAILURE_MODAL, {
+        error: serializeError(error)
+      })
+    );
   },
+  sendCode: email => ({
+    [CALL_API]: {
+      types: [
+        types.SEND_CODE_REQUEST,
+        types.SEND_CODE_SUCCESS,
+        types.SEND_CODE_FAILURE
+      ],
+      call: () =>
+        // wrap Auth0 call in a promise so it can go through our call api middleware
+        new Promise((resolve, reject) => {
+          auth.passwordlessStart(
+            {
+              connection: 'email',
+              send: 'code',
+              email
+            },
+            (err, res) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(res);
+              }
+            }
+          );
+        })
+    }
+  }),
+  verifyCode: (email, verificationCode) => ({
+    [CALL_API]: [
+      types.VERIFY_CODE_REQUEST,
+      types.VERIFY_CODE_SUCCESS,
+      types.VERIFY_CODE_FAILURE
+    ],
+    call: () =>
+      // wrap Auth0 call in a promise so it can go through our call api middleware
+      new Promise((resolve, reject) => {
+        auth.passwordlessLogin(
+          {
+            connection: 'email',
+            email,
+            verificationCode
+          },
+          (err, res) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(res);
+            }
+          }
+        );
+      })
+  }),
   handleAuthentication: () =>
     // redux-thunk knows to handle action functions instead of normal action objects
     // this allows us to dispatch actions within actions, as well as access state

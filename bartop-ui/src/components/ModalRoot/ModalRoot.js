@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Modal from '../Modal/Modal';
-import { actions } from '../../ducks/modals/modals';
-
-export const MODAL_TYPES = {
-  DEFAULT_MODAL: 'DEFAULT_MODAL'
-};
+import LoginModal from '../LoginModal/LoginModal';
+import VerifyCodeModal from '../VerifyCodeModal/VerifyCodeModal';
+import LoginFailureModal from '../LoginFailureModal/LoginFailureModal';
+import { actions, MODAL_TYPES } from '../../ducks/modals/modals';
 
 export const MODAL_COMPONENTS = {
-  DEFAULT_MODAL: Modal
+  [MODAL_TYPES.DEFAULT_MODAL]: Modal,
+  [MODAL_TYPES.LOGIN_MODAL]: LoginModal,
+  [MODAL_TYPES.VERIFY_CODE_MODAL]: VerifyCodeModal,
+  [MODAL_TYPES.LOGIN_FAILURE_MODAL]: LoginFailureModal
 };
 
 export const ModalRoot = ({ modalType, modalProps, hideModal }) => {

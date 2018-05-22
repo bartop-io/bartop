@@ -1,5 +1,4 @@
-import reducer, { types, actions, initialState } from './modals';
-import { MODAL_TYPES } from '../../components/ModalRoot/ModalRoot';
+import reducer, { MODAL_TYPES, types, actions, initialState } from './modals';
 
 describe('modal actions', () => {
   it(`can show a modal`, () => {

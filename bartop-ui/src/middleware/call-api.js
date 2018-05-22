@@ -36,7 +36,7 @@ export default ({ dispatch }) => next => action => {
   // The request is dispatched immediately
   dispatch(actionWith({ type: requestType }));
 
-  call()
+  return call()
     .then(response => {
       dispatch(
         actionWith({
