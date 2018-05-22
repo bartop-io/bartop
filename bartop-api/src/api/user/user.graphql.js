@@ -9,7 +9,7 @@ type User {
   auth0Id: String
 
   # Catalog containing all drinks a user can make
-  catalog: [ID] # todo: change to [Drink] and write a resolver to handle it
+  catalog: [Drink]
 }
 
 # Return type of createUser
@@ -30,6 +30,9 @@ input CreateUserInput {
 type Query {
   # Returns a list of all users
   listUsers: [User]
+
+  # Returns a single User with the given ID
+  getUserById(id: String!): User
 }
 
 # The root Mutation for BarTop's GraphQL interface
