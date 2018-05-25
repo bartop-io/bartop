@@ -5,7 +5,6 @@ import { LoginModal } from './LoginModal';
 import { noop } from '../../test-helpers/utils';
 
 const requiredProps = {
-  history: {},
   sendCode: noop,
   showModal: noop
 };

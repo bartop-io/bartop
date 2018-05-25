@@ -32,8 +32,8 @@ const MissingCodePrompt = styled.p`
   }
 `;
 
-export const VerifyCodeModal = ({ email, verifyCode, showModal }) => (
-  <Modal>
+export const VerifyCodeModal = ({ email, verifyCode, showModal, ...rest }) => (
+  <Modal {...rest}>
     <Formik
       initialValues={{
         verificationCode: ''

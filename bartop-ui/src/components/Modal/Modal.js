@@ -14,13 +14,14 @@ const styles = {
   }
 };
 
-const Modal = ({ children }) => (
-  <ReactModal style={styles} isOpen>
+const Modal = ({ hideModal, children }) => (
+  <ReactModal style={styles} isOpen onRequestClose={hideModal}>
     {children}
   </ReactModal>
 );
 
 Modal.propTypes = {
+  hideModal: PropTypes.func.isRequired,
   children: PropTypes.node
 };
 
