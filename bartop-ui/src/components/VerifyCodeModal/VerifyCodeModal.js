@@ -51,6 +51,7 @@ export const VerifyCodeModal = ({ email, verifyCode, showModal }) => (
             pathname: '/callback'
           });
         } catch (err) {
+          console.error(err);
           setSubmitting(false);
           setFieldError(
             'verificationCode',
@@ -73,10 +74,8 @@ export const VerifyCodeModal = ({ email, verifyCode, showModal }) => (
             <Prompt>{`${strings.auth.verifyPrompt} ${email}`}</Prompt>
             {/* if they didn't receive the code, allow them to go back a step while maintaining the email we sent the code to */}
             <MissingCodePrompt
-              onClick={
-                () =>
-                  showModal(MODAL_TYPES.LOGIN_MODAL, { prefillEmail: email })
-                // history.replace({ pathname: '/auth/login', state: { email } })
+              onClick={() =>
+                showModal(MODAL_TYPES.LOGIN_MODAL, { prefillEmail: email })
               }
             >
               {strings.auth.missingCodePrompt}
@@ -112,7 +111,7 @@ VerifyCodeModal.propTypes = {
 
 const mapDispatchToProps = {
   showModal: modalActions.showModal,
-  verifyCode: authActions.sendCode
+  verifyCode: authActions.verifyCode
 };
 
 export default connect(undefined, mapDispatchToProps)(VerifyCodeModal);

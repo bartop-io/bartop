@@ -41,11 +41,9 @@ export const LoginModal = ({ sendCode, showModal, prefillEmail }) => (
         try {
           await sendCode(email);
           setSubmitting(false);
-          // advance to the verification step, passing email in the state so we can display where we sent the code
-          // history.replace({ pathname: '/auth/verify', state: { email } });
           showModal(MODAL_TYPES.VERIFY_CODE_MODAL, { email });
         } catch (err) {
-          console.log('caught bad jawn');
+          console.error(err);
           setSubmitting(false);
           setFieldError('email', strings.auth.sendCodeFailureMessage);
         }

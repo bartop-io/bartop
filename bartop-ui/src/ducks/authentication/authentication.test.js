@@ -12,8 +12,10 @@ import {
   mockDecodedIdTokenWithName,
   mockDecodedIdTokenWithoutName,
   mockAuthStatuses,
-  mockDecodedIdTokenFirstLogIn
+  mockDecodedIdTokenFirstLogIn,
+  mockEmail
 } from '../../test-helpers/state-mocks';
+import { CALL_API } from '../../middleware/call-api';
 
 // import & mock authentication's dependencies so we can spy on functions
 import jwtDecode from 'jwt-decode';
@@ -28,6 +30,28 @@ jest.mock('../../utils/utils');
 describe('authentication actions', () => {
   afterEach(() => {
     jest.resetAllMocks();
+  });
+
+  it('can send a code', () => {
+    const expectedTypes = [
+      types.SEND_CODE_REQUEST,
+      types.SEND_CODE_SUCCESS,
+      types.SEND_CODE_FAILURE
+    ];
+    const callApi = actions.sendCode(mockEmail)[CALL_API];
+    expect(callApi.types).toEqual(expectedTypes);
+    expect(typeof callApi.call).toEqual('function');
+  });
+
+  it('can verify a code', () => {
+    const expectedTypes = [
+      types.VERIFY_CODE_REQUEST,
+      types.VERIFY_CODE_SUCCESS,
+      types.VERIFY_CODE_FAILURE
+    ];
+    const callApi = actions.verifyCode(mockEmail, 'CODE')[CALL_API];
+    expect(callApi.types).toEqual(expectedTypes);
+    expect(typeof callApi.call).toEqual('function');
   });
 
   it('should call login success with result of authentication', () => {

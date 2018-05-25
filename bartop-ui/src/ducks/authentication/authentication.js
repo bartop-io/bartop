@@ -72,29 +72,31 @@ export const actions = {
     }
   }),
   verifyCode: (email, verificationCode) => ({
-    [CALL_API]: [
-      types.VERIFY_CODE_REQUEST,
-      types.VERIFY_CODE_SUCCESS,
-      types.VERIFY_CODE_FAILURE
-    ],
-    call: () =>
-      // wrap Auth0 call in a promise so it can go through our call api middleware
-      new Promise((resolve, reject) => {
-        auth.passwordlessLogin(
-          {
-            connection: 'email',
-            email,
-            verificationCode
-          },
-          (err, res) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(res);
+    [CALL_API]: {
+      types: [
+        types.VERIFY_CODE_REQUEST,
+        types.VERIFY_CODE_SUCCESS,
+        types.VERIFY_CODE_FAILURE
+      ],
+      call: () =>
+        // wrap Auth0 call in a promise so it can go through our call api middleware
+        new Promise((resolve, reject) => {
+          auth.passwordlessLogin(
+            {
+              connection: 'email',
+              email,
+              verificationCode
+            },
+            (err, res) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(res);
+              }
             }
-          }
-        );
-      })
+          );
+        })
+    }
   }),
   handleAuthentication: () =>
     // redux-thunk knows to handle action functions instead of normal action objects
