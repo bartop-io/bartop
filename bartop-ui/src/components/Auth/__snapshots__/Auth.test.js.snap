@@ -15,6 +15,7 @@ exports[`matches the snapshot 1`] = `
         "hash": "",
         "pathname": "/",
         "search": "",
+        "state": undefined,
       },
       "push": [Function],
       "replace": [Function],
