@@ -126,4 +126,7 @@ const mapDispatchToProps = {
   handleAuthentication: actions.handleAuthentication
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Auth);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Auth);
