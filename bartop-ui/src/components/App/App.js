@@ -60,9 +60,10 @@ export default class App extends React.Component {
         padding: 0;
         font-family: 'Raleway', sans-serif;
         color: ${colors.darkest};
+
         /* don't use default styling on links */
         a {
-          color:inherit;
+          color: inherit;
           text-decoration: none;
         }
       }

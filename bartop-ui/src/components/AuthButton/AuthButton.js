@@ -33,4 +33,7 @@ const mapDispatchToProps = {
   logout: actions.logout
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuthButton);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AuthButton);
