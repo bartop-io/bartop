@@ -4,4 +4,4 @@
   # publish this directory (relative to root)
   publish = "bartop-ui/build"
   # build command
-  command = "echo 'setting REACT_APP_URL to:' $URL; export REACT_APP_URL=$URL; npm run build"
+  command = "npm run build"
