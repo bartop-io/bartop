@@ -28,8 +28,8 @@ const seed = async () => {
   // add the default drink
   const existingDrinks = await r.table('drinks');
   if (!existingDrinks.length) {
-    const res = await r.table('drinks').insert(seeds.drinks.list);
-    if (res.inserted === seeds.drinks.list.length) {
+    const res = await r.table('drinks').insert(seeds.drinks.populate);
+    if (res.inserted === seeds.drinks.populate.length) {
       logger.info(`  > default drinks added to 'drinks' table.`);
     } else {
       throw new Error('Default drinks were not added to the database.');

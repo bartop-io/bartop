@@ -114,4 +114,7 @@ const mapDispatchToProps = {
   verifyCode: authActions.verifyCode
 };
 
-export default connect(undefined, mapDispatchToProps)(VerifyCodeModal);
+export default connect(
+  undefined,
+  mapDispatchToProps
+)(VerifyCodeModal);

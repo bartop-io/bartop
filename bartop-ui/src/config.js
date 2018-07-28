@@ -3,7 +3,6 @@ const requiredEnvVars = [
   'REACT_APP_AUTH0_CLIENT_ID',
   'REACT_APP_AUTH0_CLAIM_NAMESPACE',
   'REACT_APP_AUTH0_BARTOP_API_AUDIENCE',
-  'REACT_APP_URL',
   'REACT_APP_BARTOP_API_URL'
 ];
 
@@ -22,7 +21,9 @@ export default {
     claimNamespace: process.env.REACT_APP_AUTH0_CLAIM_NAMESPACE,
     apiAudience: process.env.REACT_APP_AUTH0_BARTOP_API_AUDIENCE
   },
-  url: process.env.REACT_APP_URL,
+  // dynamically determine the URL the app is running at (used for the auth callback)
+  url: `${window.location.protocol}//${window.location.hostname}${window
+    .location.port && `:${window.location.port}`}`,
   apis: {
     bartop: {
       url: process.env.REACT_APP_BARTOP_API_URL

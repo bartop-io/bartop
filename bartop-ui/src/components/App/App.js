@@ -51,21 +51,22 @@ const client = new ApolloClient({
 
 // styled components helper for adding styles to global dom elements like body
 injectGlobal`
-html,
-body,
-#root {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  font-family: 'Raleway', sans-serif;
-  color: ${colors.darkest};
-  /* don't use default styling on links */
-  a {
-    color:inherit;
-    text-decoration: none;
+  html,
+  body,
+  #root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Raleway', sans-serif;
+    color: ${colors.darkest};
+
+    /* don't use default styling on links */
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
   }
-}
 `;
 
 ReactModal.setAppElement('#root');

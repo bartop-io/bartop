@@ -38,4 +38,7 @@ const mapDispatchToProps = {
   hideModal: actions.hideModal
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalRoot);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ModalRoot);

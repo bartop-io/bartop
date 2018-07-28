@@ -94,4 +94,7 @@ const mapDispatchToProps = {
   sendCode: authActions.sendCode
 };
 
-export default connect(undefined, mapDispatchToProps)(LoginModal);
+export default connect(
+  undefined,
+  mapDispatchToProps
+)(LoginModal);

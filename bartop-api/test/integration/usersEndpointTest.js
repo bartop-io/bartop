@@ -41,7 +41,7 @@ describe('Resource - User', function() {
         .post('/api/v1/users')
         .set('Content-Type', 'application/json')
         .set('Authorization', `Bearer ${TOKEN}`)
-        .send({ auth0Id: users.postUser.auth0Id })
+        .send({ auth0Id: users.postUser.auth0Id, catalog: [] })
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
           expect(res.body).to.be.an('object');

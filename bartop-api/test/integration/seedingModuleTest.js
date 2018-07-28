@@ -21,7 +21,7 @@ describe('Seeding module - for dev only', function() {
     const tablesInDatabase = await r.tableList();
     const drinks = await r.table('drinks');
     expect(tablesInDatabase.length).to.equal(seeds.dbTables.length);
-    expect(drinks.length).to.equal(seeds.drinks.list.length);
+    expect(drinks.length).to.equal(seeds.drinks.populate.length);
     return;
   });
 });
