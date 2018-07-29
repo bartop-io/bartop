@@ -65,7 +65,7 @@ export const LoginModal = ({ sendCode, showModal, prefillEmail, ...rest }) => (
             <TextInput
               type="email"
               id="email"
-              placeholder={strings.auth.emailInputPlaceholder}
+              label={strings.auth.emailInputLabel}
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.email}

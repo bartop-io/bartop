@@ -4,10 +4,10 @@ export default {
     unknownDuringAuthentication: 'Something went wrong during authentication'
   },
   auth: {
-    invalidEmailAddress: 'Invalid email address 🧐',
+    invalidEmailAddress: 'Please enter a valid email address',
     sendCodeFailureMessage: 'Uh oh! Please try again 🙏',
     loginPrompt: 'Enter your email to sign in or sign up',
-    emailInputPlaceholder: 'bilbo@bartop.io',
+    emailInputLabel: 'Email Address',
     submitButtonText: 'SUBMIT',
     verifyCodeFailureMessage: `Uh oh! The code you entered doesn't match.`,
     verifyPrompt: 'An email with the code has been sent to',
