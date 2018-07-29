@@ -1,8 +1,7 @@
 [build]
-  # This is the directory to change to before starting a build.
+  # cd bartop-ui before starting the build
   base    = "bartop-ui"
-  # NOTE: This is where we will look for package.json/.nvmrc/etc, not root.
-  # This is the directory that you are publishing from (relative to root of your repo)
+  # publish this directory (relative to root)
   publish = "bartop-ui/build"
-  # This will be your default build command
+  # build command
   command = "npm run build"
