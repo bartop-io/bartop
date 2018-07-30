@@ -1,1 +1,5 @@
+# temp redirect bartop.io to our github pages site
+https://bartop.io/* https://bartop-io.github.io/bartop/ 301
+
+# all other requests use index.html for SPA client-side routing
 /*  /index.html  200
