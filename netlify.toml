@@ -1,0 +1,7 @@
+[build]
+  # cd bartop-ui before starting the build
+  base    = "bartop-ui"
+  # publish this directory (relative to root)
+  publish = "bartop-ui/build"
+  # build command
+  command = "npm run build"
