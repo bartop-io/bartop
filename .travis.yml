@@ -33,7 +33,7 @@ before_deploy:
 
 deploy:
   - provider: script
-    script: cd bartop-api && chmod +x deploy-dev.sh && deploy-dev.sh
+    script: cd bartop-api && ls && chmod +x ./deploy-dev.sh && ./deploy-dev.sh
     skip_cleanup: true
     on:
       branch: dev
