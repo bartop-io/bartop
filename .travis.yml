@@ -3,6 +3,17 @@ node_js:
 - '8'
 addons:
   rethinkdb: '2.3.6'
+services:
+  - docker
+env:
+  global:
+    - GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
+    - PROJECT_NAME_DEV=bartop-dev
+    - CLUSTER_NAME_DEV=bartop-dev
+    - CLOUDSDK_COMPUTE_ZONE=us-central1-a
+    - IMAGE_NAME=bartop-api-dev
+    - KUBE_DEPLOYMENT_NAME=bartop-dev
+    - KUBE_DEPLOYMENT_CONTAINER_NAME=bartop-dev
 script:
   - npm run lint
   - npm run test-all
@@ -11,7 +22,22 @@ cache:
   - node_modules
   - bartop-api/node_modules
   - bartop-ui/node_modules
+  - "$HOME/google-cloud-sdk/"
 after_success: cd bartop-api && npm run coverage && cd ../bartop-ui/ && npm run coverage
+before_deploy:
+  - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
+  - source /home/travis/google-cloud-sdk/path.bash.inc
+  - gcloud --quiet version
+  - gcloud --quiet components update
+  - gcloud --quiet components beta update
+  - gcloud --quiet components update kubectl
+
+deploy:
+  - provider: script
+    script: ./scripts/deploy-dev.sh
+    skip_cleanup: true
+    on:
+      branch: dev
 notifications:
   email: false
   slack:
