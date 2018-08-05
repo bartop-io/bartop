@@ -10,6 +10,7 @@ const logger = require('./src/utils/logger');
 */
 
 const environment = process.env.NODE_ENV || 'local';
+logger.info(environment);
 
 let dbName;
 switch (environment) {
