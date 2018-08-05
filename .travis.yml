@@ -12,8 +12,8 @@ env:
     - CLUSTER_NAME_DEV=bartop-dev
     - CLOUDSDK_COMPUTE_ZONE=us-central1-a
     - IMAGE_NAME=bartop-api-dev
-    - KUBE_DEPLOYMENT_NAME=bartop-dev
-    - KUBE_DEPLOYMENT_CONTAINER_NAME=bartop-dev
+    - KUBE_DEPLOYMENT_NAME=bartop-api-dev
+    - KUBE_DEPLOYMENT_CONTAINER_NAME=bartop-api-dev
 script:
   - npm run lint
   - npm run test-all
