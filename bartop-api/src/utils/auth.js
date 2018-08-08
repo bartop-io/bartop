@@ -12,8 +12,8 @@ const checkJwt = jwt({
     jwksUri: `https://bartop.auth0.com/.well-known/jwks.json`
   }),
 
-  // Don't require authorization in development
-  credentialsRequired: config.env !== 'development',
+  // Don't require authorization in local development
+  credentialsRequired: config.env !== 'local',
 
   // Validate the audience and the issuer.
   audience: config.auth.audience,

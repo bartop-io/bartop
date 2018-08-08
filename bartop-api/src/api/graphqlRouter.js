@@ -18,9 +18,9 @@ const schema = makeExecutableSchema({
   resolvers: merge({}, drinkResolvers, userResolvers, catalogResolvers)
 });
 
-// export the graphql route and enable graphiql for development
+// export the graphql route and enable graphiql for local development
 module.exports = graphqlHTTP({
   schema: schema,
-  graphiql: config.env === 'development',
+  graphiql: config.env === 'local',
   pretty: true
 });

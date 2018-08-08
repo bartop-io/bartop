@@ -5,8 +5,8 @@ const logger = require('./utils/logger');
 
 const port = config.api.port;
 
-// ##### for development only #####
-if (config.env === 'development') {
+// ##### for local development only #####
+if (config.env === 'local') {
   seed().catch(err => {
     logger.error(err);
     logger.info(
