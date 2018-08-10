@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "@storybook/addon-centered": "^3.4.8",
+    "@storybook/addon-viewport": "^3.4.10",
     "@storybook/react": "^3.4.8",
     "codecov": "^3.0.4",
     "enzyme": "^3.1.1",

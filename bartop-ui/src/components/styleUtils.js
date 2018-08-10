@@ -32,3 +32,13 @@ export const shadows = {
 export const fontSizes = {
   largest: '54px'
 };
+
+export const screenSizes = {
+  mobileSmall: '320px',
+  mobileMedium: '375px',
+  mobileLarge: '425px',
+  tablet: '768px',
+  laptop: '1024px',
+  laptopLarge: '1440px',
+  fourK: '2560px'
+};
