@@ -51,9 +51,10 @@ const TextInput = ({
   value,
   onChange,
   onBlur,
+  className,
   ...props
 }) => (
-  <InputContainer>
+  <InputContainer className={className}>
     <Label htmlFor={id} error={error} float={value.trim().length > 0}>
       {label}
     </Label>
@@ -81,7 +82,8 @@ TextInput.propTypes = {
   error: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  onBlur: PropTypes.func
+  onBlur: PropTypes.func,
+  className: PropTypes.string
 };
 
 export default TextInput;

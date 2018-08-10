@@ -8,12 +8,13 @@ export const animations = {
 };
 
 export const colors = {
-  lightest: '#FFF',
+  white: '#FFF',
   light: '#F4F4F4',
   medium: '#D8D2D2',
   dark: '#ADADAD',
   darkest: '#262626',
-  overlay: 'rgba(0, 0, 0, 0.15)'
+  overlay: 'rgba(0, 0, 0, 0.15)',
+  lightBlueAccent: '#87DBF7'
 };
 
 export const spacing = {

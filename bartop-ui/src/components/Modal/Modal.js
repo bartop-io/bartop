@@ -56,7 +56,7 @@ Modal.propTypes = {
 };
 
 export default styled(Modal)`
-  background-color: ${colors.light};
+  background-color: white;
   box-shadow: ${shadows.overlay};
   position: relative;
   outline: none;
@@ -64,11 +64,6 @@ export default styled(Modal)`
   max-width: 100%;
   max-height: 100%;
   padding: 10px;
-
-  @media (min-width: ${screenSizes.mobileMedium}) {
-    min-width: 380px;
-    max-width: 90%;
-  }
 
   @media (min-width: ${screenSizes.tablet}) {
     max-width: 80%;

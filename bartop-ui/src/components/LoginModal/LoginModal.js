@@ -2,24 +2,108 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
+import { Form } from 'formik';
 
 import Modal from '../Modal/Modal';
 import TextInput from '../TextInput/TextInput';
+import Button from '../Button/Button';
+
 import { actions as authActions } from '../../ducks/authentication/authentication';
+
 import {
   actions as modalActions,
   MODAL_TYPES
 } from '../../ducks/modals/modals';
-import strings from '../../strings';
 
-import {
-  StyledForm,
-  Prompt,
-  PromptContainer,
-  InputContainer,
-  SubmitContainer,
-  SubmitButton
-} from '../StyledComponents';
+import LoginIcon from '../../images/login-icon.svg';
+import strings from '../../strings';
+import { screenSizes, colors } from '../styleUtils';
+
+const LoginModalContainer = styled.div`
+  width: 100%;
+  max-width: 750px;
+  height: 100vh;
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+
+  @media (min-width: ${screenSizes.mobileLarge}) {
+    min-width: ${screenSizes.mobileLarge};
+  }
+
+  @media (min-width: ${screenSizes.tablet}) {
+    min-width: 650px;
+  }
+
+  @media (min-width: ${screenSizes.laptop}) {
+    flex-direction: row;
+    width: 60vw;
+  }
+`;
+
+const LoginImageContainer = styled.div`
+  box-sizing: content-box;
+  background-color: ${colors.lightBlueAccent};
+  width: 100%;
+  height: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* bleed image to edge of modal */
+  margin: -10px -10px 0;
+  padding: 10px;
+
+  @media (min-width: ${screenSizes.laptop}) {
+    height: 100%;
+    width: 40%;
+    margin-right: 0;
+  }
+`;
+
+const LoginImage = styled.img`
+  width: 100%;
+  height: 100%;
+
+  @media (min-width: ${screenSizes.laptop}) {
+    height: 50%;
+  }
+`;
+
+const LoginForm = styled(Form)`
+  height: 60%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+
+  @media (min-width: ${screenSizes.laptop}) {
+    height: 100%;
+  }
+`;
+
+const LoginPrompt = styled.p`
+  font-size: 20px;
+  text-align: center;
+`;
+
+const EmailInput = styled(TextInput)`
+  width: 90%;
+`;
+
+const LoginButton = Button.extend`
+  width: 90%;
+  color: ${colors.white};
+  background-color: ${colors.lightBlueAccent};
+
+  &:disabled {
+    background-color: ${colors.light};
+    color: ${colors.medium};
+  }
+`;
 
 export const LoginModal = ({ sendCode, showModal, prefillEmail, ...rest }) => (
   <Modal {...rest}>
@@ -54,31 +138,57 @@ export const LoginModal = ({ sendCode, showModal, prefillEmail, ...rest }) => (
         touched,
         handleChange,
         handleBlur,
-        handleSubmit,
-        isSubmitting
-      }) => (
-        <StyledForm>
-          <PromptContainer>
-            <Prompt>{strings.auth.loginPrompt}</Prompt>
-          </PromptContainer>
-          <InputContainer>
-            <TextInput
-              type="email"
-              id="email"
-              label={strings.auth.emailInputLabel}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.email}
-              error={touched.email && errors.email}
-            />
-          </InputContainer>
-          <SubmitContainer>
-            <SubmitButton type="submit" disabled={isSubmitting}>
-              {strings.auth.submitButtonText}
-            </SubmitButton>
-          </SubmitContainer>
-        </StyledForm>
-      )}
+        isSubmitting,
+        isValid
+      }) => {
+        const email = values.email.trim();
+        const emailInputError =
+          touched.email && email.length > 0 && errors.email;
+        return (
+          <LoginModalContainer>
+            <LoginImageContainer>
+              <LoginImage src={LoginIcon} />
+            </LoginImageContainer>
+            <LoginForm>
+              <LoginPrompt>{strings.auth.loginPrompt}</LoginPrompt>
+              <EmailInput
+                type="email"
+                id="email"
+                label={strings.auth.emailInputLabel}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.email}
+                error={emailInputError}
+              />
+              <LoginButton type="submit" disabled={isSubmitting || !isValid}>
+                {strings.auth.loginButton}
+              </LoginButton>
+            </LoginForm>
+          </LoginModalContainer>
+        );
+
+        // <StyledForm>
+        //   <PromptContainer>
+        //     <Prompt>{strings.auth.loginPrompt}</Prompt>
+        //   </PromptContainer>
+        //   <InputContainer>
+        //     <TextInput
+        //       type="email"
+        //       id="email"
+        //       label={strings.auth.emailInputLabel}
+        //       onChange={handleChange}
+        //       onBlur={handleBlur}
+        //       value={values.email}
+        //       error={touched.email && errors.email}
+        //     />
+        //   </InputContainer>
+        //   <SubmitContainer>
+        //     <SubmitButton type="submit" disabled={isSubmitting}>
+        //       {strings.auth.submitButtonText}
+        //     </SubmitButton>
+        //   </SubmitContainer>
+        // </StyledForm>
+      }}
     />
   </Modal>
 );

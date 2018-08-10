@@ -70,6 +70,12 @@ injectGlobal`
     * {
       box-sizing: border-box;
     }
+
+    input,
+    textarea {
+      appearance: none;
+      border-radius: 0;
+    }
   }
 `;
 
