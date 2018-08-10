@@ -8,6 +8,7 @@ Web framework for hobbyist and freelance bartenders 🍸
   * [Development](#ui-development)
     * [Developing with Storybook](#ui-development-with-storybook)
     * [Integrated Development](#integrated-ui-development)
+  * [Deployment](#ui-deployment)
 * [API](#api)
   * [Development](#api-development)
 
@@ -25,6 +26,16 @@ The UI has a [Storybook](https://storybook.js.org/) for quickly designing & deve
 In order to develop for the UI with auth & data, you need to establish an [Auth0](https://auth0.com/) tenant and run the [API](#api-development). Read below for instructions to setup this full system. 
 #### Install the dependencies
 `npm install`
+
+### UI Deployment
+
+The UI is continuously deployed at the following URLs:
+
+https://dev.bartop.io -> pushes to `dev` deploy here
+
+https://bartop.io -> pushes to `prod` deploy here (but currently redirecting to this repo)
+
+When a PR is made against these branches, [Netlify](netlify.com) will [deploy a preview](https://www.netlify.com/blog/2016/07/20/introducing-deploy-previews-in-netlify/) that can be used for testing & validating the bug fix or feature.
 
 #### Environment Variables
 The UI is configured using a `.env` file. Use the `.env.example` file as a template to create a local version.
