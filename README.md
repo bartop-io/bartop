@@ -1,6 +1,6 @@
 # BarTop
-[![Build Status](https://travis-ci.org/dpopp07/bartop.svg?branch=dev)](https://travis-ci.org/dpopp07/bartop) 
-[![Coverage](https://codecov.io/gh/dpopp07/bartop/branch/dev/graph/badge.svg)](https://codecov.io/gh/dpopp07/bartop)  
+[![Build Status](https://api.travis-ci.org/bartop-io/bartop.svg?branch=dev)](https://travis-ci.org/bartop-io/bartop) 
+[![Coverage](https://codecov.io/gh/bartop-io/bartop/branch/dev/graph/badge.svg)](https://codecov.io/gh/bartop-io/bartop)  
 Web framework for hobbyist and freelance bartenders 🍸
 
 ## Table of Contents
