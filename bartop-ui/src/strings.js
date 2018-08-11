@@ -6,7 +6,7 @@ export default {
   auth: {
     invalidEmailAddress: 'Please enter a valid email address',
     sendCodeFailureMessage: 'Uh oh! Please try again 🙏',
-    loginPrompt: "Howdy! Let's get you a drink.",
+    loginPrompt: "Let's get you a drink.",
     loginButton: 'LOG IN',
     emailInputLabel: 'Email Address',
     submitButtonText: 'SUBMIT',

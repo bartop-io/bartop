@@ -4,6 +4,7 @@ import { Formik } from 'formik';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Form } from 'formik';
+import { darken } from 'polished';
 
 import Modal from '../Modal/Modal';
 import TextInput from '../TextInput/TextInput';
@@ -44,9 +45,7 @@ const LoginModalContainer = styled.div`
 `;
 
 const LoginImageContainer = styled.div`
-  box-sizing: content-box;
   background-color: ${colors.lightBlueAccent};
-  width: 100%;
   height: 40%;
   display: flex;
   justify-content: center;
@@ -57,7 +56,7 @@ const LoginImageContainer = styled.div`
   padding: 10px;
 
   @media (min-width: ${screenSizes.laptop}) {
-    height: 100%;
+    height: calc(100% + 20px);
     width: 40%;
     margin-right: 0;
   }
@@ -99,9 +98,18 @@ const LoginButton = Button.extend`
   color: ${colors.white};
   background-color: ${colors.lightBlueAccent};
 
+  &:hover {
+    background-color: ${darken(0.15, colors.lightBlueAccent)};
+  }
+
+  &:active {
+    background-color: ${darken(0.3, colors.lightBlueAccent)};
+  }
+
   &:disabled {
     background-color: ${colors.light};
     color: ${colors.medium};
+    cursor: not-allowed;
   }
 `;
 
@@ -127,7 +135,6 @@ export const LoginModal = ({ sendCode, showModal, prefillEmail, ...rest }) => (
           setSubmitting(false);
           showModal(MODAL_TYPES.VERIFY_CODE_MODAL, { email });
         } catch (err) {
-          console.error(err);
           setSubmitting(false);
           setFieldError('email', strings.auth.sendCodeFailureMessage);
         }
@@ -166,28 +173,6 @@ export const LoginModal = ({ sendCode, showModal, prefillEmail, ...rest }) => (
             </LoginForm>
           </LoginModalContainer>
         );
-
-        // <StyledForm>
-        //   <PromptContainer>
-        //     <Prompt>{strings.auth.loginPrompt}</Prompt>
-        //   </PromptContainer>
-        //   <InputContainer>
-        //     <TextInput
-        //       type="email"
-        //       id="email"
-        //       label={strings.auth.emailInputLabel}
-        //       onChange={handleChange}
-        //       onBlur={handleBlur}
-        //       value={values.email}
-        //       error={touched.email && errors.email}
-        //     />
-        //   </InputContainer>
-        //   <SubmitContainer>
-        //     <SubmitButton type="submit" disabled={isSubmitting}>
-        //       {strings.auth.submitButtonText}
-        //     </SubmitButton>
-        //   </SubmitContainer>
-        // </StyledForm>
       }}
     />
   </Modal>

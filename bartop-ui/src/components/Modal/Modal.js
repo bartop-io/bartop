@@ -66,7 +66,7 @@ export default styled(Modal)`
   padding: 10px;
 
   @media (min-width: ${screenSizes.tablet}) {
-    max-width: 80%;
+    max-width: 90%;
   }
 
   @media (min-width: ${screenSizes.laptop}) {

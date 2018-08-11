@@ -62,7 +62,7 @@ export const actions = {
             },
             (err, res) => {
               if (err) {
-                reject(err);
+                reject(err.original.message);
               } else {
                 resolve(res);
               }
