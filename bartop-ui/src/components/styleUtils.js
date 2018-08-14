@@ -1,4 +1,4 @@
-import { keyframes } from 'styled-components';
+import { keyframes, css } from 'styled-components';
 
 export const animations = {
   spin: keyframes`
@@ -43,3 +43,32 @@ export const screenSizes = {
   laptopLarge: '1440px',
   fourK: '2560px'
 };
+
+export const globals = css`
+  html,
+  body,
+  #root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Raleway', sans-serif;
+    color: ${colors.darkest};
+
+    /* don't use default styling on links */
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    input,
+    textarea {
+      appearance: none;
+      border-radius: 0;
+    }
+  }
+`;

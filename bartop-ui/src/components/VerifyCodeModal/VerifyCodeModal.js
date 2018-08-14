@@ -3,9 +3,17 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Formik } from 'formik';
 import { connect } from 'react-redux';
+import { complement } from 'polished';
 
 import Modal from '../Modal/Modal';
 import TextInput from '../TextInput/TextInput';
+import {
+  ModalContainer,
+  ImageContainer,
+  Image,
+  Form
+} from '../Modal/ModalComponents';
+
 import strings from '../../strings';
 import { actions as authActions } from '../../ducks/authentication/authentication';
 import {
@@ -13,23 +21,28 @@ import {
   MODAL_TYPES
 } from '../../ducks/modals/modals';
 import history from '../../singletons/history';
+import VerifyCodeIcon from '../../images/verify-code-icon.svg';
+import { colors } from '../styleUtils';
 
-import {
-  StyledForm,
-  PromptContainer,
-  Prompt,
-  InputContainer,
-  SubmitContainer,
-  SubmitButton
-} from '../StyledComponents';
+const VerifyImageContainer = ImageContainer.extend`
+  background-color: ${complement(colors.lightBlueAccent)};
+`;
+
+const VerifyCodePrompt = styled.p`
+  font-size: 20px;
+  text-align: center;
+`;
 
 const MissingCodePrompt = styled.p`
-  font-size: small;
-  font-style: italic;
+  font-size: 14px;
 
   &:hover {
     cursor: pointer;
   }
+`;
+
+const CodeInput = styled(TextInput)`
+  width: 90%;
 `;
 
 export const VerifyCodeModal = ({ email, verifyCode, showModal, ...rest }) => (
@@ -65,13 +78,30 @@ export const VerifyCodeModal = ({ email, verifyCode, showModal, ...rest }) => (
         touched,
         handleChange,
         handleBlur,
-        handleSubmit,
         isSubmitting,
-        isValid
+        submitForm
       }) => (
-        <StyledForm autoComplete="off">
-          <PromptContainer>
-            <Prompt>{`${strings.auth.verifyPrompt} ${email}`}</Prompt>
+        <ModalContainer>
+          <VerifyImageContainer>
+            <Image src={VerifyCodeIcon} />
+          </VerifyImageContainer>
+          <Form autoComplete="off">
+            <VerifyCodePrompt>{strings.auth.verifyPrompt}</VerifyCodePrompt>
+            <CodeInput
+              type="text"
+              id="verificationCode"
+              label={strings.auth.codeInputPlaceholder}
+              onChange={e => {
+                handleChange(e);
+                if (e.target.value.length === 6) {
+                  submitForm();
+                }
+              }}
+              onBlur={handleBlur}
+              value={values.verificationCode}
+              error={touched.verificationCode && errors.verificationCode}
+              disabled={isSubmitting}
+            />
             {/* if they didn't receive the code, allow them to go back a step while maintaining the email we sent the code to */}
             <MissingCodePrompt
               onClick={() =>
@@ -80,24 +110,8 @@ export const VerifyCodeModal = ({ email, verifyCode, showModal, ...rest }) => (
             >
               {strings.auth.missingCodePrompt}
             </MissingCodePrompt>
-          </PromptContainer>
-          <InputContainer>
-            <TextInput
-              type="text"
-              id="verificationCode"
-              placeholder={strings.auth.codeInputPlaceholder}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.verificationCode}
-              error={touched.verificationCode && errors.verificationCode}
-            />
-          </InputContainer>
-          <SubmitContainer>
-            <SubmitButton type="submit" disabled={isSubmitting || !isValid}>
-              {strings.auth.submitButtonText}
-            </SubmitButton>
-          </SubmitContainer>
-        </StyledForm>
+          </Form>
+        </ModalContainer>
       )}
     />
   </Modal>

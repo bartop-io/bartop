@@ -3,12 +3,17 @@ import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { Form } from 'formik';
 import { darken } from 'polished';
 
 import Modal from '../Modal/Modal';
 import TextInput from '../TextInput/TextInput';
 import Button from '../Button/Button';
+import {
+  ModalContainer,
+  ImageContainer,
+  Image,
+  Form
+} from '../Modal/ModalComponents';
 
 import { actions as authActions } from '../../ducks/authentication/authentication';
 
@@ -19,69 +24,10 @@ import {
 
 import LoginIcon from '../../images/login-icon.svg';
 import strings from '../../strings';
-import { screenSizes, colors } from '../styleUtils';
+import { colors } from '../styleUtils';
 
-const LoginModalContainer = styled.div`
-  width: 100%;
-  max-width: 750px;
-  height: 100vh;
-  max-height: 600px;
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-
-  @media (min-width: ${screenSizes.mobileLarge}) {
-    min-width: ${screenSizes.mobileLarge};
-  }
-
-  @media (min-width: ${screenSizes.tablet}) {
-    min-width: 650px;
-  }
-
-  @media (min-width: ${screenSizes.laptop}) {
-    flex-direction: row;
-    width: 60vw;
-  }
-`;
-
-const LoginImageContainer = styled.div`
+const LoginImageContainer = ImageContainer.extend`
   background-color: ${colors.lightBlueAccent};
-  height: 40%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  /* bleed image to edge of modal */
-  margin: -10px -10px 0;
-  padding: 10px;
-
-  @media (min-width: ${screenSizes.laptop}) {
-    height: calc(100% + 20px);
-    width: 40%;
-    margin-right: 0;
-  }
-`;
-
-const LoginImage = styled.img`
-  width: 100%;
-  height: 100%;
-
-  @media (min-width: ${screenSizes.laptop}) {
-    height: 50%;
-  }
-`;
-
-const LoginForm = styled(Form)`
-  height: 60%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-
-  @media (min-width: ${screenSizes.laptop}) {
-    height: 100%;
-  }
 `;
 
 const LoginPrompt = styled.p`
@@ -152,11 +98,11 @@ export const LoginModal = ({ sendCode, showModal, prefillEmail, ...rest }) => (
         const emailInputError =
           touched.email && email.length > 0 && errors.email;
         return (
-          <LoginModalContainer>
+          <ModalContainer>
             <LoginImageContainer>
-              <LoginImage src={LoginIcon} />
+              <Image src={LoginIcon} />
             </LoginImageContainer>
-            <LoginForm>
+            <Form>
               <LoginPrompt>{strings.auth.loginPrompt}</LoginPrompt>
               <EmailInput
                 type="email"
@@ -170,8 +116,8 @@ export const LoginModal = ({ sendCode, showModal, prefillEmail, ...rest }) => (
               <LoginButton type="submit" disabled={isSubmitting || !isValid}>
                 {strings.auth.loginButton}
               </LoginButton>
-            </LoginForm>
-          </LoginModalContainer>
+            </Form>
+          </ModalContainer>
         );
       }}
     />

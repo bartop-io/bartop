@@ -11,9 +11,9 @@ export default {
     emailInputLabel: 'Email Address',
     submitButtonText: 'SUBMIT',
     verifyCodeFailureMessage: `Uh oh! The code you entered doesn't match.`,
-    verifyPrompt: 'An email with the code has been sent to',
+    verifyPrompt: 'So close! Enter your code below.',
     codeInputPlaceholder: 'Your code',
-    missingCodePrompt: `Didn't receive the code?`,
+    missingCodePrompt: `Never received a code?`,
     login: 'Login',
     logout: 'Logout',
     failure: 'Authentication failed.'

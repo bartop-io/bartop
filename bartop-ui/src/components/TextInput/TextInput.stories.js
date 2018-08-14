@@ -24,7 +24,7 @@ const ControlledTextInput = props => (
 );
 
 storiesOf('TextInput', module)
-  .add('with label', () => <ControlledTextInput {...TextInputProps} />)
+  .add('default', () => <ControlledTextInput {...TextInputProps} />)
   .add('with error', () => (
     <ControlledTextInput {...TextInputProps} error="Error message goes here" />
   ));
