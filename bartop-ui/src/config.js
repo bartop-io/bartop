@@ -9,9 +9,13 @@ const requiredEnvVars = [
 const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
 
 if (missingEnvVars.length > 0) {
-  throw new Error(
-    `Missing necessary environment variables: ${missingEnvVars.join(', ')}`
-  );
+  const message = `Missing necessary environment variables: ${missingEnvVars.join(
+    ', '
+  )}`;
+  if (process.env.NODE_ENV === 'PRODUCTION') {
+    throw new Error(message);
+  }
+  console.warn(message);
 }
 
 export default {
