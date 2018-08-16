@@ -65,6 +65,7 @@ export const LoginModal = ({ sendCode, showModal, prefillEmail, ...rest }) => (
       initialValues={{
         email: prefillEmail || ''
       }}
+      isInitialValid={prefillEmail}
       validate={({ email }) => {
         const errors = {};
         if (
