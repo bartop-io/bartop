@@ -7,7 +7,7 @@ import { colors } from '../styleUtils';
 const InputContainer = styled.div`
   min-width: 300px;
   position: relative;
-  height: 72px;
+  height: 76px;
 `;
 
 const Label = styled.label`
@@ -15,7 +15,7 @@ const Label = styled.label`
   transition: all 0.25s ease;
   transition-property: font-size top;
   font-size: ${props => (props.float ? '12px' : '20px')};
-  top: ${props => (props.float ? '0' : '20px')};
+  top: ${props => (props.float ? '0' : '22px')};
   color: ${props => (props.float ? (props.error ? 'red' : 'black') : 'grey')};
 `;
 
