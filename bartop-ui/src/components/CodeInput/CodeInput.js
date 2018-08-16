@@ -51,43 +51,57 @@ const InputFeedback = styled.div`
 // the styles are based on 6 digit codes - if this length changes, the letter-spacing & digit underlines need to change as well
 const CODE_LENGTH = 6;
 
-const CodeInput = ({
-  id,
-  error,
-  value,
-  onChange,
-  onBlur,
-  className,
-  ...props
-}) => (
-  <InputContainer className={className}>
-    <Input
-      id={id}
-      type="number"
-      value={value}
-      onChange={e => {
-        onChange(e);
-        // when we hit the length, we auto-submit
-        // blur focus and set code value to placeholder to show in case it was incorrect
-        if (e.target.value.length === CODE_LENGTH) {
-          e.target.blur();
-          e.target.placeholder = e.target.value;
-        }
-      }}
-      onBlur={onBlur}
-      error={error}
-      maxLength={CODE_LENGTH}
-      autoComplete="off"
-      {...props}
-    />
-    <DigitUnderlineContainer>
-      {[...Array(CODE_LENGTH)].map((e, i) => (
-        <DigitUnderline key={i} error={error} />
-      ))}
-    </DigitUnderlineContainer>
-    <InputFeedback>{error}</InputFeedback>
-  </InputContainer>
-);
+export class CodeInput extends React.Component {
+  componentDidUpdate(prevProps) {
+    const { value, submit } = this.props;
+    // if passed a submit function, auto submit when the user enters the full length code
+    // TODO - <Formik> doesn't update values until *after* onChange, so calling submitForm() in VerifyCodeModal will miss the 6th digit
+    // but, it feels dirty being in here, so worth exploring a cleaner option at some point
+    if (prevProps.value !== value && submit && value.length === CODE_LENGTH) {
+      submit();
+    }
+  }
+  render() {
+    const {
+      id,
+      error,
+      value,
+      onChange,
+      onBlur,
+      className,
+      ...props
+    } = this.props;
+    return (
+      <InputContainer className={className}>
+        <Input
+          id={id}
+          type="number"
+          value={value}
+          onChange={e => {
+            onChange(e);
+            // when we hit the length, we auto-submit
+            // blur focus and set code value to placeholder to show in case it was incorrect
+            if (e.target.value.length === CODE_LENGTH) {
+              e.target.blur();
+              e.target.placeholder = e.target.value;
+            }
+          }}
+          onBlur={onBlur}
+          error={error}
+          maxLength={CODE_LENGTH}
+          autoComplete="off"
+          {...props}
+        />
+        <DigitUnderlineContainer>
+          {[...Array(CODE_LENGTH)].map((e, i) => (
+            <DigitUnderline key={i} error={error} />
+          ))}
+        </DigitUnderlineContainer>
+        <InputFeedback>{error}</InputFeedback>
+      </InputContainer>
+    );
+  }
+}
 
 CodeInput.defaultProps = {
   value: ''
@@ -99,7 +113,8 @@ CodeInput.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   onBlur: PropTypes.func,
-  className: PropTypes.string
+  className: PropTypes.string,
+  submit: PropTypes.func
 };
 
 export default CodeInput;

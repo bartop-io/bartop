@@ -12,7 +12,6 @@ exports[`matches the snapshot 1`] = `
     isInitialValid={false}
     onSubmit={[Function]}
     render={[Function]}
-    validate={[Function]}
     validateOnBlur={true}
     validateOnChange={true}
   />

@@ -96,7 +96,8 @@ export const actions = {
               }
             }
           );
-        })
+        }),
+      propagateFailure: true
     }
   }),
   handleAuthentication: () =>

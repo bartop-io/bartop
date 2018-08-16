@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { complement } from 'polished';
 
 import Modal from '../Modal/Modal';
-import TextInput from '../TextInput/TextInput';
+import CodeInput from '../CodeInput/CodeInput';
 import {
   ModalContainer,
   ImageContainer,
@@ -38,11 +38,8 @@ const MissingCodePrompt = styled.p`
 
   &:hover {
     cursor: pointer;
+    text-decoration: underline;
   }
-`;
-
-const CodeInput = styled(TextInput)`
-  width: 90%;
 `;
 
 export const VerifyCodeModal = ({ email, verifyCode, showModal, ...rest }) => (
@@ -51,25 +48,28 @@ export const VerifyCodeModal = ({ email, verifyCode, showModal, ...rest }) => (
       initialValues={{
         verificationCode: ''
       }}
-      // empty validator to clear errors set from onSubmit
-      validate={({ verificationCode }) => ({})}
       onSubmit={async (
         { verificationCode },
-        { setSubmitting, setFieldError }
+        { setSubmitting, setFieldError, setFieldValue }
       ) => {
+        console.log('gonna subnmit', verificationCode);
         try {
+          setFieldError('verificationCode', null);
           await verifyCode(email, verificationCode);
           setSubmitting(false);
-          history.replace({
+          history.push({
             pathname: '/callback'
           });
         } catch (err) {
           console.error(err);
+          const message =
+            err.code === 'access_denied'
+              ? strings.auth.verifyCodeNoMatch
+              : strings.auth.verifyCodeFailureFallback;
           setSubmitting(false);
-          setFieldError(
-            'verificationCode',
-            strings.auth.verifyCodeFailureMessage
-          );
+          setFieldError('verificationCode', message);
+          // clear value on error, the previously entered code will be shown as the placeholder
+          setFieldValue('verificationCode', '', false);
         }
       }}
       render={({
@@ -79,28 +79,23 @@ export const VerifyCodeModal = ({ email, verifyCode, showModal, ...rest }) => (
         handleChange,
         handleBlur,
         isSubmitting,
+        setFieldValue,
         submitForm
       }) => (
         <ModalContainer>
           <VerifyImageContainer>
             <Image src={VerifyCodeIcon} />
           </VerifyImageContainer>
-          <Form autoComplete="off">
+          <Form>
             <VerifyCodePrompt>{strings.auth.verifyPrompt}</VerifyCodePrompt>
             <CodeInput
-              type="text"
               id="verificationCode"
-              label={strings.auth.codeInputPlaceholder}
-              onChange={e => {
-                handleChange(e);
-                if (e.target.value.length === 6) {
-                  submitForm();
-                }
-              }}
+              onChange={handleChange}
               onBlur={handleBlur}
-              value={values.verificationCode}
+              value={`${values.verificationCode}`}
               error={touched.verificationCode && errors.verificationCode}
               disabled={isSubmitting}
+              submit={submitForm}
             />
             {/* if they didn't receive the code, allow them to go back a step while maintaining the email we sent the code to */}
             <MissingCodePrompt
