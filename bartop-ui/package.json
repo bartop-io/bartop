@@ -4,7 +4,7 @@
   "description": "Web app for BarTop's UI.",
   "dependencies": {
     "apollo-boost": "^0.1.10",
-    "auth0-js": "^9.6.1",
+    "auth0-js": "^9.7.3",
     "formik": "^0.11.11",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",

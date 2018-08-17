@@ -55,7 +55,7 @@ export const VerifyCodeModal = ({ email, verifyCode, showModal, ...rest }) => (
         console.log('gonna subnmit', verificationCode);
         try {
           setFieldError('verificationCode', null);
-          await verifyCode(email, verificationCode);
+          await verifyCode(email, `${verificationCode}`);
           setSubmitting(false);
           history.push({
             pathname: '/callback'
