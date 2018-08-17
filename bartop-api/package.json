@@ -43,7 +43,7 @@
     "morgan": "^1.9.0",
     "nodemon": "^1.18.3",
     "rethinkdbdash": "^2.3.31",
-    "winston": "^2.4.2"
+    "winston": "^3.0.0"
   },
   "devDependencies": {
     "axios": "^0.18.0",
