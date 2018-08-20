@@ -6,9 +6,11 @@ import { VerifyCodeModal } from './VerifyCodeModal';
 import { noop } from '../../test-helpers/utils';
 
 const props = {
-  sendCode: noop,
+  verifyCode: noop,
   showModal: noop,
-  email: 'billy@bartop.io'
+  email: 'billy@bartop.io',
+  hideModal: noop,
+  ariaHideApp: false
 };
 
 storiesOf('VerifyCodeModal', module).add('default', () => (

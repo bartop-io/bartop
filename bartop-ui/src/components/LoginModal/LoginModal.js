@@ -83,7 +83,7 @@ export const LoginModal = ({ sendCode, showModal, prefillEmail, ...rest }) => (
           showModal(MODAL_TYPES.VERIFY_CODE_MODAL, { email });
         } catch (err) {
           setSubmitting(false);
-          setFieldError('email', strings.auth.sendCodeFailureMessage);
+          setFieldError('email', strings.auth.failureFallback);
         }
       }}
       render={({

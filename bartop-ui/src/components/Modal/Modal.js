@@ -35,12 +35,13 @@ const CancelIcon = styled.img`
   height: 10px;
 `;
 
-const Modal = ({ className, hideModal, children }) => (
+const Modal = ({ className, hideModal, children, ...rest }) => (
   <ReactModal
     className={className}
     style={styles}
     isOpen
     onRequestClose={hideModal}
+    {...rest}
   >
     <CancelButton onClick={hideModal}>
       <CancelIcon src={cancelIcon} />

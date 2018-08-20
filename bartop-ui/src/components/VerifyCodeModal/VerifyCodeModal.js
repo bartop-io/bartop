@@ -65,7 +65,7 @@ export const VerifyCodeModal = ({ email, verifyCode, showModal, ...rest }) => (
           const message =
             err.code === 'access_denied'
               ? strings.auth.verifyCodeNoMatch
-              : strings.auth.verifyCodeFailureFallback;
+              : strings.auth.failureFallback;
           setSubmitting(false);
           setFieldError('verificationCode', message);
           // clear value on error, the previously entered code will be shown as the placeholder
