@@ -14,7 +14,8 @@ export const colors = {
   dark: '#ADADAD',
   darkest: '#262626',
   overlay: 'rgba(0, 0, 0, 0.15)',
-  lightBlueAccent: '#87DBF7'
+  lightBlueAccent: '#87DBF7',
+  red: '#F74D4A'
 };
 
 export const spacing = {
