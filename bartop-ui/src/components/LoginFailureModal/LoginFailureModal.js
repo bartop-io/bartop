@@ -17,7 +17,7 @@ import { screenSizes, colors } from '../styleUtils';
 import { actions, MODAL_TYPES } from '../../ducks/modals/modals';
 
 const FailureImageContainer = ImageContainer.extend`
-  background-color: ${lighten(.05, colors.red)};
+  background-color: ${lighten(0.05, colors.red)};
 `;
 
 const MessageContainer = styled.div`
@@ -27,11 +27,11 @@ const MessageContainer = styled.div`
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+
   @media (min-width: ${screenSizes.laptop}) {
     height: 100%;
   }
 `;
-
 
 const LoginButton = Button.extend`
   width: 90%;
@@ -55,7 +55,9 @@ export const LoginFailureModal = ({ error, showModal, ...rest }) => (
       </FailureImageContainer>
       <MessageContainer>
         <p>{`${strings.auth.failure} ${error ? error.message : ''}`}</p>
-        <LoginButton onClick={() => showModal(MODAL_TYPES.LOGIN_MODAL)}>{strings.auth.loginButton}</LoginButton>
+        <LoginButton onClick={() => showModal(MODAL_TYPES.LOGIN_MODAL)}>
+          {strings.auth.loginButton}
+        </LoginButton>
       </MessageContainer>
     </ModalContainer>
   </Modal>

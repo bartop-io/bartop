@@ -14,7 +14,7 @@ export default {
     missingCodePrompt: `Never received a code?`,
     login: 'Login',
     logout: 'Logout',
-    failure: `Sorry, we couldn't log you in. Please try again.`,
+    failure: `Sorry, we couldn't log you in. Please try again.`
   },
   pageNotFound: `Oops! This page doesn't seem to exist 😓`
 };

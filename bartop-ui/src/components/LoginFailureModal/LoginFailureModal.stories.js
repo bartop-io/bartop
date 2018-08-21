@@ -8,7 +8,7 @@ const props = {
   showModal: noop,
   hideModal: noop,
   ariaHideApp: false
-}
+};
 
 storiesOf('LoginFailureModal', module).add('default', () => (
   <LoginFailureModal {...props} />

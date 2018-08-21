@@ -2,8 +2,22 @@
 
 exports[`matches the snapshot 1`] = `
 <Styled(Modal)>
-  <p>
-    Authentication failed. 
-  </p>
+  <styled.div>
+    <styled.div>
+      <styled.img
+        src="failure-icon.png"
+      />
+    </styled.div>
+    <styled.div>
+      <p>
+        Sorry, we couldn't log you in. Please try again. 
+      </p>
+      <styled.button
+        onClick={[Function]}
+      >
+        LOG IN
+      </styled.button>
+    </styled.div>
+  </styled.div>
 </Styled(Modal)>
 `;
