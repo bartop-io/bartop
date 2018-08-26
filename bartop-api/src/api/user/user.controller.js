@@ -7,7 +7,7 @@ const validateInput = require('../../utils/validators');
 module.exports.create = asyncMiddleware(async (req, res, next) => {
   validateInput.onPost(req, model);
   const result = await logic.create(req.body);
-  res.status(201).json(result);
+  res.status(201).json(result.user);
 });
 
 module.exports.list = asyncMiddleware(async (req, res, next) => {

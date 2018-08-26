@@ -13,7 +13,14 @@ module.exports = r => {
       .table(TABLE_NAME)
       .insert(body, { returnChanges: true });
 
-    return processDbResult(dbOpResult);
+    const finalResult = {};
+    const processedResult = processDbResult(dbOpResult);
+    if (processedResult.error) {
+      finalResult.errors = [processedResult.error];
+    } else {
+      finalResult.user = processedResult;
+    }
+    return finalResult;
   };
 
   // list all users
@@ -25,6 +32,7 @@ module.exports = r => {
 
   // get a user by the db-generated id
   // will be `null` if user does not exist
+  // ^ should be sufficient, deciding not to return an error
   const get = async id => {
     const user = await r.table(TABLE_NAME).get(id);
     // resolve drink objects in the catalog

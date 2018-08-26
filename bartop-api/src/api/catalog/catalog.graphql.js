@@ -1,7 +1,13 @@
 module.exports = `
 
+# Type used accross API for handled errors
 type Error {
-  message: String
+
+  # Message describing the error. Should be user friendly.
+  message: String!
+
+  # Optional array of IDs for Errors involving specific resources
+  id: [ID]
 }
 
 # Input type containing data needed to add drinks to a user's catalog

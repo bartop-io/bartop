@@ -10,8 +10,7 @@ const getUserById = async (root, { id }) => {
 };
 
 const createUser = async (root, { input }) => {
-  const newUser = await logic.create(input);
-  return { user: newUser };
+  return await logic.create(input);
 };
 
 module.exports = {

@@ -17,6 +17,9 @@ type CreateUserPayload {
 
   # The created User object
   user: User
+
+  # Errors that occurred while executing the request
+  errors: [Error]
 }
 
 # Input type containing data needed to create a new User

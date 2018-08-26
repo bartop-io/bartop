@@ -64,16 +64,18 @@ describe('Resource - Catalog', function() {
   });
 
   it('Mutation - add a fake drink, should be invalid', function(done) {
+    const badId = 'bestfriend<insertname>';
     const query = `
       mutation {
         addDrinksToCatalog(
-          input: { userId: "${userId}", drinkIds: ["bestfriend<insertname>"] }
+          input: { userId: "${userId}", drinkIds: ["${badId}"] }
         ) {
           drinks {
             name
           }
           errors {
             message
+            id
           }
         }
       }`;
@@ -88,24 +90,25 @@ describe('Resource - Catalog', function() {
         expect(payload).to.be.an('object');
         expect(payload.drinks).to.equal(null);
         expect(payload.errors).to.be.an('array');
-        expect(payload.errors[0].message).to.equal(
-          'The following drink ids are invalid: bestfriend<insertname>'
-        );
+        expect(payload.errors[0].message).to.equal('Drinks Not Found');
+        expect(payload.errors[0].id[0]).to.equal(badId);
         done();
       });
   });
 
   it('Mutation - error on adding a drink for user that doesnt exist', function(done) {
+    const badId = 'bernieEddy';
     const query = `
       mutation {
         addDrinksToCatalog(
-          input: { userId: "bernieEddy", drinkIds: ["${oldFashionedId}"] }
+          input: { userId: "${badId}", drinkIds: ["${oldFashionedId}"] }
         ) {
           drinks {
             name
           }
           errors {
             message
+            id
           }
         }
       }`;
@@ -115,12 +118,11 @@ describe('Resource - Catalog', function() {
       .set('Content-Type', 'application/json')
       .send({ query })
       .end((err, res) => {
-        const payload = res.body.errors;
-        expect(res.statusCode).to.equal(500);
-        expect(payload).to.be.an('array');
-        expect(payload[0].message).to.equal(
-          'Resource with ID: bernieEddy does not exist.'
-        );
+        const payload = res.body.data.addDrinksToCatalog;
+        expect(res.statusCode).to.equal(200);
+        expect(payload.errors).to.be.an('array');
+        expect(payload.errors[0].message).to.equal('Resource not found.');
+        expect(payload.errors[0].id[0]).to.equal(badId);
         done();
       });
   });
@@ -166,6 +168,7 @@ describe('Resource - Catalog', function() {
           }
           errors {
             message
+            id
           }
         }
       }`;
@@ -180,9 +183,11 @@ describe('Resource - Catalog', function() {
         expect(payload).to.be.an('object');
         expect(payload.drinks).to.equal(null);
         expect(payload.errors).to.be.an('array');
-        expect(payload.errors[0].message).to.equal(
-          'The following drink ids are invalid: proxieseverywhere, run'
-        );
+        expect(payload.errors[0].message).to.equal('Drinks Not Found');
+        expect(payload.errors[0].id).to.deep.equal([
+          'proxieseverywhere',
+          'run'
+        ]);
         done();
       });
   });
