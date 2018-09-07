@@ -4,18 +4,17 @@ export default {
     unknownDuringAuthentication: 'Something went wrong during authentication'
   },
   auth: {
-    invalidEmailAddress: 'Invalid email address 🧐',
-    sendCodeFailureMessage: 'Uh oh! Please try again 🙏',
-    loginPrompt: 'Enter your email to sign in or sign up',
-    emailInputPlaceholder: 'bilbo@bartop.io',
-    submitButtonText: 'SUBMIT',
-    verifyCodeFailureMessage: `Uh oh! The code you entered doesn't match.`,
-    verifyPrompt: 'An email with the code has been sent to',
-    codeInputPlaceholder: 'Your code',
-    missingCodePrompt: `Didn't receive the code?`,
+    invalidEmailAddress: 'Please enter a valid email address',
+    loginPrompt: "Let's get you a drink.",
+    loginButton: 'LOG IN',
+    emailInputLabel: 'Email Address',
+    verifyCodeNoMatch: `Uh oh, that code doesn't match.`,
+    failureFallback: 'Sorry, something went wrong. Please try again.',
+    verifyPrompt: 'So close! Enter your code below.',
+    missingCodePrompt: `Never received a code?`,
     login: 'Login',
     logout: 'Logout',
-    failure: 'Authentication failed.'
+    failure: `Sorry, we couldn't log you in. Please try again.`
   },
   pageNotFound: `Oops! This page doesn't seem to exist 😓`
 };

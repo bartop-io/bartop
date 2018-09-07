@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches the snapshot 1`] = `
+<Styled(Modal)>
+  <Formik
+    enableReinitialize={false}
+    initialValues={
+      Object {
+        "verificationCode": "",
+      }
+    }
+    isInitialValid={false}
+    onSubmit={[Function]}
+    render={[Function]}
+    validateOnBlur={true}
+    validateOnChange={true}
+  />
+</Styled(Modal)>
+`;

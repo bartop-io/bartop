@@ -10,7 +10,7 @@ export default ({ dispatch }) => next => action => {
     return next(action);
   }
 
-  const { types, call } = callAPI;
+  const { types, call, propagateFailure } = callAPI;
 
   // Validate that the action has three types (request, success, and failure)
   if (!Array.isArray(types) || types.length !== 3) {
@@ -36,7 +36,7 @@ export default ({ dispatch }) => next => action => {
   // The request is dispatched immediately
   dispatch(actionWith({ type: requestType }));
 
-  call()
+  return call()
     .then(response => {
       dispatch(
         actionWith({
@@ -46,13 +46,16 @@ export default ({ dispatch }) => next => action => {
       );
     })
     .catch(error => {
-      console.error('call api middleware error');
-      console.error(error);
+      console.error('Call API Middleware Error:', error);
       dispatch(
         actionWith({
           type: failureType,
           error: serializeError(error)
         })
       );
+      // optionally allow actions to propagate failure so it can be handled elsewhere
+      if (propagateFailure) {
+        throw error;
+      }
     });
 };

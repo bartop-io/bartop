@@ -4,6 +4,7 @@ import thunk from 'redux-thunk';
 import callApiMiddleware from '../../middleware/call-api';
 import reducer, { types, actions, initialState } from './authentication';
 import { types as userTypes } from '../user/user';
+import { types as modalTypes, MODAL_TYPES } from '../modals/modals';
 import {
   mockAuthResult,
   mockUserInfo,
@@ -11,13 +12,14 @@ import {
   mockDecodedIdTokenWithName,
   mockDecodedIdTokenWithoutName,
   mockAuthStatuses,
-  mockDecodedIdTokenFirstLogIn
+  mockDecodedIdTokenFirstLogIn,
+  mockEmail
 } from '../../test-helpers/state-mocks';
+import { CALL_API } from '../../middleware/call-api';
 
 // import & mock authentication's dependencies so we can spy on functions
 import jwtDecode from 'jwt-decode';
 import auth from '../../singletons/authentication';
-import history from '../../singletons/history';
 import * as utils from '../../utils/utils';
 
 jest.mock('jwt-decode');
@@ -30,14 +32,26 @@ describe('authentication actions', () => {
     jest.resetAllMocks();
   });
 
-  it('should call redirect to /auth/login when startLogin()', () => {
-    const expectedAction = {
-      type: types.START_LOGIN
-    };
+  it('can send a code', () => {
+    const expectedTypes = [
+      types.SEND_CODE_REQUEST,
+      types.SEND_CODE_SUCCESS,
+      types.SEND_CODE_FAILURE
+    ];
+    const callApi = actions.sendCode(mockEmail)[CALL_API];
+    expect(callApi.types).toEqual(expectedTypes);
+    expect(typeof callApi.call).toEqual('function');
+  });
 
-    const action = actions.startLogin();
-    expect(action).toEqual(expectedAction);
-    expect(history.push).toBeCalledWith('/auth/login');
+  it('can verify a code', () => {
+    const expectedTypes = [
+      types.VERIFY_CODE_REQUEST,
+      types.VERIFY_CODE_SUCCESS,
+      types.VERIFY_CODE_FAILURE
+    ];
+    const callApi = actions.verifyCode(mockEmail, 'CODE')[CALL_API];
+    expect(callApi.types).toEqual(expectedTypes);
+    expect(typeof callApi.call).toEqual('function');
   });
 
   it('should call login success with result of authentication', () => {
@@ -55,15 +69,25 @@ describe('authentication actions', () => {
     expect(action).toEqual(expectedAction);
   });
 
-  it('should fail login with an error and redirect to /auth/failure', () => {
-    const expectedAction = {
-      type: types.LOGIN_FAILURE,
-      error: mockError
-    };
+  it('should fail login with an error and show the LoginFailureModal', () => {
+    const store = configureMockStore([thunk, callApiMiddleware])();
 
-    const action = actions.loginFailure(mockError);
-    expect(action).toEqual(expectedAction);
-    expect(history.replace).toBeCalledWith('/auth/failure');
+    const expectedActions = [
+      {
+        type: types.LOGIN_FAILURE,
+        error: mockError
+      },
+      {
+        type: modalTypes.SHOW_MODAL,
+        modalType: MODAL_TYPES.LOGIN_FAILURE_MODAL,
+        modalProps: {
+          error: mockError
+        }
+      }
+    ];
+
+    store.dispatch(actions.loginFailure(mockError));
+    expect(store.getActions()).toEqual(expectedActions);
   });
 
   describe('can handle authentication', () => {
@@ -160,6 +184,11 @@ describe('authentication actions', () => {
         {
           type: types.LOGIN_FAILURE,
           error: mockError
+        },
+        {
+          type: modalTypes.SHOW_MODAL,
+          modalType: MODAL_TYPES.LOGIN_FAILURE_MODAL,
+          modalProps: { error: mockError }
         }
       ];
       store.dispatch(actions.handleAuthentication());
@@ -178,6 +207,11 @@ describe('authentication actions', () => {
         {
           type: types.LOGIN_FAILURE,
           error: mockError
+        },
+        {
+          type: modalTypes.SHOW_MODAL,
+          modalType: MODAL_TYPES.LOGIN_FAILURE_MODAL,
+          modalProps: { error: mockError }
         }
       ];
       store.dispatch(actions.handleAuthentication());
@@ -200,16 +234,6 @@ describe('authentication reducer', () => {
 
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toEqual(initialState);
-  });
-
-  it('should adjust status on startLogin()', () => {
-    const expectedState = {
-      ...initialState,
-      status: mockAuthStatuses.requesting
-    };
-    expect(reducer(undefined, { type: types.START_LOGIN })).toEqual(
-      expectedState
-    );
   });
 
   it('should update state on login success', () => {

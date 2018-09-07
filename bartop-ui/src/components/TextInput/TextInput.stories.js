@@ -1,24 +1,30 @@
 import React from 'react';
 
+import { Formik, Form } from 'formik';
 import { storiesOf } from '@storybook/react';
 
 import TextInput from './TextInput';
 
 const TextInputProps = {
   type: 'text',
-  id: 'id'
+  id: 'example',
+  label: 'Label'
 };
 
+const ControlledTextInput = props => (
+  <Formik
+    initialValues={{ example: '' }}
+    render={({ values, handleChange }) => (
+      <Form>
+        <TextInput value={values.example} onChange={handleChange} {...props} />
+      </Form>
+    )}
+    onSubmit={s => s}
+  />
+);
+
 storiesOf('TextInput', module)
-  .add('empty', () => <TextInput {...TextInputProps} />)
-  .add('with label', () => <TextInput {...TextInputProps} label="Label here" />)
+  .add('default', () => <ControlledTextInput {...TextInputProps} />)
   .add('with error', () => (
-    <TextInput {...TextInputProps} error="Error message here" />
-  ))
-  .add('with label & error', () => (
-    <TextInput
-      {...TextInputProps}
-      label="Label here"
-      error="Error message here"
-    />
+    <ControlledTextInput {...TextInputProps} error="Error message goes here" />
   ));
