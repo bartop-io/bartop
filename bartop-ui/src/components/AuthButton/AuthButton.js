@@ -3,12 +3,19 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Button from '../Button/Button';
-import { actions } from '../../ducks/authentication/authentication';
+import {
+  actions as modalActions,
+  MODAL_TYPES
+} from '../../ducks/modals/modals';
+import { actions as authActions } from '../../ducks/authentication/authentication';
 import strings from '../../strings';
 
-export const AuthButton = ({ className, loggedIn, login, logout }) =>
+export const AuthButton = ({ className, loggedIn, showModal, logout }) =>
   !loggedIn ? (
-    <Button className={className} onClick={login}>
+    <Button
+      className={className}
+      onClick={() => showModal(MODAL_TYPES.LOGIN_MODAL)}
+    >
       {strings.auth.login}
     </Button>
   ) : (
@@ -20,7 +27,7 @@ export const AuthButton = ({ className, loggedIn, login, logout }) =>
 AuthButton.propTypes = {
   className: PropTypes.string,
   loggedIn: PropTypes.bool.isRequired,
-  login: PropTypes.func.isRequired,
+  showModal: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired
 };
 
@@ -29,8 +36,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  login: actions.startLogin,
-  logout: actions.logout
+  showModal: modalActions.showModal,
+  logout: authActions.logout
 };
 
 export default connect(

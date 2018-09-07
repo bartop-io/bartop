@@ -3,10 +3,11 @@ import { shallow } from 'enzyme';
 
 import { AuthButton } from './AuthButton';
 import { noop } from '../../test-helpers/utils';
+import { MODAL_TYPES } from '../../ducks/modals/modals';
 
 const requiredProps = {
   loggedIn: false,
-  login: noop,
+  showModal: noop,
   logout: noop
 };
 
@@ -20,13 +21,13 @@ it('if logged out, shows login text', () => {
   expect(wrapper.dive().text()).toEqual('Login');
 });
 
-it('if logged out, calls login if clicked', () => {
-  const login = jest.spyOn(requiredProps, 'login');
+it('if logged out, shows LoginModal when clicked', () => {
+  const showModal = jest.spyOn(requiredProps, 'showModal');
   const wrapper = shallow(<AuthButton {...requiredProps} />);
-  expect(login).not.toBeCalled();
+  expect(showModal).not.toBeCalled();
   wrapper.dive().simulate('click');
-  expect(login).toBeCalled();
-  login.mockRestore();
+  expect(showModal).toBeCalledWith(MODAL_TYPES.LOGIN_MODAL);
+  showModal.mockRestore();
 });
 
 it('if logged in, shows logout text', () => {

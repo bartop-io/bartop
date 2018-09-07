@@ -1,15 +1,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import VerifyForm from './VerifyForm';
+import { VerifyCodeModal } from './VerifyCodeModal';
+import { noop } from '../../test-helpers/utils';
 
 const requiredProps = {
-  history: {},
   email: 'bilbo@bartop.io',
-  verifyCode: jest.fn()
+  verifyCode: noop
 };
 
 it('matches the snapshot', () => {
-  const wrapper = shallow(<VerifyForm {...requiredProps} />);
+  const wrapper = shallow(<VerifyCodeModal {...requiredProps} />);
   expect(wrapper).toMatchSnapshot();
 });
