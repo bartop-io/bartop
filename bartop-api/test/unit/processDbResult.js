@@ -13,15 +13,10 @@ describe('Util - Process DB Result', function() {
       unchanged: 0
     };
     const id = '05041995';
-    let err = null;
-    try {
-      processDbResult(dbOpResult, id);
-    } catch (e) {
-      err = e;
-    }
-    expect(err).to.not.equal(null);
-    expect(err.name).to.equal('ResourceNotFoundError');
-    expect(err.message).to.equal(`Resource with ID: ${id} does not exist.`);
+    const result = processDbResult(dbOpResult, id);
+    expect(result.error).to.not.equal(undefined);
+    expect(result.error.message).to.equal('Resource not found.');
+    expect(result.error.id[0]).to.equal(id);
     done();
   });
 
@@ -37,15 +32,9 @@ describe('Util - Process DB Result', function() {
       skipped: 0,
       unchanged: 0
     };
-    let err = null;
-    try {
-      processDbResult(dbOpResult);
-    } catch (e) {
-      err = e;
-    }
-    expect(err).to.not.equal(null);
-    expect(err.name).to.equal('RethinkPostWriteError');
-    expect(err.message).to.equal(fakeError);
+    const result = processDbResult(dbOpResult);
+    expect(result.error).to.not.equal(undefined);
+    expect(result.error.message).to.equal('Something went wrong.');
     done();
   });
 
@@ -61,15 +50,9 @@ describe('Util - Process DB Result', function() {
       skipped: 0,
       unchanged: 0
     };
-    let err = null;
-    try {
-      processDbResult(dbOpResult);
-    } catch (e) {
-      err = e;
-    }
-    expect(err).to.not.equal(null);
-    expect(err.name).to.equal('InternalDatabaseOperationError');
-    expect(err.message).to.equal(JSON.stringify(dbOpResult, null, 2));
+    const result = processDbResult(dbOpResult);
+    expect(result.error).to.not.equal(undefined);
+    expect(result.error.message).to.equal('Something went wrong.');
     done();
   });
 

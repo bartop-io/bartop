@@ -1,19 +1,28 @@
 const processDbResult = require('../../utils/processDbResult');
+const logger = require('../../utils/logger');
 
 module.exports = r => {
   const add = async body => {
-    const { userId, drinkIds } = body;
-    const drinks = await r.table('drinks').getAll(...drinkIds);
+    // initialize variables
+    const { userId } = body;
+    let { drinkIds } = body;
     const finalResult = {};
+    const errors = [];
+
+    // validate drinks
+    const drinks = await r.table('drinks').getAll(...drinkIds);
     if (drinks.length !== drinkIds.length) {
-      finalResult.errors = [];
       const invalidDrinkIds = listInvalidDrinks(drinkIds, drinks);
-      finalResult.errors.push({
-        message: `The following drink ids are invalid: ${invalidDrinkIds.join(
-          ', '
-        )}`
+      errors.push({
+        message: 'Drinks Not Found',
+        id: invalidDrinkIds
       });
-    } else {
+      logger.error(`Drink objects not found: ${invalidDrinkIds}`);
+      drinkIds = drinkIds.filter(id => !invalidDrinkIds.includes(id));
+    }
+
+    // update catalog if there are drinks to be added
+    if (drinkIds.length) {
       const dbOpResult = await r
         .table('users')
         .get(userId)
@@ -22,33 +31,67 @@ module.exports = r => {
           // this prevents duplication
           catalog: r.row('catalog').setUnion(drinkIds)
         });
-      processDbResult(dbOpResult, userId);
-      finalResult.drinks = drinks;
+
+      // process results
+      const processedResult = processDbResult(dbOpResult, userId);
+
+      // these errors mean no data could be returned
+      if (processedResult.error) {
+        errors.push(processedResult.error);
+      } else {
+        finalResult.drinks = drinks;
+      }
+    }
+
+    // attach errors array
+    if (errors.length) {
+      finalResult.errors = errors;
     }
     return finalResult;
   };
 
   const remove = async body => {
-    const { userId, drinkIds } = body;
-    const drinks = await r.table('drinks').getAll(...drinkIds);
+    // initialize variables
+    const { userId } = body;
+    let { drinkIds } = body;
     const finalResult = {};
+    const errors = [];
+
+    // validate drinks
+    const drinks = await r.table('drinks').getAll(...drinkIds);
     if (drinks.length !== drinkIds.length) {
-      finalResult.errors = [];
       const invalidDrinkIds = listInvalidDrinks(drinkIds, drinks);
-      finalResult.errors.push({
-        message: `The following drink ids are invalid: ${invalidDrinkIds.join(
-          ', '
-        )}`
+      errors.push({
+        message: 'Drinks Not Found',
+        id: invalidDrinkIds
       });
-    } else {
+      logger.error(`Drink objects not found: ${invalidDrinkIds}`);
+      drinkIds = drinkIds.filter(id => !invalidDrinkIds.includes(id));
+    }
+
+    // update catalog if there are drinks to be added
+    if (drinkIds.length) {
       const dbOpResult = await r
         .table('users')
         .get(userId)
         .update({
           catalog: r.row('catalog').difference(drinkIds)
         });
-      processDbResult(dbOpResult, userId);
-      finalResult.drinks = drinks;
+
+      // process results
+      const processedResult = processDbResult(dbOpResult, userId);
+
+      // these errors mean no data could be returned
+      if (processedResult.error) {
+        errors.push(processedResult.error);
+      } else {
+        finalResult.drinks = drinks;
+      }
+    }
+
+    // attach errors array
+    if (errors.length) {
+      finalResult.errors = errors;
     }
     return finalResult;
   };
