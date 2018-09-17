@@ -10,6 +10,9 @@ type User {
 
   # Catalog containing all drinks a user can make
   catalog: [Drink]
+
+  # Array of Menu objects the user has created
+  menus: [Menu]
 }
 
 # Return type of createUser
