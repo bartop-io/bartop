@@ -1,35 +1,31 @@
 const processDbResult = require('../../utils/processDbResult');
-const logger = require('../../utils/logger');
+const validateDrinkIds = require('../../utils/validators/drinks');
 
 module.exports = r => {
   const add = async body => {
     // initialize variables
-    const { userId } = body;
-    let { drinkIds } = body;
+    const { userId, drinkIds } = body;
     const finalResult = {};
     const errors = [];
 
     // validate drinks
-    const drinks = await r.table('drinks').getAll(...drinkIds);
-    if (drinks.length !== drinkIds.length) {
-      const invalidDrinkIds = listInvalidDrinks(drinkIds, drinks);
-      errors.push({
-        message: 'Drinks Not Found',
-        id: invalidDrinkIds
-      });
-      logger.error(`Drink objects not found: ${invalidDrinkIds}`);
-      drinkIds = drinkIds.filter(id => !invalidDrinkIds.includes(id));
+    const { drinksError, validDrinks, drinkObjects } = validateDrinkIds(
+      drinkIds
+    );
+
+    if (drinksError) {
+      errors.push(drinksError);
     }
 
     // update catalog if there are drinks to be added
-    if (drinkIds.length) {
+    if (validDrinks.length) {
       const dbOpResult = await r
         .table('users')
         .get(userId)
         .update({
           // setUnion returns an array of distinct values
           // this prevents duplication
-          catalog: r.row('catalog').setUnion(drinkIds)
+          catalog: r.row('catalog').setUnion(validDrinks)
         });
 
       // process results
@@ -39,7 +35,7 @@ module.exports = r => {
       if (processedResult.error) {
         errors.push(processedResult.error);
       } else {
-        finalResult.drinks = drinks;
+        finalResult.drinks = drinkObjects;
       }
     }
 
@@ -52,25 +48,21 @@ module.exports = r => {
 
   const remove = async body => {
     // initialize variables
-    const { userId } = body;
-    let { drinkIds } = body;
+    const { userId, drinkIds } = body;
     const finalResult = {};
     const errors = [];
 
     // validate drinks
-    const drinks = await r.table('drinks').getAll(...drinkIds);
-    if (drinks.length !== drinkIds.length) {
-      const invalidDrinkIds = listInvalidDrinks(drinkIds, drinks);
-      errors.push({
-        message: 'Drinks Not Found',
-        id: invalidDrinkIds
-      });
-      logger.error(`Drink objects not found: ${invalidDrinkIds}`);
-      drinkIds = drinkIds.filter(id => !invalidDrinkIds.includes(id));
+    const { drinksError, validDrinks, drinkObjects } = validateDrinkIds(
+      drinkIds
+    );
+
+    if (drinksError) {
+      errors.push(drinksError);
     }
 
     // update catalog if there are drinks to be added
-    if (drinkIds.length) {
+    if (validDrinks.length) {
       const dbOpResult = await r
         .table('users')
         .get(userId)
@@ -85,7 +77,7 @@ module.exports = r => {
       if (processedResult.error) {
         errors.push(processedResult.error);
       } else {
-        finalResult.drinks = drinks;
+        finalResult.drinks = drinkObjects;
       }
     }
 
